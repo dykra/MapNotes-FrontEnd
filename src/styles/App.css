@@ -8,7 +8,7 @@
 }
 
 .App-header {
-  background: rgba(89, 97, 106, 0.24) image("1013.jpg");
+  background: rgba(89, 97, 106, 0.24) image("../images/1013.jpg");
   height: 150px;
   padding: 20px;
   color: #d7dcd6;
