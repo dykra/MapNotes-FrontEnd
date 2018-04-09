@@ -8,10 +8,10 @@
 }
 
 .App-header {
-  background-color: #222;
+  background: rgba(89, 97, 106, 0.24) image("1013.jpg");
   height: 150px;
   padding: 20px;
-  color: white;
+  color: #d7dcd6;
 }
 
 .App-title {
@@ -22,7 +22,7 @@
   font-size: large;
 }
 
-@keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
+/*@keyframes App-logo-spin {*/
+  /*from { transform: rotate(0deg); }*/
+  /*to { transform: rotate(360deg); }*/
+/*}*/
