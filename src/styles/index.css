@@ -13,20 +13,20 @@ body, html {
   background-image: url("../images/1013.jpg");
 
   /* Full height */
-  height: 25%;
+  height: 40%;
 
   /* Center and scale the image nicely */
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-  opacity: 0.5;
+  opacity: 0.7;
 
 }
 
 .centered_text {
   color: rgba(0, 0, 0, 1);
   position: absolute;
-  top: 12.5%;
+  top: 15%;
   left: 53%;
   transform: translate(-50%, -50%);
   font-size: xx-large;
