@@ -30,6 +30,8 @@
       <h1>Map Notes</h1>
     </div>
   </div>
+  <textarea rows="1" cols="40" id="locations_box" name="amount"></textarea>
+
 
   <div id="root"></div>
     <!--<h3>My Google Maps Demo</h3>-->
@@ -45,7 +47,26 @@
                 position: uluru,
                 map: map
             });
+
+            locations = []
+
+            google.maps.event.addListener(map, 'click', function(event) {
+                placeMarker(event.latLng);
+                document.getElementById("locations_box").value = event.latLng;
+
+            });
+
+            function placeMarker(location) {
+                var marker = new google.maps.Marker({
+                    position: location,
+                    map: map
+                });
+
+                // locations += position
+                // print(locations)
+            }
         }
+
     </script>
     <script async defer
             src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCFIcsdU4oXSvKQTTFR02oSbMBOhGE5jS8&callback=initMap">
