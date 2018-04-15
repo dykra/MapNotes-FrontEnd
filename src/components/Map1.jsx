@@ -24,3 +24,4 @@ export default class Map1 extends Component {
         )
     }
 }
+
