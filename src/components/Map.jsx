@@ -10,7 +10,7 @@ export default class Map1 extends Component {
 
     render() {
         return (
-            <div style={{width: '100%', height: 1000}} className='google-map'>
+            <div className='google-map'>
                 <GoogleMapReact
                     ootstrapURLKeys={{
                         key: 'AIzaSyCFIcsdU4oXSvKQTTFR02oSbMBOhGE5jS8',
