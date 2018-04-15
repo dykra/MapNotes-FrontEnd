@@ -1,23 +1,14 @@
-/*body {*/
-/*margin: 0;*/
-/*padding: 0;*/
-/*font-family: sans-serif;*/
-/*}*/
-
 body, html {
   height: 100%;
   margin: 0;
 }
 .bg {
   /* The image used */
-  background-image: url("../images/1013.jpg");
-
   /* Full height */
   height: 40%;
 
   /* Center and scale the image nicely */
-  background-position: center;
-  background-repeat: no-repeat;
+  background: url("../images/1013.jpg") no-repeat center;
   background-size: cover;
   opacity: 0.7;
 
