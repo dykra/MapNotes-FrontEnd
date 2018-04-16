@@ -13,7 +13,6 @@ export default class Map1 extends Component {
             <div className='google-map'>
                 <GoogleMapReact
                     ootstrapURLKeys={{
-                        key: 'AIzaSyCFIcsdU4oXSvKQTTFR02oSbMBOhGE5jS8',
                         language: 'en'
                     }}
                     onClick={this._onClick}
