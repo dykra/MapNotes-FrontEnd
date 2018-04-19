@@ -1,6 +1,6 @@
 import React from 'react';
 import { compose, withStateHandlers, withProps } from "recompose";
-import { withGoogleMap, withScriptjs, GoogleMap } from 'react-google-maps';
+import { withGoogleMap, withScriptjs, GoogleMap, Marker } from 'react-google-maps'
 
 
 const Map = compose(
@@ -12,7 +12,14 @@ const Map = compose(
         <GoogleMap
             defaultZoom={8}
             defaultCenter={{lat: -34.397, lng: 150.644}}
+            onClick={props.onMapClick}
         >
+            {props.markers.map((marker) =>
+                <Marker position={marker.position}
+                />
+
+            )}
+  >
         </GoogleMap>
     )
 });
@@ -20,15 +27,26 @@ const Map = compose(
 export default class MapContainer extends React.Component {
 
     constructor (props) {
-        super(props);
+       super(props);
         this.state = {
+            markers : [],
+            isMarkerShown: false,
         };
+    }
 
+    componentDidMount() {
+        this.setState({ isMarkerShown: true })
+    }
+
+    handleMapClick(event) {
+
+        this.setState(prevState => ({
+            markers: [...prevState.markers,  { position: event.latLng, isWindowOpened:false}]
+        }));
     }
 
     componentDidMount() {
     }
-
 
     render () {
         return (
@@ -38,7 +56,10 @@ export default class MapContainer extends React.Component {
                     loadingElement={<div style={{ height: `100%` }} />}
                     containerElement={<div style={{ height: `400px` }} />}
                     mapElement={<div style={{ height: `100%` }} />}
-                />
+                    placeMarker={this.placeMarker}
+                    onMapClick={this.handleMapClick.bind(this)}
+                    markers = {this.state.markers}
+                    isMarkerShown={this.state.isMarkerShown}                />
             </div>
         )
     }
