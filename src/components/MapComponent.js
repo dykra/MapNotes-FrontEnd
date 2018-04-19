@@ -16,11 +16,6 @@ const Map = compose(
         >
             {props.markers.map((marker) =>
                 <Marker position={marker.position}
-                        {...marker.isWindowOpened}
-                        {...<InfoWindow>
-                            hello
-                        </InfoWindow>}
-
                 />
 
             )}
@@ -36,7 +31,6 @@ export default class MapContainer extends React.Component {
             markers : [],
             isMarkerShown: false,
         };
-
     }
 
     componentDidMount() {
