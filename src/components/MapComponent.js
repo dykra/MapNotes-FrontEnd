@@ -1,9 +1,15 @@
 import React from 'react';
 import { compose, withStateHandlers, withProps } from "recompose";
-import { withGoogleMap, withScriptjs, GoogleMap, Marker } from 'react-google-maps';
-
+import { InfoWindow, withGoogleMap, withScriptjs, GoogleMap, Marker } from 'react-google-maps';
 
 const Map = compose(
+    withStateHandlers(() => ({
+        isOpen: false,
+    }), {
+        onToggleOpen: ({ isOpen }) => () => ({
+            isOpen: !isOpen,
+        })
+    }),
     withScriptjs,
     withGoogleMap,
 )
@@ -16,9 +22,16 @@ const Map = compose(
         >
             {props.markers.map((marker) =>
                 <Marker position={marker.position}
-                />
+                        onClick={props.onToggleOpen}
+                >
 
+                    {props.isOpen && <InfoWindow onCloseClick={props.onToggleOpen}>
+                        <span>Example text to print on view</span>
+                    </InfoWindow>}
+
+                </Marker>
             )}
+
         </GoogleMap>
     )
 });
@@ -26,7 +39,7 @@ const Map = compose(
 export default class MapContainer extends React.Component {
 
     constructor (props) {
-       super(props);
+        super(props);
         this.state = {
             markers : [],
             isMarkerShown: false,
