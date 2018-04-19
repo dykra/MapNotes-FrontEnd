@@ -6,7 +6,10 @@
     "google-map-react": "^0.34.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
-    "react-scripts-ts": "2.14.0"
+    "react-scripts-ts": "2.14.0",
+    "mobx-react": "latest",
+    "mobx": "latest",
+    "react-google-maps": "latest"
   },
   "scripts": {
     "start": "react-scripts-ts start",
