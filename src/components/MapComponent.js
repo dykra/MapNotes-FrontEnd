@@ -1,69 +1,45 @@
-
 import React from 'react';
-import { withGoogleMap, GoogleMap, Marker, GoogleMapLoader } from 'react-google-maps';
-import {observer} from 'mobx-react'
-import {observable} from 'mobx'
+import { compose, withStateHandlers, withProps } from "recompose";
+import { InfoWindow, withGoogleMap, withScriptjs, GoogleMap, Marker } from 'react-google-maps';
 
 
-
-const Map = withGoogleMap(props => {
+const Map = compose(
+    withScriptjs,
+    withGoogleMap,
+)
+(props => {
     return (
         <GoogleMap
             defaultZoom={8}
             defaultCenter={{lat: -34.397, lng: 150.644}}
-            onClick={props.onMapClick}
         >
-            {props.markers.map(marker => (
-                <Marker
-                    {...marker}
-                />
-            ))}
-            {props.isMarkerShown && <Marker position={props.markerPosition}/>}
         </GoogleMap>
     )
 });
-const MapContainer= observer( class Browse extends React.Component {
-    constructor(props) {
+
+export default class MapContainer extends React.Component {
+
+    constructor (props) {
         super(props);
-        this.state= observable({
-            markers:[{
-                position:{
-                    lat: -50.397,
-                    lng:150.644,
-                }
-            },
-                {
-                    position:{
-                        lat: -34.397,
-                        lng:150.644,
-                    }
-                }]
-        })
+        this.state = {
+        };
+
     }
 
-    handleMarkerClick() {
-        this.setState({
-            zoom: 8,
-        });
+    componentDidMount() {
     }
 
-    render() {
+
+    render () {
         return (
-            <div style={{ height: '100%'}}>
+            <div style={{height: '100%'}}>
                 <Map
-                    googleMapURL="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places"
+                    googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyC4R6AN7SmujjPUIGKdyao2Kqitzr1kiRg&v=3.exp&libraries=geometry,drawing,places"
                     loadingElement={<div style={{ height: `100%` }} />}
-                    onMarkerClick = {this.handleMarkerClick}
-                    containerElement={
-                        <div style={{ height: `400px` }} />
-                    }
-                    mapElement={
-                        <div style={{ height: `100%` }} />
-                    }
-                    markers={this.state.markers}/>
+                    containerElement={<div style={{ height: `400px` }} />}
+                    mapElement={<div style={{ height: `100%` }} />}
+                />
             </div>
         )
     }
-});
-export default MapContainer
-
+}
