@@ -20,8 +20,11 @@ const Map = compose(
             defaultCenter={{lat: -34.397, lng: 150.644}}
             onClick={props.onMapClick}
         >
-            {props.markers.map((marker) =>
-                <Marker position={marker.position}
+            {props.markers.map((marker, index) =>
+                <Marker
+                        key={index}
+                        label={index.toString()}
+                        position={marker.position}
                         onClick={props.onToggleOpen}
                 >
 
