@@ -8,6 +8,10 @@ const Map = compose(
     }), {
         onToggleOpen: ({ isOpen }) => () => ({
             isOpen: !isOpen,
+        }),
+
+        handleToggleOpen: ({markerId}) => (markerId) => ({
+            openInfoWindowMarkerId: markerId,
         })
     }),
     withScriptjs,
@@ -25,10 +29,10 @@ const Map = compose(
                         key={index}
                         label={index.toString()}
                         position={marker.position}
-                        onClick={props.onToggleOpen}
+                        onClick={props.handleToggleOpen(index)}
                 >
 
-                    {props.isOpen && <InfoWindow onCloseClick={props.onToggleOpen}>
+                    {(props.openInfoWindowMarkerId == index) && <InfoWindow onCloseClick={props.onToggleOpen}>
                         <span>Example text to print on view</span>
                     </InfoWindow>}
 
@@ -46,6 +50,7 @@ export default class MapContainer extends React.Component {
         this.state = {
             markers : [],
             isMarkerShown: false,
+            openInfoWindowMarkerId: ''
         };
     }
 
@@ -58,7 +63,8 @@ export default class MapContainer extends React.Component {
         this.setState(prevState => ({
             markers: [...prevState.markers,  { position: event.latLng, isWindowOpened:false}]
         }));
-    }
+    };
+
 
     render () {
         return (
