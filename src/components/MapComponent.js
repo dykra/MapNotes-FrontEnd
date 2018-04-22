@@ -1,19 +1,9 @@
 import React from 'react';
-import { compose, withStateHandlers, withProps } from "recompose";
-import { InfoWindow, withGoogleMap, withScriptjs, GoogleMap, Marker } from 'react-google-maps';
+import { compose, withProps } from "recompose";
+import { withGoogleMap, withScriptjs, GoogleMap } from 'react-google-maps';
+import InfoWindowMap from "./MarkerInfoWindow";
 
 const Map = compose(
-    withStateHandlers(() => ({
-        isOpen: false,
-    }), {
-        onToggleOpen: ({ isOpen }) => () => ({
-            isOpen: !isOpen,
-        }),
-
-        handleToggleOpen: ({markerId}) => (markerId) => ({
-            openInfoWindowMarkerId: markerId,
-        })
-    }),
     withScriptjs,
     withGoogleMap,
 )
@@ -25,18 +15,12 @@ const Map = compose(
             onClick={props.onMapClick}
         >
             {props.markers.map((marker, index) =>
-                <Marker
-                        key={index}
-                        label={index.toString()}
-                        position={marker.position}
-                        onClick={props.handleToggleOpen(index)}
-                >
-
-                    {(props.openInfoWindowMarkerId == index) && <InfoWindow onCloseClick={props.onToggleOpen}>
-                        <span>Example text to print on view</span>
-                    </InfoWindow>}
-
-                </Marker>
+                <InfoWindowMap
+                    lat={marker.position.lat()}
+                    lng={marker.position.lng()}
+                    index={index}
+                    key={marker.position}
+                />
             )}
 
         </GoogleMap>
@@ -48,20 +32,14 @@ export default class MapContainer extends React.Component {
     constructor (props) {
         super(props);
         this.state = {
-            markers : [],
-            isMarkerShown: false,
-            openInfoWindowMarkerId: ''
+            markers : []
         };
-    }
-
-    componentDidMount() {
-        this.setState({ isMarkerShown: true })
     }
 
     handleMapClick(event) {
 
         this.setState(prevState => ({
-            markers: [...prevState.markers,  { position: event.latLng, isWindowOpened:false}]
+            markers: [...prevState.markers,  { position: event.latLng , isWindowOpened:false}]
         }));
     };
 
@@ -74,10 +52,8 @@ export default class MapContainer extends React.Component {
                     loadingElement={<div style={{ height: `100%` }} />}
                     containerElement={<div style={{ height: `400px` }} />}
                     mapElement={<div style={{ height: `100%` }} />}
-                    placeMarker={this.placeMarker}
                     onMapClick={this.handleMapClick.bind(this)}
                     markers = {this.state.markers}
-                    isMarkerShown={this.state.isMarkerShown}
                 />
             </div>
         )
