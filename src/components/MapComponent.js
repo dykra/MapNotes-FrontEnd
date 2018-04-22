@@ -3,6 +3,7 @@ import { compose, withProps } from "recompose";
 import { withGoogleMap, withScriptjs, GoogleMap } from 'react-google-maps';
 import InfoWindowMap from "./MarkerInfoWindow";
 
+
 const Map = compose(
     withScriptjs,
     withGoogleMap,
@@ -22,7 +23,6 @@ const Map = compose(
                     key={marker.position}
                 />
             )}
-
         </GoogleMap>
     )
 });
@@ -43,6 +43,9 @@ export default class MapContainer extends React.Component {
         }));
     };
 
+
+    componentDidMount() {
+    }
 
     render () {
         return (
