@@ -29,8 +29,8 @@ const Map = compose(
 
 export default class MapContainer extends React.Component {
 
-    constructor (props) {
-        super(props);
+    constructor () {
+        super();
         this.state = {
             markers : []
         };

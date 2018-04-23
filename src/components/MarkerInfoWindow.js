@@ -3,8 +3,8 @@ import {Marker, InfoWindow} from "react-google-maps";
 
 export default class InfoWindowMap extends Component {
 
-    constructor(props) {
-        super(props);
+    constructor() {
+        super();
 
         this.state = {
             isOpen: false
