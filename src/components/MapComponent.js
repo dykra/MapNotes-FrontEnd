@@ -1,6 +1,7 @@
 import React from 'react';
-import { compose, withStateHandlers, withProps } from "recompose";
-import { withGoogleMap, withScriptjs, GoogleMap, Marker } from 'react-google-maps'
+import { compose, withProps } from "recompose";
+import { withGoogleMap, withScriptjs, GoogleMap } from 'react-google-maps';
+import InfoWindowMap from "./MarkerInfoWindow";
 
 
 const Map = compose(
@@ -14,36 +15,34 @@ const Map = compose(
             defaultCenter={{lat: -34.397, lng: 150.644}}
             onClick={props.onMapClick}
         >
-            {props.markers.map((marker) =>
-                <Marker position={marker.position}
+            {props.markers.map((marker, index) =>
+                <InfoWindowMap
+                    lat={marker.position.lat()}
+                    lng={marker.position.lng()}
+                    index={index}
+                    key={marker.position}
                 />
-
             )}
-  >
         </GoogleMap>
     )
 });
 
 export default class MapContainer extends React.Component {
 
-    constructor (props) {
-       super(props);
+    constructor () {
+        super();
         this.state = {
-            markers : [],
-            isMarkerShown: false,
+            markers : []
         };
-    }
-
-    componentDidMount() {
-        this.setState({ isMarkerShown: true })
     }
 
     handleMapClick(event) {
 
         this.setState(prevState => ({
-            markers: [...prevState.markers,  { position: event.latLng, isWindowOpened:false}]
+            markers: [...prevState.markers,  { position: event.latLng , isWindowOpened:false}]
         }));
-    }
+    };
+
 
     componentDidMount() {
     }
@@ -56,10 +55,9 @@ export default class MapContainer extends React.Component {
                     loadingElement={<div style={{ height: `100%` }} />}
                     containerElement={<div style={{ height: `400px` }} />}
                     mapElement={<div style={{ height: `100%` }} />}
-                    placeMarker={this.placeMarker}
                     onMapClick={this.handleMapClick.bind(this)}
                     markers = {this.state.markers}
-                    isMarkerShown={this.state.isMarkerShown}                />
+                />
             </div>
         )
     }
