@@ -10,7 +10,7 @@ export default class List extends React.Component {
             <div className="List">
                 <ListGroup>
 
-                        {this.props.todos.map((todo, index) => {
+                        {this.props.elements.map((todo, index) => {
                             return (
 
                                     <Task

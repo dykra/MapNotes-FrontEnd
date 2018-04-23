@@ -12,10 +12,9 @@ class MapMenu extends React.Component {
         inputs : [{name: '', type: ''}],
         isNewMapClicked : false,
         isOpen : false,
-        todos: [
-            { name : 'Kolor drzwi', type : 'color'},
-            { name : 'size' , type : 'm2'}
-        ]
+        todos: [],
+        isSubmit : false
+
     };
 
 
@@ -50,6 +49,7 @@ class MapMenu extends React.Component {
 
     handleSubmit = (evt) => {
         evt.preventDefault();
+        console.log('handle submit');
 
         const newTodos = this.state.inputs.map(input=> {
             return {
@@ -59,17 +59,38 @@ class MapMenu extends React.Component {
         });
 
 
-        this.setState({todos: this.state.todos.concat(newTodos), inputs: [{name: '', type: ''}]})
+        const t = this.state.todos;
+        t.push(newTodos)
+
+        this.setState({
+            todos : t, inputs: [{name: '', type: ''}], isSubmit: true
+        });
+
+
+        //console.log('print state after concat', todos)
+
+        //this.setState({
+        //    todos: this.state.todos.concat(newTodos), inputs: [{name: '', type: ''}], isSubmited: true
+        //});
+
+        console.log('after setting state', this.state)
+
+
+        let json = JSON.stringify(this.state.todos);
+        console.log('checking json',json)
+
+
+        this.setState({
+            todos :[], inputs: [{name: '', type: ''}], isSubmit: true
+        });
 
         this.toggleModal()
-
-        let json = JSON.serialize(this.state.todos);
-        fetch("urL")
-
     };
 
 
+
     renderMainMenu(){
+        console.log('printing my array in main menu!',this.state.todos)
         return (
             <div className="MapMenu">
                 <Button className="NewMapButton" bsSize="large" bsStyle="primary" onClick={this.buttonClicked} block>
@@ -78,7 +99,7 @@ class MapMenu extends React.Component {
 
                 <List
                     handleClick ={this.handleClick}
-                    todos={this.state.todos}
+                    elements={this.state.todos}
                 />
             </div>
         );
@@ -91,7 +112,7 @@ class MapMenu extends React.Component {
                 inputValue={this.state.inputValue}
                 handleNewInput={this.handleNewInput}
                 inputs = {this.state.inputs}
-                handleSubmit ={this.handleSubmit}
+                handleSubmit={this.handleSubmit}
                 closeClick={() => this.toggleModal()}
             />
         )
