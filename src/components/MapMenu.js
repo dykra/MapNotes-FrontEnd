@@ -13,7 +13,8 @@ class MapMenu extends React.Component {
         isNewMapClicked : false,
         isOpen : false,
         todos: [],
-        isSubmit : false
+        isSubmit : false,
+        openMap : false
 
     };
 
@@ -45,6 +46,11 @@ class MapMenu extends React.Component {
     handleNewInput = () => {
         console.log('new input!!')
         this.setState({inputs: this.state.inputs.concat({name: '', type: ''})})
+    };
+
+    openMapButtonClicked = () => {
+        console.log('open map button clicked!!')
+        this.setState({openMap : true})
     };
 
     handleSubmit = (evt) => {
@@ -96,6 +102,11 @@ class MapMenu extends React.Component {
                 <Button className="NewMapButton" bsSize="large" bsStyle="primary" onClick={this.buttonClicked} block>
                     Create new map
                 </Button>
+                <div>
+                    <Button className ="Open map button" bsize ="small" bsStyle="primary" onClick={this.openMapButtonClicked}>
+                        Open map
+                    </Button>
+                </div>
 
                 <List
                     handleClick ={this.handleClick}
@@ -118,6 +129,14 @@ class MapMenu extends React.Component {
         )
     }
 
+    renderMap(){
+        return(
+            <div className="App">
+                <Map/>
+            </div>
+        )
+    }
+
     render() {
 
             if(this.state.isNewMapClicked === false && this.state.isOpen === false){
@@ -127,6 +146,10 @@ class MapMenu extends React.Component {
             }else if(this.state.isNewMapClicked === true){
                 return(
                     this.renderModal()
+                )
+            }else if(this.state.openMap === true){
+                return(
+                    this.renderMap()
                 )
             }else{
                 return(
