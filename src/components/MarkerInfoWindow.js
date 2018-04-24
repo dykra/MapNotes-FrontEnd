@@ -28,7 +28,9 @@ export default class InfoWindowMap extends Component {
         this.setState({isOpen: true});
     };
 
+
     handleMouseOver = (id) => {
+
         console.log(id);
         this.handleToggleOpen();
     };
@@ -52,13 +54,16 @@ export default class InfoWindowMap extends Component {
                 lat: this.props.lat,
                 lng: this.props.lng
             }} label={this.props.index.toString()}
+
                     onMouseOver={() => this.handleMouseOver(this.props.index)}
                     onMouseOut={()=> this.handleMouseOut()}
+
                     onClick={() => this.handleClicks(this.props.index)}
             >
 
                 {
                     this.state.isOpen &&
+
                     <InfoWindow >
                         <div>
                             <p>Atrybuty domyślne</p>
@@ -74,6 +79,7 @@ export default class InfoWindowMap extends Component {
                             <p>Atrybuty domyślne</p>
                             <p>Reszta atrubutów</p>
                             <p>Obrazek</p>
+
                         </div>
                     </InfoWindow>
                 }
@@ -81,3 +87,4 @@ export default class InfoWindowMap extends Component {
         )
     }
 }
+
