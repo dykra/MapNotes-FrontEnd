@@ -145,6 +145,7 @@ class MapMenu extends React.Component {
                 )
             }else if(this.state.isNewMapClicked === true){
                 return(
+
                     this.renderModal()
                 )
             }else if(this.state.openMap === true){

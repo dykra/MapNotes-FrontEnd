@@ -16,11 +16,16 @@ const Map = compose(
             onClick={props.onMapClick}
         >
             {props.markers.map((marker, index) =>
+
                 <InfoWindowMap
                     lat={marker.position.lat()}
                     lng={marker.position.lng()}
                     index={index}
                     key={marker.position}
+                    isNewMarker = {marker.isNewMarker}
+                    closePin = {() => handleMarker()}
+
+
                 />
             )}
         </GoogleMap>
@@ -32,15 +37,27 @@ export default class MapContainer extends React.Component {
     constructor () {
         super();
         this.state = {
-            markers : []
+            markers : [],
+            isNewMarker: false
+
         };
     }
+
+    undoAddedMarker = () => {
+        let array = this.state.markers;
+        array.pop();
+        this.setState({markers: array});
+        this.handleMarker();
+    };
+
+
 
     handleMapClick(event) {
 
         this.setState(prevState => ({
-            markers: [...prevState.markers,  { position: event.latLng , isWindowOpened:false}]
-        }));
+            markers: [...prevState.markers,  { position: event.latLng, isNewMarker : true }]
+        }))
+        this.setState({isNewMarker : true})
     };
 
 
@@ -57,6 +74,8 @@ export default class MapContainer extends React.Component {
                     mapElement={<div style={{ height: `100%` }} />}
                     onMapClick={this.handleMapClick.bind(this)}
                     markers = {this.state.markers}
+
+
                 />
             </div>
         )
