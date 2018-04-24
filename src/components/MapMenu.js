@@ -139,7 +139,7 @@ class MapMenu extends React.Component {
 
     render() {
 
-            if(this.state.isNewMapClicked === false && this.state.isOpen === false){
+            if(this.state.isNewMapClicked === false && this.state.isOpen === false && this.state.openMap === false) {
                 return(
                     this.renderMainMenu()
                 )
