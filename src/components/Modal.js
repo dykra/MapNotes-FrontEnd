@@ -51,7 +51,7 @@ export default class MyModal extends React.Component {
                                         value={input.type}
                                     />
                                         <label>
-                                            <select onChange={(evt) => this.handleChangeModal(evt, index)}>
+                                            <select onClick={(evt) => this.handleChangeModal(evt, index)}>
                                                 <option value="default type">default type</option>
                                                 <option value="m^2">m^2</option>
                                                 <option value="pln">pln</option>
