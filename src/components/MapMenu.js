@@ -94,6 +94,8 @@ class MapMenu extends React.Component {
 
 
 
+
+
     renderMainMenu(){
         console.log('printing my array in main menu!',this.state.todos)
         return (
@@ -120,6 +122,7 @@ class MapMenu extends React.Component {
                 inputs = {this.state.inputs}
                 handleSubmit={this.handleSubmit}
                 closeClick={() => this.toggleModal()}
+
             />
         )
     }
