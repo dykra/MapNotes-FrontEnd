@@ -7,19 +7,42 @@ export default class InfoWindowMap extends Component {
         super();
 
         this.state = {
-            isOpen: false
+            isOpen: false,
+            isDetailOpen:false
         }
 
     }
+
+    handleToggleDetailOpen = () => {
+
+        this.setState({isDetailOpen: true});
+    };
+
+    handleClicks = (id) => {
+        console.log(id);
+        this.handleToggleDetailOpen();
+    };
 
     handleToggleOpen = () => {
 
         this.setState({isOpen: true});
     };
 
-    handleClicks = (id) => {
+
+    handleMouseOver = (id) => {
+
         console.log(id);
         this.handleToggleOpen();
+    };
+
+    handleToggleClose = () => {
+
+        this.setState({isOpen: false});
+    }
+
+    handleMouseOut = (id) => {
+        console.log(id);
+        this.handleToggleClose();
     };
 
 
@@ -31,14 +54,32 @@ export default class InfoWindowMap extends Component {
                 lat: this.props.lat,
                 lng: this.props.lng
             }} label={this.props.index.toString()}
+
+                    onMouseOver={() => this.handleMouseOver(this.props.index)}
+                    onMouseOut={()=> this.handleMouseOut()}
+
                     onClick={() => this.handleClicks(this.props.index)}
             >
 
                 {
                     this.state.isOpen &&
-                    <InfoWindow onCloseClick={() => this.setState({isOpen: false})}>
+
+                    <InfoWindow >
                         <div>
-                            <span>Example Text</span>
+                            <p>Atrybuty domyślne</p>
+                            <p>Obrazek</p>
+                        </div>
+                    </InfoWindow>
+                }
+
+                {
+                    this.state.isDetailOpen &&
+                    <InfoWindow onCloseClick={() => this.setState({isDetailOpen: false})}>
+                        <div>
+                            <p>Atrybuty domyślne</p>
+                            <p>Reszta atrubutów</p>
+                            <p>Obrazek</p>
+
                         </div>
                     </InfoWindow>
                 }
@@ -46,3 +87,4 @@ export default class InfoWindowMap extends Component {
         )
     }
 }
+
