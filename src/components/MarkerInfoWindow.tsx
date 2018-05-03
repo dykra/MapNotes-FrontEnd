@@ -46,7 +46,7 @@ export default class InfoWindowMap extends Component<any, any> {
                 position={{lat: this.props.lat, lng: this.props.lng}}
                 label={this.props.index.toString()}
                 onMouseOver={() => this.handleMouseOver(this.props.index)}
-                onMouseOut={() => this.handleMouseOut}
+                onMouseOut={() => this.handleMouseOut(this.props.index)}
                 onClick={() => this.handleClicks(this.props.index)}
             >
                 {
