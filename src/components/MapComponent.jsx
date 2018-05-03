@@ -76,13 +76,6 @@ export default class MapContainer extends React.Component {
     };
 
 
-    componentDidMount() {
-    }
-
-    componentWillMount(){
-
-    }
-
     handleBoundsChanged() {
         this.setState({
             bounds: this._map.getBounds(),
@@ -114,9 +107,8 @@ export default class MapContainer extends React.Component {
             isWindowOpened:false
         }));
 
-        console.log(searchBoxMarkers);
         const nextCenter = searchBoxMarkers.length > 0 ? searchBoxMarkers[0].position : this.state.center;
-        console.log(nextCenter);
+
         this.setState(prevState => ({
             center: nextCenter,
             markers: [...prevState.markers, {position: searchBoxMarkers[0].position, isWindowOpened: false}]
