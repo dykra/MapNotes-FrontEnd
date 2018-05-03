@@ -4,6 +4,19 @@ import { withGoogleMap, withScriptjs, GoogleMap } from 'react-google-maps';
 import InfoWindowMap from "./MarkerInfoWindow";
 import { SearchBox } from "react-google-maps/lib/components/places/SearchBox"
 
+const INPUT_STYLE = {
+    boxSizing: `border-box`,
+    border: `1px solid transparent`,
+    width: `240px`,
+    height: `32px`,
+    marginTop: `27px`,
+    padding: `0 12px`,
+    borderRadius: `3px`,
+    boxShadow: `0 2px 6px rgba(0, 0, 0, 0.3)`,
+    fontSize: `14px`,
+    outline: `none`,
+    textOverflow: `ellipses`,
+};
 
 const Map = compose(
     withScriptjs,
@@ -27,20 +40,8 @@ const Map = compose(
                 >
                 <input
                     type="text"
-                    placeholder="Customized your placeholder"
-                    style={{
-                        boxSizing: `border-box`,
-                        border: `1px solid transparent`,
-                        width: `240px`,
-                        height: `32px`,
-                        marginTop: `27px`,
-                        padding: `0 12px`,
-                        borderRadius: `3px`,
-                        boxShadow: `0 2px 6px rgba(0, 0, 0, 0.3)`,
-                        fontSize: `14px`,
-                        outline: `none`,
-                        textOverflow: `ellipses`,
-                    }}
+                    placeholder="Search places"
+                    style={INPUT_STYLE}
                 />
             </SearchBox>
 
