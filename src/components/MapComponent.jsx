@@ -64,9 +64,7 @@ export default class MapContainer extends React.Component {
         this.state = {
             markers : [],
             bounds: null,
-            center: {
-                lat: 41.9, lng: -87.624
-            }
+            center: null
         };
     }
 
@@ -114,6 +112,7 @@ export default class MapContainer extends React.Component {
             center: nextCenter,
             markers: [...prevState.markers, {position: searchBoxMarkers[0].position, isWindowOpened: false}]
         }));
+        this._map.fitBounds(bounds);
     }
     render (){
         return (
