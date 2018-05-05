@@ -1,6 +1,5 @@
 import * as React from 'react';
 import Map from './MapComponent.js';
-import List from './List';
 import MyModal from "./Modal";
 import {Button} from "react-bootstrap";
 
@@ -96,6 +95,8 @@ class MapMenu extends React.Component {
 
 
 
+
+
     renderMainMenu(){
         console.log('printing my array in main menu!',this.state.todos)
         return (
@@ -109,10 +110,6 @@ class MapMenu extends React.Component {
                     </Button>
                 </div>
 
-                <List
-                    handleClick ={this.handleClick}
-                    elements={this.state.todos}
-                />
             </div>
         );
     }
@@ -126,6 +123,7 @@ class MapMenu extends React.Component {
                 inputs = {this.state.inputs}
                 handleSubmit={this.handleSubmit}
                 closeClick={() => this.toggleModal()}
+
             />
         )
     }
