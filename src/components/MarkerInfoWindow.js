@@ -29,7 +29,7 @@ export default class InfoWindowMap extends Component {
     handleClicks = (id) => {
         console.log(id);
         this.handleToggleOpen();
-    };
+    }
 
     handleAddNote(markerState) {
         console.log("status "+markerState)
@@ -137,7 +137,10 @@ export default class InfoWindowMap extends Component {
             inputs = {this.state.inputs}
             closeClick={() => {
                 this.handleNotes();
-                this.handleAddNote(false)}}
+                this.handleAddNote(false)
+                this.props.closePin()
+            }}
+
 
         />;
     }

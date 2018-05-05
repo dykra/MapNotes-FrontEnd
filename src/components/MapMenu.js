@@ -83,6 +83,7 @@ class MapMenu extends React.Component {
 
 
         let json = JSON.stringify(this.state.todos);
+        // json.fetch()
         console.log('checking json',json)
 
 

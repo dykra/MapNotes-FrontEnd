@@ -23,7 +23,7 @@ const Map = compose(
                     index={index}
                     key={marker.position}
                     isNewMarker = {marker.isNewMarker}
-                    closePin = {() => handleMarker()}
+                    closePin = {props.onDelete}
 
 
                 />
@@ -47,7 +47,7 @@ export default class MapContainer extends React.Component {
         let array = this.state.markers;
         array.pop();
         this.setState({markers: array});
-        this.handleMarker();
+        // this.handleMarker();
     };
 
 
@@ -74,6 +74,7 @@ export default class MapContainer extends React.Component {
                     mapElement={<div style={{ height: `100%` }} />}
                     onMapClick={this.handleMapClick.bind(this)}
                     markers = {this.state.markers}
+                    onDelete = {this.undoAddedMarker.bind(this)}
 
 
                 />
