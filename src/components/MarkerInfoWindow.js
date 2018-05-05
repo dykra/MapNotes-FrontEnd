@@ -15,18 +15,30 @@ export default class InfoWindowMap extends Component {
                 {name: 'size', value: ' '},
                 {name: 'price', value: ' '}],
             todos: [],
-            isSubmit : false
-
+            isSubmit : false,
+            isDetailOpen:false
         }
 
     }
+
+    handleToggleDetailOpen = () => {
+
+        this.setState({isDetailOpen: true});
+    };
+
+    handleClicks = (id) => {
+        console.log(id);
+        this.handleToggleDetailOpen();
+    };
 
     handleToggleOpen = () => {
 
         this.setState({isOpen: true});
     };
 
-    handleClicks = (id) => {
+
+    handleMouseOver = (id) => {
+
         console.log(id);
         this.handleToggleOpen();
     }
@@ -46,6 +58,16 @@ export default class InfoWindowMap extends Component {
         console.log("oko"+evt.target.value);
         this.state.inputs[index]["value"] = evt.target.value
         this.forceUpdate();
+    handleToggleClose = () => {
+
+        this.setState({isOpen: false});
+    }
+
+    handleMouseOut = (id) => {
+        console.log(id);
+        this.handleToggleClose();
+    };
+
 
     };
 
@@ -102,9 +124,9 @@ export default class InfoWindowMap extends Component {
 
                     onClick={() => {
                         console.log("ula"+this.props.isNewMarker);
-                        console.log("testAdded"+this.state.isNoteAdded)
+                        console.log("testAdded"+this.state.isNoteAdded);
                         if(this.props.isNewMarker === true && this.state.isNoteAdded !== true){
-                            this.handleAddNote(this.props.isNewMarker)
+                            this.handleAddNote(this.props.isNewMarker);
                             this.handleNotes();
                             console.log("isAdded" + this.state.isNoteAdded)
                         }else{
@@ -113,13 +135,32 @@ export default class InfoWindowMap extends Component {
 
                     }}
 
+
+                    onMouseOver={() => this.handleMouseOver(this.props.index)}
+                    onMouseOut={()=> this.handleMouseOut()}
+
+                    // onClick={() => this.handleClicks(this.props.index)}
             >
 
                 {
                     this.state.isOpen &&
-                    <InfoWindow onCloseClick={() => this.setState({isOpen: false})}>
+
+                    <InfoWindow >
                         <div>
-                            <span>Example Text</span>
+                            <p>Atrybuty domyślne</p>
+                            <p>Obrazek</p>
+                        </div>
+                    </InfoWindow>
+                }
+
+                {
+                    this.state.isDetailOpen &&
+                    <InfoWindow onCloseClick={() => this.setState({isDetailOpen: false})}>
+                        <div>
+                            <p>Atrybuty domyślne</p>
+                            <p>Reszta atrubutów</p>
+                            <p>Obrazek</p>
+
                         </div>
                     </InfoWindow>
                 }
