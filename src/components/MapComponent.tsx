@@ -1,17 +1,18 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 import { compose } from 'recompose';
 import { GoogleMap, withGoogleMap, withScriptjs } from 'react-google-maps';
-import InfoWindowMap from './MarkerInfoWindow';
+import MarkerInfoWindow from './MarkerInfoWindow';
 import { WithScriptjsProps } from 'react-google-maps/lib/withScriptjs';
 import { WithGoogleMapProps } from 'react-google-maps/lib/withGoogleMap';
-
-const googleUrl = 'https://maps.googleapis.com/maps/api/js' +
-    '?key=AIzaSyC4R6AN7SmujjPUIGKdyao2Kqitzr1kiRg&v=3.exp&libraries=geometry,drawing,places';
+import { GOOGLE_MAP_URL } from '../constants';
+import { MarkerData } from '../types/MarkerData';
 
 interface MapProps {
     googleMapURL: String;
-    markers: any;
-    onMapClick: (e: google.maps.MouseEvent | google.maps.IconMouseEvent) => void;
+    markers: ReactElement<any>[];
+    onMapClick: (e: google.maps.MouseEvent) => void;
+    defaultCenter: google.maps.LatLngLiteral;
+    defaultZoom: number;
 }
 
 type MapComposeProps = WithScriptjsProps & WithGoogleMapProps & MapProps;
@@ -23,25 +24,22 @@ const Map = compose<MapProps, MapComposeProps>(
 ((props: MapProps) => {
     return (
         <GoogleMap
-            defaultZoom={8}
-            defaultCenter={{lat: -34.397, lng: 150.644}}
+            defaultZoom={props.defaultZoom}
+            defaultCenter={props.defaultCenter}
             onClick={props.onMapClick}
         >
-            {props.markers.map((marker: any, index: any) =>
-                <InfoWindowMap
-                    lat={marker.position.lat()}
-                    lng={marker.position.lng()}
-                    index={index}
-                    key={marker.position}
-                />
-            )}
+            {props.markers}
         </GoogleMap>
     );
 });
 
-export default class MapContainer extends React.Component<any, any> {
+interface MapContainerState {
+    markers: MarkerData[];
+}
 
-    constructor(props: any) {
+export default class MapContainer extends React.Component<{}, MapContainerState> {
+
+    constructor(props: {}) {
         super(props);
         this.handleMapClick = this.handleMapClick.bind(this);
         this.state = {
@@ -49,23 +47,32 @@ export default class MapContainer extends React.Component<any, any> {
         };
     }
 
-    handleMapClick(event: any) {
-
+    handleMapClick(event: google.maps.MouseEvent) {
         this.setState((prevState: any) => ({
             markers: [...prevState.markers, {position: event.latLng, isWindowOpened: false}]
         }));
     }
 
     render() {
+        const markers = this.state.markers.map((marker: MarkerData, index: any) => (
+            <MarkerInfoWindow
+                lat={marker.position.lat()}
+                lng={marker.position.lng()}
+                index={index}
+                key={index}
+            />)
+        );
         return (
             <div style={{height: '100%'}}>
                 <Map
-                    googleMapURL={googleUrl}
+                    googleMapURL={GOOGLE_MAP_URL}
                     loadingElement={<div style={{height: `100%`}}/>}
-                    containerElement={<div style={{height: `400px`}}/>}
+                    containerElement={<div style={{ height: '100vh' }} />}
                     mapElement={<div style={{height: `100%`}}/>}
                     onMapClick={this.handleMapClick}
-                    markers={this.state.markers}
+                    markers={markers}
+                    defaultCenter={{lat: -34.397, lng: 150.644}}
+                    defaultZoom={8}
                 />
             </div>
         );

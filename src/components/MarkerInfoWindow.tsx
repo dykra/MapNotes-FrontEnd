@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Marker, InfoWindow } from 'react-google-maps';
 
-export default class InfoWindowMap extends Component<any, any> {
+export default class MarkerInfoWindow extends Component<any, any> {
 
     constructor(props: any) {
         super(props);
