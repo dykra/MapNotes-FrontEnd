@@ -1,6 +1,9 @@
 import React, {Component} from 'react';
 import {Marker, InfoWindow} from "react-google-maps";
 import Note from "./Note";
+import data from './data.json';
+
+
 
 export default class InfoWindowMap extends Component {
 
@@ -11,9 +14,7 @@ export default class InfoWindowMap extends Component {
             isOpen: false,
             isNewMarker: false,
             isNoteAdded: false,
-            inputs : [{name: 'Localisation', value: ' '},
-                {name: 'size', value: ' '},
-                {name: 'price', value: ' '}],
+            inputs : data,
             todos: [],
             isSubmit : false,
             isDetailOpen:false
@@ -44,10 +45,7 @@ export default class InfoWindowMap extends Component {
     }
 
     handleAddNote(markerState) {
-        console.log("status "+markerState)
-        console.log("kaka2"+this.state.isNewMarker);
         this.setState({isNewMarker: markerState});
-        console.log("kaka"+this.state.isNewMarker);
     };
 
     handleNotes() {
@@ -55,9 +53,11 @@ export default class InfoWindowMap extends Component {
     };
 
     handleChange = (evt, index, field_name) => {
-        console.log("oko"+evt.target.value);
-        this.state.inputs[index]["value"] = evt.target.value
+
+        this.state.inputs[index]["value"] = evt.target.value;
         this.forceUpdate();
+    };
+
     handleToggleClose = () => {
 
         this.setState({isOpen: false});
@@ -69,16 +69,15 @@ export default class InfoWindowMap extends Component {
     };
 
 
-    };
+
 
     handleNewInput = () => {
-        console.log('new input!!')
+
         this.setState({inputs: this.state.inputs.concat({name: '', type: ''})})
     };
 
     handleSubmit = (evt) => {
         evt.preventDefault();
-        console.log('handle submit');
 
         const newTodos = this.state.inputs.map(input=> {
             return {
@@ -96,7 +95,6 @@ export default class InfoWindowMap extends Component {
             todos : t, inputs: [{name: '', type: ''}], isSubmit: true
         });
 
-        console.log('after setting state', this.state)
 
         let json = JSON.stringify(this.state.todos);
         console.log('checking json',json)
@@ -122,9 +120,13 @@ export default class InfoWindowMap extends Component {
             }} label={this.props.index.toString()}
 
 
+
+
+
+                    onMouseOver={() => this.handleMouseOver(this.props.index)}
+                    onMouseOut={()=> this.handleMouseOut()}
+
                     onClick={() => {
-                        console.log("ula"+this.props.isNewMarker);
-                        console.log("testAdded"+this.state.isNoteAdded);
                         if(this.props.isNewMarker === true && this.state.isNoteAdded !== true){
                             this.handleAddNote(this.props.isNewMarker);
                             this.handleNotes();
@@ -134,10 +136,6 @@ export default class InfoWindowMap extends Component {
                         }
 
                     }}
-
-
-                    onMouseOver={() => this.handleMouseOver(this.props.index)}
-                    onMouseOut={()=> this.handleMouseOut()}
 
                     // onClick={() => this.handleClicks(this.props.index)}
             >
@@ -197,8 +195,7 @@ export default class InfoWindowMap extends Component {
                 )
             }else{
                 console.log(this.state.isNoteAdded)
-                console.log("aaaaa "+this.state.isNewMarker)
-                console.log("map");
+                
                 return(
 
                     this.renderMap()

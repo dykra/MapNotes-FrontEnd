@@ -1,7 +1,6 @@
 import React from 'react';
 import {Button, Modal} from 'react-bootstrap';
 import * as input from "react-bootstrap";
-// import List from './AttributeList'
 
 
 export default class Note extends React.Component {
@@ -9,11 +8,7 @@ export default class Note extends React.Component {
     constructor() {
         super();
         this.state={
-            data: [
-                {"name": "Localisation", "value":"text"},
-                {"name" : "size" , "value" : "m2"},
-                {"name" : "price" , "value" : "number"}
-            ],
+            data: []
 
         }
 
@@ -21,33 +16,84 @@ export default class Note extends React.Component {
 
 
     render() {
-        return( <div className="static-modal">
+
+
+
+        return( <div>
+
                 <Modal.Dialog >
+
                     <Modal.Header>
-                        <Modal.Title>New note</Modal.Title>
+                        <Modal.Title>Create new note</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
+
+                        <div className="container-fluid">
+
+
                         <form onSubmit={(evt) => this.props.handleSubmit(evt)}>
-                            {this.props.inputs.map((input, index) =>
+
+                            {this.props.inputs.map((input, index) =>(
+
                                 <div key={index}>
+
+
+                                    {(input.name).localeCompare('') !== 0 &&
                             <label>
+
+                                <div className="col-8 col-sm-6">
+
+
                                 {input.name}
+                                </div>
+                                <div className="col-8 col-sm-6">
                                 <input
                                 onChange={(evt) => this.props.handleChange(evt, index, input.name)}
                                 value={input.value}
                                 />
-                            </label>
-
-
                                 </div>
+
+
+                            </label>}
+                            {(input.name).localeCompare('') === 0 &&
+                                        <div>
+
+                                                <input
+                                                    // onChange={(evt) => this.props.handleChange(evt, index, input.name)}
+                                                    value={input.name}
+                                                />
+                                                <input
+                                                    onChange={(evt) => this.props.handleChange(evt, index, input.name)}
+                                                    value={input.value}
+                                                />
+                                            <select>
+                                                <option value="default type">default type</option>
+                                                <option value="m^2">m^2</option>
+                                                <option value="pln">pln</option>
+                                                <option value="yes">yes</option>
+                                                <option value="no">no</option>
+                                            </select>
+                                            </div>
+
+
+
+                            }
+
+
+
+                                </div>)
+
                             )}
 
                         </form>
+                            </div>
+
                     </Modal.Body>
                     <Modal.Footer>
+
                         <Button onClick = {this.props.handleNewInput} bsSize="xsmall">Add new attribute</Button>
-                        <Button onClick = {this.props.closeClick} > Close</Button>
-                        <Button onClick = {(evt) => this.props.handleSubmit(evt)} bsStyle="primary">Save changes</Button>
+                        <button className="btn btn-secondary"  onClick = {this.props.closeClick}> Close</button>
+                        <button onClick = {(evt) => this.props.handleSubmit(evt)} className="btn btn-primary">Save changes</button>
                     </Modal.Footer>
                 </Modal.Dialog>
             </div>

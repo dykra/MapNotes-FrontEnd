@@ -82,7 +82,6 @@ class MapMenu extends React.Component {
 
 
         let json = JSON.stringify(this.state.todos);
-        // json.fetch()
         console.log('checking json',json)
 
 
@@ -138,24 +137,24 @@ class MapMenu extends React.Component {
 
     render() {
 
-            if(this.state.isNewMapClicked === false && this.state.isOpen === false && this.state.openMap === false) {
-                return(
-                    this.renderMainMenu()
-                )
-            }else if(this.state.isNewMapClicked === true){
-                return(
+        if(this.state.isNewMapClicked === false && this.state.isOpen === false && this.state.openMap === false) {
+            return(
+                this.renderMainMenu()
+            )
+        }else if(this.state.isNewMapClicked === true){
+            return(
 
-                    this.renderModal()
-                )
-            }else if(this.state.openMap === true){
-                return(
-                    this.renderMap()
-                )
-            }else{
-                return(
-                    this.renderMainMenu()
-                )
-            }
+                this.renderModal()
+            )
+        }else if(this.state.openMap === true){
+            return(
+                this.renderMap()
+            )
+        }else{
+            return(
+                this.renderMainMenu()
+            )
+        }
     }
 }
 
