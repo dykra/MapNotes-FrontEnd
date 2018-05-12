@@ -4,7 +4,6 @@ import * as FormControl from 'react-bootstrap/lib/FormControl';
 import * as ControlLabel from 'react-bootstrap/lib/ControlLabel';
 import { FormGroup } from 'react-bootstrap';
 import * as Col from 'react-bootstrap/lib/Col';
-import { getTransportData } from '../api/TransportApi';
 
 interface TransportState {
     transportInput: string;
@@ -34,9 +33,6 @@ export default class TransportComponent extends React.Component<any, TransportSt
         console.log('search transport');
         console.log(event);
         console.log(this.state.transportInput);
-        getTransportData(
-            {'origin': 'Gosford', 'destination': this.state.transportInput},
-            this.getTransportResult);
     }
 
     getTransportResult(event: any) {
@@ -65,9 +61,6 @@ export default class TransportComponent extends React.Component<any, TransportSt
                     >SEARCH
                     </Button>
                 </FormGroup>
-                <div>
-                    {this.state.transportRes}
-                </div>
             </div>
         );
     }
