@@ -195,7 +195,7 @@ export default class InfoWindowMap extends Component {
                 )
             }else{
                 console.log(this.state.isNoteAdded)
-                
+
                 return(
 
                     this.renderMap()
