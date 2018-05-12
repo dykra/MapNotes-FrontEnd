@@ -4,12 +4,13 @@ import Note from "./Note";
 import data from './data.json';
 
 
+import React, { Component } from 'react';
+import { Marker, InfoWindow } from 'react-google-maps';
 
-export default class InfoWindowMap extends Component {
+export default class MarkerInfoWindow extends Component<any, any> {
 
-    constructor() {
-        super();
-
+    constructor(props: any) {
+        super(props);
         this.state = {
             isOpen: false,
             isNewMarker: false,
@@ -18,65 +19,60 @@ export default class InfoWindowMap extends Component {
             todos: [],
             isSubmit : false,
             isDetailOpen:false
-        }
+        };
 
     }
 
-    handleToggleDetailOpen = () => {
-
+    handleToggleDetailOpen() {
         this.setState({isDetailOpen: true});
-    };
+    }
 
-    handleClicks = (id) => {
+    handleClicks(id: any) {
         console.log(id);
         this.handleToggleDetailOpen();
-    };
-
-    handleToggleOpen = () => {
-
-        this.setState({isOpen: true});
-    };
-
-
-    handleMouseOver = (id) => {
-
-        console.log(id);
-        this.handleToggleOpen();
     }
 
-    handleAddNote(markerState) {
+    handleToggleOpen() {
+        this.setState({isOpen: true});
+    }
+
+    handleMouseOver(id: any) {
+        console.log(id);
+        this.handleToggleOpen();
+
+    }
+
+    handleAddNote(markerState: any) {
         this.setState({isNewMarker: markerState});
-    };
+    }
 
     handleNotes() {
         this.setState({isNoteAdded: !this.state.isNoteAdded});
-    };
+    }
 
-    handleChange = (evt, index, field_name) => {
+    handleChange(evt: any, index: any, field_name: any) {
 
         this.state.inputs[index]["value"] = evt.target.value;
         this.forceUpdate();
-    };
+    }
 
-    handleToggleClose = () => {
-
+    handleToggleClose() {
         this.setState({isOpen: false});
     }
 
-    handleMouseOut = (id) => {
+    handleMouseOut(id: any) {
         console.log(id);
         this.handleToggleClose();
-    };
+    }
 
 
 
-
-    handleNewInput = () => {
+    handleNewInput(){
 
         this.setState({inputs: this.state.inputs.concat({name: '', type: ''})})
-    };
+    }
 
-    handleSubmit = (evt) => {
+    handleSubmit(evt: any){
         evt.preventDefault();
 
         const newTodos = this.state.inputs.map(input=> {
@@ -109,7 +105,7 @@ export default class InfoWindowMap extends Component {
 
         console.log("stan:"+this.state.isOpen+this.state.isNewMarker+this.state.isNoteAdded)
 
-    };
+    }
 
 
     renderMap(){
@@ -163,7 +159,7 @@ export default class InfoWindowMap extends Component {
                     </InfoWindow>
                 }
             </Marker>
-        )
+        );
     }
 
 
