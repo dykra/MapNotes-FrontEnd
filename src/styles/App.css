@@ -29,31 +29,32 @@
 }
 
 .ClosedLeftBar {
-  background-color: black;
+    margin-top: 0.5%;
+    margin-bottom: 0.5%;
+    width: 5%;
+    height: 96%;
+    float: left;
 }
 
 .OpenedLeftBar {
   margin-top: 0.5%;
   margin-bottom: 0.5%;
-  width: 20%;
+  width: 25%;
   height: 96%;
   float: left;
 }
 
 .CloseLeftBarButton {
-  margin-right: 0%;
-  margin-top: 0%;
   float: right;
-  /*color: aqua;*/
 }
 
 .OpenLeftBarButton {
-  color: cornflowerblue;
+    float: right;
 }
 
 .TransportBar {
   display: block;
-  margin: 20% 5% 10%;
+  margin: 20% 2.5% 10%;
 }
 
 .PinBar{
@@ -64,5 +65,7 @@
 .SearchTransportButton {
   margin-top: 5%;
   margin-bottom:5%;
+  margin-right: 2.5%;
   float: right;
 }
+
