@@ -27,3 +27,23 @@
   width: 100%;
   height: 1000px;
 }
+
+.complexAttributes {
+  margin-left:10%;
+  margin-right: 10%;
+  margin-top: 5%;
+}
+
+.newComplexAttrButton {
+  float: right;
+  background-color: darkseagreen;
+}
+
+.simpleAttrButton {
+  margin-right: 2%;
+  margin-left: 2%;
+}
+
+.simpleAttrButtonList {
+  text-align: center;
+}
