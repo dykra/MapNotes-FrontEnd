@@ -4,6 +4,8 @@ import '../styles/App.css';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/css/bootstrap-theme.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import ComplexAttribute from './ComplexAttribiute';
+
 
 class App extends React.Component<any, any> {
 
@@ -11,6 +13,7 @@ class App extends React.Component<any, any> {
         return (
             <div className="App">
                 <MapMenu/>
+                <ComplexAttribute/>
             </div>
         );
     }
