@@ -6,6 +6,7 @@ import { WithScriptjsProps } from 'react-google-maps/lib/withScriptjs';
 import { WithGoogleMapProps } from 'react-google-maps/lib/withGoogleMap';
 import { GOOGLE_MAP_URL } from '../constants';
 import { MarkerData } from '../types/MarkerData';
+import LeftBarComponent from './LeftBarComponent';
 import SearchBox from 'react-google-maps/lib/components/places/SearchBox';
 import { ReactElement } from 'react';
 const INPUT_STYLE = {
@@ -70,6 +71,8 @@ const Map = compose<MapProps, MapComposeProps>(
 
 interface MapContainerState {
     markers: MarkerData[];
+    visibleLeftBar: boolean;
+    transportInput: String;
     bounds: any;
     center: any;
     isNewMarker: any;
@@ -90,6 +93,8 @@ export default class MapContainer extends React.Component<{}, MapContainerState>
 
         this.state = {
             markers: [],
+            visibleLeftBar: false,
+            transportInput: '',
             bounds: null,
             center: null,
             isNewMarker: false
@@ -142,11 +147,14 @@ export default class MapContainer extends React.Component<{}, MapContainerState>
         }));
 
         const nextCenter = searchBoxMarkers.length > 0 ? searchBoxMarkers[0].position : this.state.center;
+        if (!this.state.markers.some(item => item.position.equals(searchBoxMarkers[0].position))) {
 
-        this.setState(prevState => ({
-            center: nextCenter,
-            markers: [...prevState.markers, {position: searchBoxMarkers[0].position, isWindowOpened: false}]
-        }));
+            this.setState(prevState => ({
+                center: nextCenter,
+                markers: [...prevState.markers, {position: searchBoxMarkers[0].position, isWindowOpened: false}]
+            }));
+        }
+
         this.references.map.fitBounds(bounds);
     }
 
@@ -161,8 +169,10 @@ export default class MapContainer extends React.Component<{}, MapContainerState>
                 closePin={this.undoAddedMarker}
             />)
         );
+
         return (
             <div style={{height: '100%'}}>
+                <LeftBarComponent/>
                 <Map
                     googleMapURL={GOOGLE_MAP_URL}
                     loadingElement={<div style={{height: `100%`}}/>}
