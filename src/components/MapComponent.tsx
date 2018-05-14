@@ -130,11 +130,14 @@ export default class MapContainer extends React.Component<{}, MapContainerState>
         }));
 
         const nextCenter = searchBoxMarkers.length > 0 ? searchBoxMarkers[0].position : this.state.center;
+        if (!this.state.markers.some(item => item.position.equals(searchBoxMarkers[0].position))) {
 
-        this.setState(prevState => ({
-            center: nextCenter,
-            markers: [...prevState.markers, {position: searchBoxMarkers[0].position, isWindowOpened: false}]
-        }));
+            this.setState(prevState => ({
+                center: nextCenter,
+                markers: [...prevState.markers, {position: searchBoxMarkers[0].position, isWindowOpened: false}]
+            }));
+        }
+
         this.references.map.fitBounds(bounds);
     }
 
