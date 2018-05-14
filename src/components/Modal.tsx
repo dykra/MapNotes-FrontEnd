@@ -1,33 +1,19 @@
-import React from 'react';
-import {
-    Button,
-    ButtonToolbar,
-    ControlLabel,
-    DropdownButton,
-    FormControl,
-    FormGroup,
-    MenuItem,
-    Modal
-} from 'react-bootstrap';
+import * as React from 'react';
+import { Button, Modal } from 'react-bootstrap';
 
-
-
-
-
-
-export default class MyModal extends React.Component {
-
-    constructor(props) {
+export default class MyModal extends React.Component<any, any> {
+    // private closeClick: any;
+    constructor(props: any) {
         super(props);
-        this.closeClick = this.props.closeClick
+        // this.closeClick = this.props.closeClick;
         this.state = {value: 'submit'};
         this.handleChangeModal = this.handleChangeModal.bind(this);
     }
 
-    handleChangeModal(event, index) {
+    handleChangeModal(event: any, index: any) {
         this.setState({value: event.target.value});
-        console.log('chosen value ', event.target.value)
-        this.props.handleChange(event, index, 'type')
+        console.log('chosen value ', event.target.value);
+        this.props.handleChange(event, index, 'type');
     }
 
     render() {
@@ -39,8 +25,8 @@ export default class MyModal extends React.Component {
                     </Modal.Header>
 
                     <Modal.Body>
-                        <form onSubmit={(evt) => this.props.handleSubmit(evt)}>
-                            {this.props.inputs.map((input, index) =>
+                        <form onSubmit={(evt) => this.props.handleSubmit(evt)} >
+                            {this.props.inputs.map( ( input: any, index: any) =>
                                 <div className="form-inline" key={index}>
                                     <input
                                         onChange={(evt) => this.props.handleChange(evt, index, 'name')}
@@ -66,15 +52,12 @@ export default class MyModal extends React.Component {
                     </Modal.Body>
 
                     <Modal.Footer>
-                        <Button onClick = {this.props.handleNewInput} bsSize="xsmall">Add new input</Button>
-                        <Button onClick = {this.props.closeClick}>Close</Button>
-                        <Button onClick = {(evt) => this.props.handleSubmit(evt)} bsStyle="primary">Save changes</Button>
+                        <Button onClick={this.props.handleNewInput} bsSize="xsmall">Add new input</Button>
+                        <Button onClick={this.props.closeClick}>Close</Button>
+                        <Button onClick={(evt) => this.props.handleSubmit(evt)} bsStyle="primary">Save changes</Button>
                     </Modal.Footer>
                 </Modal.Dialog>
             </div>
         );
     }
 }
-
-
-

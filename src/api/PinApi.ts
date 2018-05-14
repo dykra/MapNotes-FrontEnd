@@ -2,7 +2,7 @@ import axios from 'axios';
 import { BASE_URL } from '../constants';
 import { PinData } from '../types/PinData';
 
-const PIN_URL = BASE_URL + '/pin';
+const PIN_URL: string = BASE_URL + '/pin';
 
 export function deletePin(id: number, cb: () => void) {
     axios.delete(PIN_URL + '/' + id)

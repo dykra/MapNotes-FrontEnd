@@ -1,25 +1,20 @@
-import React from 'react';
-import {Button, Modal} from 'react-bootstrap';
-import * as input from "react-bootstrap";
+import * as React from 'react';
+import { Button, Modal } from 'react-bootstrap';
 
+export default class Note extends React.Component<any, any> {
 
-export default class Note extends React.Component {
-
-    constructor() {
-        super();
-        this.state={
+    constructor(props: any) {
+        super(props);
+        this.state = {
             data: []
-
-        }
+        };
 
     }
 
-
     render() {
 
-
-
-        return( <div>
+        return(
+            <div>
 
                 <Modal.Dialog >
 
@@ -27,39 +22,32 @@ export default class Note extends React.Component {
                         <Modal.Title>Create new note</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-
                         <div className="container-fluid">
-
-
                         <form onSubmit={(evt) => this.props.handleSubmit(evt)}>
 
-                            {this.props.inputs.map((input, index) =>(
+                            {this.props.inputs.map((input: any, index: any) => (
 
                                 <div key={index}>
-
 
                                     {(input.name).localeCompare('') !== 0 &&
                             <label>
 
                                 <div className="col-8 col-sm-6">
 
-
                                 {input.name}
                                 </div>
                                 <div className="col-8 col-sm-6">
                                 <input
-                                onChange={(evt) => this.props.handleChange(evt, index, input.name)}
-                                value={input.value}
+                                    onChange={(evt) => this.props.handleChange(evt, index, input.name)}
+                                    value={input.value}
                                 />
                                 </div>
-
 
                             </label>}
                             {(input.name).localeCompare('') === 0 &&
                                         <div>
-
                                                 <input
-                                                    // onChange={(evt) => this.props.handleChange(evt, index, input.name)}
+                                                    // onChange={(evt) =>this.props.handleChange(evt,index, input.name)}
                                                     value={input.name}
                                                 />
                                                 <input
@@ -74,15 +62,9 @@ export default class Note extends React.Component {
                                                 <option value="no">no</option>
                                             </select>
                                             </div>
-
-
-
                             }
 
-
-
                                 </div>)
-
                             )}
 
                         </form>
@@ -91,16 +73,13 @@ export default class Note extends React.Component {
                     </Modal.Body>
                     <Modal.Footer>
 
-                        <Button onClick = {this.props.handleNewInput} bsSize="xsmall">Add new attribute</Button>
-                        <button className="btn btn-secondary"  onClick = {this.props.closeClick}> Close</button>
-                        <button onClick = {(evt) => this.props.handleSubmit(evt)} className="btn btn-primary">Save changes</button>
+                        <Button onClick={this.props.handleNewInput} bsSize="xsmall">Add new attribute</Button>
+                        <button className="btn btn-secondary"  onClick={this.props.closeClick}> Close</button>
+                        <button onClick={(evt) => this.props.handleSubmit(evt)} className="btn btn-primary">
+                            Save changes</button>
                     </Modal.Footer>
                 </Modal.Dialog>
             </div>
         );
     }
 }
-
-
-
-
