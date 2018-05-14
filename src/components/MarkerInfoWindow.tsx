@@ -45,7 +45,6 @@ export default class MarkerInfoWindow extends Component<any, any> {
     }
 
     handleAddNote(markerState: any) {
-        console.log('handle with set');
         this.setState({isNewMarker: markerState});
     }
 
@@ -55,6 +54,11 @@ export default class MarkerInfoWindow extends Component<any, any> {
 
     handleChange(evt: any, index: any, fieldName: any) {
 
+        this.state.inputs[index][fieldName] = evt.target.value;
+        this.forceUpdate();
+    }
+
+    handleChangeName(evt: any, index: any, fieldName: any) {
         this.state.inputs[index][fieldName] = evt.target.value;
         this.forceUpdate();
     }
@@ -69,7 +73,6 @@ export default class MarkerInfoWindow extends Component<any, any> {
     }
 
     handleNewInput() {
-
         this.setState({inputs: this.state.inputs.concat({name: '', type: ''})});
     }
 
@@ -163,6 +166,7 @@ export default class MarkerInfoWindow extends Component<any, any> {
                 handleNewInput={this.handleNewInput}
                 handleChange={this.handleChange}
                 handleSubmit={this.handleSubmit}
+                handleChangeName={this.handleChangeName}
                 inputValue={this.state.inputValue}
                 inputs={this.state.inputs}
                 closeClick={() => {
