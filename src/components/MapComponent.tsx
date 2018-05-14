@@ -6,6 +6,7 @@ import { WithScriptjsProps } from 'react-google-maps/lib/withScriptjs';
 import { WithGoogleMapProps } from 'react-google-maps/lib/withGoogleMap';
 import { GOOGLE_MAP_URL } from '../constants';
 import { MarkerData } from '../types/MarkerData';
+import LeftBarComponent from './LeftBarComponent';
 import SearchBox from 'react-google-maps/lib/components/places/SearchBox';
 
 const INPUT_STYLE = {
@@ -69,8 +70,11 @@ const Map = compose<MapProps, MapComposeProps>(
 
 interface MapContainerState {
     markers: MarkerData[];
+    visibleLeftBar: boolean;
+    transportInput: String;
     bounds: any;
     center: any;
+
 }
 
 export default class MapContainer extends React.Component<{}, MapContainerState> {
@@ -87,6 +91,8 @@ export default class MapContainer extends React.Component<{}, MapContainerState>
 
         this.state = {
             markers: [],
+            visibleLeftBar: false,
+            transportInput: '',
             bounds: null,
             center: null
         };
@@ -150,8 +156,10 @@ export default class MapContainer extends React.Component<{}, MapContainerState>
                 key={index}
             />)
         );
+
         return (
             <div style={{height: '100%'}}>
+                <LeftBarComponent/>
                 <Map
                     googleMapURL={GOOGLE_MAP_URL}
                     loadingElement={<div style={{height: `100%`}}/>}

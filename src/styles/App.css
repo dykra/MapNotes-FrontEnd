@@ -26,4 +26,49 @@
 .google-map {
   width: 100%;
   height: 1000px;
+
 }
+
+.ClosedLeftBar {
+    margin-top: 0.5%;
+    margin-bottom: 0.5%;
+    width: 5%;
+    height: 96%;
+    float: left;
+}
+
+.OpenedLeftBar {
+  margin-top: 0.5%;
+  margin-bottom: 0.5%;
+  width: 25%;
+  height: 96%;
+  float: left;
+}
+
+.CloseLeftBarButton {
+  float: right;
+}
+
+.OpenLeftBarButton {
+    float: right;
+}
+
+.TransportBar {
+  display: block;
+  margin: 20% 2.5% 10%;
+}
+
+.PinBar{
+  margin-top: 20%;
+  margin-bottom: 20%;
+}
+
+.SearchTransportButton {
+  margin-top: 5%;
+  margin-bottom:5%;
+  margin-right: 2.5%;
+  float: right;
+}
+
+}
+
