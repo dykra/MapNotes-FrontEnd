@@ -8,16 +8,16 @@ function parseParameter (parameter: string): Array<string> {
     }
 }
 
-function parseWithAttributeCondition (condition: string): Array<any> {
+function parseWithAttributeCondition (condition: string): Filter {
     const attributeValue = condition.split(":");
     if (attributeValue.length != 2) {
         throw new Error("W danym warunku może być co najwyżej jeden znacznik atrybutu \':\'");
     }
-    return
+    return AttributeFilter
 
 }
 
-function parseFilterAndInput (condition: string): Array<any> {
+function parseFilterAndInput (condition: string): Filter {
 
     if (condition.includes(":")) {
         return parseWithAttributeCondition(condition);
@@ -27,7 +27,7 @@ function parseFilterAndInput (condition: string): Array<any> {
 
 }
 
-function parseFilterOrInput (input: string): Array<any> {
+function parseFilterOrInput (input: string): Filter {
 
     const splitByAnd: Array<string> = input.split("&");
     return AndFilter(splitByAnd.map(parseFilterAndInput));
