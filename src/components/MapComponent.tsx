@@ -120,7 +120,6 @@ export default class MapContainer extends React.Component<{}, MapContainerState>
         let array = this.state.markers;
         array.pop();
         this.setState({markers: array});
-        // this.handleMarker();
     }
 
     onBoundsChanged() {
