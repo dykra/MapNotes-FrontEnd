@@ -1,18 +1,3 @@
-const MAX_CONDITIONS: number = 10;
-
-function conditionsToArray (input: string, separator: string): Array<string> {
-    return input.split(separator, MAX_CONDITIONS - 1)
-}
-
-function parseWithAttributeCondition (condition: string): Array<string> {
-    const parsed = conditionsToArray(condition, ":")
-    if (parsed.length != 2) {
-        //błąd zagnieżdżonego atrybutu?
-    }
-    const attribute: Array<string> = parseParameter(parsed[0])
-    const value: Array<string> = parseValue(parsed[1])
-}
-
 function parseParameter (parameter: string): Array<string> {
     if (condition.includes("<") || condition.includes(">") || condition.includes("=")) {
         //błąd znak mniejszy/większy/rowny bez atrybutu
@@ -23,36 +8,40 @@ function parseParameter (parameter: string): Array<string> {
     }
 }
 
-
-// reserved: ":" "|" "&" "."
-function parseCondition (condition: string): Array<string> {
-    if (condition.includes(":")) {
-        return parseWithAttributeCondition(condition)
-    } else {
-        return parseParameter(condition)
+function parseWithAttributeCondition (condition: string): Array<any> {
+    const attributeValue = condition.split(":");
+    if (attributeValue.length != 2) {
+        throw new Error("W danym warunku może być co najwyżej jeden znacznik atrybutu \':\'");
     }
+    return
+
 }
 
-function parseFilterInput (input: string): Array<any> {
+function parseFilterAndInput (condition: string): Array<any> {
 
-    const orConditions: Array<string> = conditionsToArray(input, "|");
-
-    let conditions: Array<Array<string>> = [];
-    for(let i = 0; i < orConditions.length; i++) {
-        conditions.push(conditionsToArray(orConditions[i], "&"))
+    if (condition.includes(":")) {
+        return parseWithAttributeCondition(condition);
+    } else {
+        return parsePlainCondition(condition);
     }
 
-    let filter: Array<Array<Array<string>>> = [];
-    for(let i = 0; i < conditions.length; i++) {
-        filter.push([]);
-        for(let j = 0;j < conditions[i].length; j++) {
-            try {
-                filter[i].push(parseCondition(conditions[i][j]))
-            } catch (exception) {
-                //wrong input
-            }
-        }
+}
+
+function parseFilterOrInput (input: string): Array<any> {
+
+    const splitByAnd: Array<string> = input.split("&");
+    return AndFilter(splitByAnd.map(parseFilterAndInput));
+
+}
+
+// reserved: ":" "|" "&" "."
+function parseFilterInput (input: string): Filter {
+
+    try{
+        const splitByOr: Array<string> = input.split("|");
+        return OrFilter(splitByOr.map(parseFilterOrInput));
+    } catch (error) {
+        console.error(error.message);
     }
 
-    return filter
 }
