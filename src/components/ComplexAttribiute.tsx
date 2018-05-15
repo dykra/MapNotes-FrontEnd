@@ -15,26 +15,41 @@ interface ComplexAttributeState {
     show: boolean;
     newComplexAttrName: string;
     newComplexAttrValue: string;
+    isDisabledOperator: boolean;
+    isDisabledSimpleAttr: boolean;
+    operators: Array<string>;
 }
 
 export default class ComplexAttribute extends React.Component<any, ComplexAttributeState> {
 
     constructor(props: {}) {
         super(props);
-        this.createListOfButtons = this.createListOfButtons.bind(this);
+        this.createListOfButtonsWithSimpleAttr = this.createListOfButtonsWithSimpleAttr.bind(this);
         this.onChangeAttributeNameInput = this.onChangeAttributeNameInput.bind(this);
         this.onChangeAttributeValueInput = this.onChangeAttributeValueInput.bind(this);
         this.handleClickAddNewComplexAttr = this.handleClickAddNewComplexAttr.bind(this);
         this.handleDeleteRow = this.handleDeleteRow.bind(this);
         this.handleClose = this.handleClose.bind(this);
         this.handleSave = this.handleSave.bind(this);
+        this.changeEnabledButtons = this.changeEnabledButtons.bind(this);
+        this.isEnabledSaveButton = this.isEnabledSaveButton.bind(this);
+        this.handleClickOnSaveComplexAttrButton = this.handleClickOnSaveComplexAttrButton.bind(this);
+        this.handleCLickOnBackToSimpleAttrButton = this.handleCLickOnBackToSimpleAttrButton.bind(this);
         this.state = {
             simpleAttributes: [ 'price' , 'size' , 'aaa' ],
             complexAttributes: [],
             show: false,
             newComplexAttrName: '',
             newComplexAttrValue: '',
+            isDisabledSimpleAttr: false,
+            isDisabledOperator: true,
+            operators: ['+', '-', '*', '/'],
         };
+    }
+
+    isEnabledSaveButton() {
+        //  TODO:  check if the input is proper
+        // this.state.newComplexAttrValue
     }
 
     onChangeAttributeNameInput(event: any) {
@@ -46,32 +61,58 @@ export default class ComplexAttribute extends React.Component<any, ComplexAttrib
         console.log('on change value input');
         console.log(event.target.value);
         this.setState({
-            newComplexAttrValue: this.state.newComplexAttrValue + '[' + event.target.value + ']'
+            newComplexAttrValue: this.state.newComplexAttrValue + ' [ ' + event.target.value + ' ] '
         });
+        this.changeEnabledButtons();
     }
 
-    createListOfButtons() {
+    changeEnabledButtons() {
+        if ( this.state.isDisabledSimpleAttr) {
+            this.setState({
+                isDisabledSimpleAttr: false,
+                isDisabledOperator: true,
+            });
+        } else {
+            this.setState({
+                isDisabledSimpleAttr: true,
+                isDisabledOperator: false,
+            });
+        }
+    }
+
+    createListOfButtonsWithSimpleAttr() {
+        //  TODO: filter attributes must be only numbers
         let simpleAttButtons = [];
-        simpleAttButtons.push(
-            <Button
-                className={'simpleAttrButton'}
-                id={'+'}
-                value={'+'}
-                onClick={this.onChangeAttributeValueInput}
-            > +
-            </Button>);
         for ( let i = 0 ; i < this.state.simpleAttributes.length ; i++ ) {
             simpleAttButtons.push((
                 <Button
                     className={'simpleAttrButton'}
                     id={this.state.simpleAttributes[i]}
                     value={this.state.simpleAttributes[i]}
+                    disabled={this.state.isDisabledSimpleAttr}
                     onClick={this.onChangeAttributeValueInput}
                 > {this.state.simpleAttributes[i]}
                 </Button>
             ));
         }
         return simpleAttButtons;
+    }
+
+    createListOfButtonsWithOperands() {
+        let operatorButtons = [];
+        for ( let i = 0 ; i < this.state.operators.length ; i++ ) {
+            operatorButtons.push((
+                <Button
+                    className={'simpleAttrButton'}
+                    id={this.state.operators[i]}
+                    value={this.state.operators[i]}
+                    disabled={this.state.isDisabledOperator}
+                    onClick={this.onChangeAttributeValueInput}
+                > {this.state.operators[i]}
+                </Button>
+            ));
+        }
+        return operatorButtons;
     }
 
     handleClickAddNewComplexAttr() {
@@ -94,6 +135,7 @@ export default class ComplexAttribute extends React.Component<any, ComplexAttrib
             show: false,
         });
     }
+
     handleSave() {
         let complexAttr: ComplexAttrType = {
                 'name': this.state.newComplexAttrName,
@@ -109,6 +151,15 @@ export default class ComplexAttribute extends React.Component<any, ComplexAttrib
         });
         console.log('save');
         this.handleClose();
+    }
+
+    handleClickOnSaveComplexAttrButton() {
+        console.log('saving complex attr');
+        console.log('move to map');
+    }
+
+    handleCLickOnBackToSimpleAttrButton() {
+        console.log('go back to simple attributes');
     }
 
     render() {
@@ -135,13 +186,14 @@ export default class ComplexAttribute extends React.Component<any, ComplexAttrib
                                 </Col>
                                 <Col sm={8}> Attribute value
                                     <FormControl
-                                        placeholder={this.state.newComplexAttrValue}
+                                        value={this.state.newComplexAttrValue}
                                         onChange={this.onChangeAttributeValueInput}
                                     />
                                 </Col>
                             </FormGroup>
                             <FormGroup controlId="formControlsSelect">
-                                <div className={'simpleAttrButtonList'}>{this.createListOfButtons()}</div>
+                                <div className={'operatorButtonList'}> {this.createListOfButtonsWithOperands()}</div>
+                                <div className={'simpleAttrButtonList'}>{this.createListOfButtonsWithSimpleAttr()}</div>
                             </FormGroup>
                         </Modal.Body>
 
@@ -193,6 +245,24 @@ export default class ComplexAttribute extends React.Component<any, ComplexAttrib
                     </div>);
                 break;
         }
-        return <div> {a} {b} </div>;
+        return (
+            <div>
+                <div>{a} {b}
+                    <div className={'complexAttrButtons'}>
+                        <Button
+                            className={'saveComplexAttrButton'}
+                            bsSize="small"
+                            onClick={this.handleClickOnSaveComplexAttrButton}
+                        >Save complex attributes
+                        </Button>
+                        <Button
+                            className={'saveComplexAttrButton'}
+                            bsSize="small"
+                            onClick={this.handleCLickOnBackToSimpleAttrButton}
+                        >Back to simple attributes
+                        </Button>
+                    </div>
+                </div>
+            </div>);
     }
 }

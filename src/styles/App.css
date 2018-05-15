@@ -87,4 +87,20 @@
 
 .simpleAttrButtonList {
   text-align: center;
+  margin-top: 2%;
+}
+
+.operatorButtonList {
+  text-align: center;
+}
+
+.complexAttrButtons {
+  margin-top: 2%;
+  float: right;
+  margin-bottom: 2%;
+}
+
+.saveComplexAttrButton {
+  margin-left: 2%;
+  margin-top: 1%;
 }
