@@ -2,11 +2,14 @@ import * as React from 'react';
 import { Button, Modal } from 'react-bootstrap';
 
 export default class MyModal extends React.Component<any, any> {
-    // private closeClick: any;
+
     constructor(props: any) {
         super(props);
-        // this.closeClick = this.props.closeClick;
-        this.state = {value: 'submit'};
+
+        this.state = {
+            value: 'submit',
+            types: [ 'm^2', 'pln', 'yes', 'no' ]
+        };
         this.handleChangeModal = this.handleChangeModal.bind(this);
     }
 
@@ -38,11 +41,18 @@ export default class MyModal extends React.Component<any, any> {
                                     />
                                         <label>
                                             <select onClick={(evt) => this.handleChangeModal(evt, index)}>
-                                                <option value="default type">default type</option>
-                                                <option value="m^2">m^2</option>
-                                                <option value="pln">pln</option>
-                                                <option value="yes">yes</option>
-                                                <option value="no">no</option>
+                                                <option value="">Default Attribute</option>
+                                                {
+                                                    this.state.types.map(function(type: any) {
+                                                        return <option
+                                                            key={type.toString()}
+                                                            value={type.toString()}
+                                                        >
+                                                            {type.toString()}
+                                                        </option>;
+                                                    })
+                                                }
+
                                             </select>
                                         </label>
                                 </div>

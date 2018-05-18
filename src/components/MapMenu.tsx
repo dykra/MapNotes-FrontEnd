@@ -3,7 +3,17 @@ import Map from './MapComponent';
 import MyModal from './Modal';
 import { Button } from 'react-bootstrap';
 
-class MapMenu extends React.Component <any, any> {
+interface MapMenuState {
+    inputValue: String;
+    inputs: any;
+    isNewMapClicked: boolean;
+    isOpen: boolean;
+    todos: any;
+    isSubmit: boolean;
+    openMap: boolean;
+}
+
+class MapMenu extends React.Component <{}, MapMenuState> {
 
     constructor(props: any) {
         super(props);
@@ -69,12 +79,10 @@ class MapMenu extends React.Component <any, any> {
                 type: input.type
             };
         });
-        let t: any;
-        t = this.state.todos;
-        t.push(newTodos);
+        // let t: any;
 
         this.setState({
-            todos : t, inputs: [{name: '', type: ''}], isSubmit: true
+            todos :  this.state.todos.concat(newTodos), inputs: [{name: '', type: ''}], isSubmit: true
         });
 
         console.log('after setting state', this.state);
@@ -126,25 +134,18 @@ class MapMenu extends React.Component <any, any> {
     }
 
     render() {
+        let returnFunction;
 
         if ( !this.state.isNewMapClicked && !this.state.isOpen && !this.state.openMap ) {
-            return(
-                this.renderMainMenu()
-            );
+            returnFunction = this.renderMainMenu();
         } else if ( this.state.isNewMapClicked ) {
-            return(
-
-                this.renderModal()
-            );
+            returnFunction = this.renderModal();
         } else if ( this.state.openMap ) {
-            return(
-                this.renderMap()
-            );
+            returnFunction = this.renderMap();
         } else {
-            return(
-                this.renderMainMenu()
-            );
+            returnFunction = this.renderMainMenu();
         }
+        return returnFunction;
     }
 }
 

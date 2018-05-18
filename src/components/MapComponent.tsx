@@ -75,7 +75,7 @@ interface MapContainerState {
     transportInput: String;
     bounds: any;
     center: any;
-    isNewMarker: any;
+    isNewMarker: boolean;
 }
 
 export default class MapContainer extends React.Component<{}, MapContainerState> {

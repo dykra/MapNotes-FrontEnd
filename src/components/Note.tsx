@@ -1,13 +1,18 @@
 import * as React from 'react';
 import { Button, Checkbox, Modal } from 'react-bootstrap';
 
-export default class Note extends React.Component<any, any> {
+interface NoteState {
+    input: any;
+    types: String[];
+
+}
+export default class Note extends React.Component<any, NoteState> {
 
     constructor(props: any) {
         super(props);
         this.state = {
-            data: [],
-            input: ''
+            input: '',
+            types: [ 'm^2', 'pln', 'yes', 'no' ]
         };
 
     }
@@ -56,17 +61,25 @@ export default class Note extends React.Component<any, any> {
                                             onChange={(evt) => this.props.handleChange(evt, index, 'type')}
                                             value={input.value}
                                         />
+
                                         <select>
-                                            <option value="default type">default type</option>
-                                            <option value="m^2">m^2</option>
-                                            <option value="pln">pln</option>
-                                            <option value="yes">yes</option>
-                                            <option value="no">no</option>
+                                            <option value="">Default Attribute</option>
+                                            {
+                                                this.state.types.map(function(type: any) {
+                                                    return <option
+                                                                key={type.toString()}
+                                                                value={type.toString()}
+                                                    >
+                                                        {type.toString()}
+                                                    </option>;
+                                                })
+                                            }
+
                                         </select>
                                         <Checkbox>Default attribute</Checkbox>
 
                                     </div>
-                                        }
+                                    }
 
                                 </div>)
                             )}
@@ -84,7 +97,6 @@ export default class Note extends React.Component<any, any> {
                     </button>
                 </Modal.Footer>
             </Modal.Dialog>
-        </div>
-        );
+        </div>);
     }
 }

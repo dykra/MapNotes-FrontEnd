@@ -3,7 +3,17 @@ import { Marker, InfoWindow } from 'react-google-maps';
 import Note from './Note';
 import { Component } from 'react';
 
-export default class MarkerInfoWindow extends Component<any, any> {
+interface MarkerInfoWindowState {
+    isOpen: boolean;
+    isNewMarker: boolean;
+    isNoteAdded: boolean;
+    inputs: any;
+    todos: String[];
+    isSubmit: boolean;
+    isDetailOpen: boolean;
+
+}
+export default class MarkerInfoWindow extends Component<any, MarkerInfoWindowState> {
 
     constructor(props: any) {
         super(props);
@@ -99,10 +109,17 @@ export default class MarkerInfoWindow extends Component<any, any> {
         this.setState({
             todos : [], inputs: [{name: '', type: ''}], isSubmit: true
         });
-        // this.handleNotes();
         this.handleAddNote(false);
-        console.log('stan:' + this.state.isOpen + this.state.isNewMarker + this.state.isNoteAdded);
 
+    }
+
+    handleNewMarker() {
+        if (this.props.isNewMarker && !this.state.isNoteAdded ) {
+            this.handleAddNote(this.props.isNewMarker);
+            this.handleNotes();
+        } else {
+            this.handleClicks(this.props.index);
+        }
     }
 
     renderMap() {
@@ -114,16 +131,10 @@ export default class MarkerInfoWindow extends Component<any, any> {
                 lng: this.props.lng
             }}
                 label={this.props.index.toString()}
-                onClick={() => {
-                    if (this.props.isNewMarker && !this.state.isNoteAdded ) {
-                        this.handleAddNote(this.props.isNewMarker);
-                        this.handleNotes();
-                        console.log('isAdded' + this.state.isNoteAdded);
-                    } else {
-                        this.handleClicks(this.props.index);
-                    }
+                onClick={
+                    () => this.handleNewMarker()
+                }
 
-                }}
                 onMouseOver={
                         () => this.handleMouseOver(this.props.index)
                     }
@@ -132,45 +143,26 @@ export default class MarkerInfoWindow extends Component<any, any> {
                     }
 
             >
-
                 {
-                    this.state.isOpen &&
-
-                    <InfoWindow >
-                        <div>
-                            <p>Atrybuty domyślne</p>
-                            <p>Obrazek</p>
-                        </div>
-                    </InfoWindow>
+                    this.handleSmallNote()
+                }
+                {
+                    this.handleExtendNote()
                 }
 
-                {
-                    this.state.isDetailOpen &&
-                    <InfoWindow onCloseClick={() => this.setState({isDetailOpen: false})}>
-                        <div>
-                            <p>Atrybuty domyślne</p>
-                            <p>Reszta atrubutów</p>
-                            <p>fghjng</p>
-
-                        </div>
-                    </InfoWindow>
-                }
             </Marker>
         );
     }
 
     renderModal() {
-        console.log('renderModal');
         return (
             <Note
                 handleNewInput={this.handleNewInput}
                 handleChange={this.handleChange}
                 handleSubmit={this.handleSubmit}
                 handleChangeName={this.handleChangeName}
-                inputValue={this.state.inputValue}
                 inputs={this.state.inputs}
                 closeClick={() => {
-                    console.log('closing');
                     this.handleNotes();
                     this.handleAddNote(false);
                     this.props.closePin();
@@ -180,21 +172,43 @@ export default class MarkerInfoWindow extends Component<any, any> {
     }
 
     render() {
+        let returnFun;
+        if (this.state.isNewMarker) {
+            returnFun = this.renderModal();
 
-            if (this.state.isNewMarker === true) {
-                console.log('jestem');
-                return(
+        } else {
 
-                    this.renderModal()
-                );
-            } else {
-                console.log(this.state.isNoteAdded);
+            returnFun = this.renderMap();
 
-                return(
-                    this.renderMap()
-                );
-            }
+        }
+        return returnFun;
 
     }
 
+    handleSmallNote() {
+           return(
+               this.state.isOpen &&
+               (
+                   <InfoWindow >
+                   <div>
+                       <p>Atrybuty domyślne</p>
+                       <p>Obrazek</p>
+                   </div>
+               </InfoWindow>
+               )
+    ) ;
+    }
+
+    handleExtendNote() {
+        return(
+            this.state.isDetailOpen && (
+                <InfoWindow onCloseClick={() => this.setState({isDetailOpen: false})}>
+                <div>
+                    <p>Atrybuty domyślne</p>
+                    <p>Reszta atrubutów</p>
+
+                </div>
+            </InfoWindow>)
+        );
+    }
 }
