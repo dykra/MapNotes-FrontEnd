@@ -1,0 +1,3 @@
+[
+  { "name" : "Door color", "type" : "color"},
+  { "name" : "Size" , "type" : "m2"}]

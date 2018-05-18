@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react';
+import * as React from 'react';
 import { compose } from 'recompose';
 import { GoogleMap, withGoogleMap, withScriptjs } from 'react-google-maps';
 import MarkerInfoWindow from './MarkerInfoWindow';
@@ -8,7 +8,7 @@ import { GOOGLE_MAP_URL } from '../constants';
 import { MarkerData } from '../types/MarkerData';
 import LeftBarComponent from './LeftBarComponent';
 import SearchBox from 'react-google-maps/lib/components/places/SearchBox';
-
+import { ReactElement } from 'react';
 const INPUT_STYLE = {
     boxSizing: `border-box`,
     border: `1px solid transparent`,
@@ -34,6 +34,7 @@ interface MapProps {
     onBoundsChanged: any;
     onPlacesChanged: any;
     bounds: any;
+    onDelete: any;
 }
 
 type MapComposeProps = WithScriptjsProps & WithGoogleMapProps & MapProps;
@@ -74,7 +75,7 @@ interface MapContainerState {
     transportInput: String;
     bounds: any;
     center: any;
-
+    isNewMarker: boolean;
 }
 
 export default class MapContainer extends React.Component<{}, MapContainerState> {
@@ -88,20 +89,23 @@ export default class MapContainer extends React.Component<{}, MapContainerState>
         this.handleSearchBoxMounted = this.handleSearchBoxMounted.bind(this);
         this.onBoundsChanged = this.onBoundsChanged.bind(this);
         this.onPlacesChanged = this.onPlacesChanged.bind(this);
+        this.undoAddedMarker = this.undoAddedMarker.bind(this);
 
         this.state = {
             markers: [],
             visibleLeftBar: false,
             transportInput: '',
             bounds: null,
-            center: null
+            center: null,
+            isNewMarker: false
         };
     }
 
     handleMapClick(event: google.maps.MouseEvent) {
         this.setState((prevState: any) => ({
-            markers: [...prevState.markers, {position: event.latLng, isWindowOpened: false}]
+            markers: [...prevState.markers, {position: event.latLng, isWindowOpened: false, isNewMarker : true}]
         }));
+        this.setState({isNewMarker : true});
     }
 
     handleSearchBoxMounted(searchBox: any) {
@@ -110,6 +114,12 @@ export default class MapContainer extends React.Component<{}, MapContainerState>
 
     handleMapMounted(map: any) {
         this.references.map = map;
+    }
+
+    undoAddedMarker() {
+        let array = this.state.markers;
+        array.pop();
+        this.setState({markers: array});
     }
 
     onBoundsChanged() {
@@ -154,6 +164,8 @@ export default class MapContainer extends React.Component<{}, MapContainerState>
                 lng={marker.position.lng()}
                 index={index}
                 key={index}
+                isNewMarker={this.state.isNewMarker}
+                closePin={this.undoAddedMarker}
             />)
         );
 
@@ -174,6 +186,7 @@ export default class MapContainer extends React.Component<{}, MapContainerState>
                     onBoundsChanged={this.onBoundsChanged}
                     bounds={this.state.bounds}
                     onPlacesChanged={this.onPlacesChanged}
+                    onDelete={this.undoAddedMarker}
                 />
             </div>
         );
