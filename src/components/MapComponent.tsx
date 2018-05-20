@@ -1,6 +1,7 @@
+/* global google */
 import * as React from 'react';
 import { compose } from 'recompose';
-import { GoogleMap, withGoogleMap, withScriptjs } from 'react-google-maps';
+import { GoogleMap, withGoogleMap, withScriptjs, DirectionsRenderer } from 'react-google-maps';
 import MarkerInfoWindow from './MarkerInfoWindow';
 import { WithScriptjsProps } from 'react-google-maps/lib/withScriptjs';
 import { WithGoogleMapProps } from 'react-google-maps/lib/withGoogleMap';
@@ -26,6 +27,7 @@ const INPUT_STYLE = {
 interface MapProps {
     googleMapURL: String;
     markers: ReactElement<any>[];
+    directions: any;
     onMapClick: (e: google.maps.MouseEvent) => void;
     defaultCenter: google.maps.LatLngLiteral;
     defaultZoom: number;
@@ -51,6 +53,7 @@ const Map = compose<MapProps, MapComposeProps>(
             onClick={props.onMapClick}
             onBoundsChanged={props.onBoundsChanged}
             ref={props.handleMapMounted}
+
         >
             <SearchBox
                 bounds={props.bounds}
@@ -65,6 +68,7 @@ const Map = compose<MapProps, MapComposeProps>(
                 />
             </SearchBox>
             {props.markers}
+            {props.directions && <DirectionsRenderer directions={props.directions} />}
         </GoogleMap>
     );
 });
@@ -76,11 +80,34 @@ interface MapContainerState {
     bounds: any;
     center: any;
     isNewMarker: boolean;
+    directions: any;
 }
 
 export default class MapContainer extends React.Component<{}, MapContainerState> {
 
-    references: { map: any; searchBox: any; } = {map: null, searchBox: null};
+    references: { map: any; searchBox: any; directionsService: any; } =
+        {map: null, searchBox: null, directionsService: null};
+
+    componentDidMount() {
+        console.log('Mounted');
+        // const DirectionsService = new google.maps.DirectionsService();
+        //
+        // DirectionsService.route({
+        //     origin: new google.maps.LatLng(41.8507300, -87.6512600),
+        //     destination: new google.maps.LatLng(41.8525800, -87.6514100),
+        //     travelMode: google.maps.TravelMode.DRIVING,
+        // },
+        //     (result,
+        //      status) => {
+        //         if (status === google.maps.DirectionsStatus.OK) {
+        //             this.setState({
+        //                 directions: result,
+        //             });
+        //         } else {
+        //             console.log(`error fetching directions ${result}`);
+        //         }
+        // });
+    }
 
     constructor(props: {}) {
         super(props);
@@ -97,7 +124,8 @@ export default class MapContainer extends React.Component<{}, MapContainerState>
             transportInput: '',
             bounds: null,
             center: null,
-            isNewMarker: false
+            isNewMarker: false,
+            directions : null,
         };
     }
 
@@ -114,6 +142,24 @@ export default class MapContainer extends React.Component<{}, MapContainerState>
 
     handleMapMounted(map: any) {
         this.references.map = map;
+        this.references.directionsService = new google.maps.DirectionsService();
+
+        this.references.directionsService.route({
+            origin: new google.maps.LatLng(41.8507300, -87.6512600),
+            destination: new google.maps.LatLng(41.8525800, -87.6514100),
+            travelMode: google.maps.TravelMode.DRIVING,
+        },
+            (result: any,
+             status: any) => {
+                if (status === google.maps.DirectionsStatus.OK) {
+                    this.setState({
+                        directions: result,
+                    });
+                } else {
+                    console.log(`error fetching directions ${result}`);
+                }
+        });
+
     }
 
     undoAddedMarker() {
@@ -179,6 +225,7 @@ export default class MapContainer extends React.Component<{}, MapContainerState>
                     mapElement={<div style={{height: `100%`}}/>}
                     onMapClick={this.handleMapClick}
                     markers={markers}
+                    directions={this.state.directions}
                     defaultCenter={{lat: -34.397, lng: 150.644}}
                     defaultZoom={8}
                     handleMapMounted={this.handleMapMounted}

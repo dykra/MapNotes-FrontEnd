@@ -5,8 +5,6 @@
   "dependencies": {
     "@types/react-bootstrap": "^0.32.9",
     "axios": "^0.18.0",
-    "@types/googlemaps": "^3.30.8",
-    "@types/markerclustererplus": "^2.1.33",
     "bootstrap": "^3.3.7",
     "link": "^0.1.5",
     "lodash": "latest",
@@ -38,7 +36,7 @@
     "eject": "react-scripts-ts eject"
   },
   "devDependencies": {
-    "@types/googlemaps": "latest",
+    "@types/googlemaps": "^3.30.8",
     "@types/jest": "^22.2.2",
     "@types/markerclustererplus": "^2.1.33",
     "@types/node": "^9.6.1",
