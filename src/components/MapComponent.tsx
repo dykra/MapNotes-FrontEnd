@@ -9,11 +9,12 @@ import { MarkerData } from '../types/MarkerData';
 import LeftBarComponent from './LeftBarComponent';
 import SearchBox from 'react-google-maps/lib/components/places/SearchBox';
 import { ReactElement } from 'react';
-import { addPin } from '../api/MapApi';
+// import { getAllPins } from '../api/PinApi';
+import { addPin, getAllMaps, getMapById, putMap } from '../api/MapApi';
+import { MapData } from '../types/MapData';
+// import { addPin } from '../api/MapApi';
 import { PinData } from '../types/PinData';
 import { getAllPins } from '../api/PinApi';
-// import { addPin } from '../api/MapApi';
-// import { PinData } from '../types/PinData';
 // import {getAllPins} from "../api/PinApi";
 const INPUT_STYLE = {
     boxSizing: `border-box`,
@@ -77,12 +78,14 @@ const Map = compose<MapProps, MapComposeProps>(
 
 interface MapContainerState {
     markers: MarkerData[];
+    gotPins: PinData[];
     visibleLeftBar: boolean;
     transportInput: String;
     bounds: any;
     center: any;
     isNewMarker: boolean;
 }
+declare var gotPins: PinData[];
 
 export default class MapContainer extends React.Component<{}, MapContainerState> {
 
@@ -103,7 +106,8 @@ export default class MapContainer extends React.Component<{}, MapContainerState>
             transportInput: '',
             bounds: null,
             center: null,
-            isNewMarker: false
+            isNewMarker: false,
+            gotPins: [],
         };
     }
 
@@ -112,28 +116,83 @@ export default class MapContainer extends React.Component<{}, MapContainerState>
         var marker: MarkerData = {
             position: new google.maps.LatLng(2.2, 5.6),
             isWindowOpened: false,
+            groupName: 'first group',
         };
 
-        // var marker: MarkerData = {
-        //     position: event.latLng,
-        //     isWindowOpened: false,
+        var marker2: MarkerData = {
+            position: new google.maps.LatLng(3.2, 5.6),
+            isWindowOpened: false,
+            groupName: 'second group',
+        };
+
+        var pin1: PinData = {
+            data: marker,
+            id: 1,
+        };
+
+        var pin2: PinData = {
+            data: marker2,
+            id: 2,
+        };
+
+        // var mockPins: PinData[] = [pin1, pin2];
+
+        // var newmap: MapData = {
+        //     data: 'trallala',
+        //     id: 1,
+        //     pins: [pin, pin2],
         // };
 
-        var pin: PinData = {
-          data: marker,
-          id: 1,
+        const mypins: PinData[] = [pin2];
+
+        const mymap: MapData = {
+            data: {attributes : mypins},
+            id: 1,
+            pins: mypins
         };
 
-        addPin(1, pin, function () { console.log(pin); });
-
-        getAllPins(function (pins: PinData[]) {
-            console.log(pins);
+        putMap(mymap, function (maps: MapData): void {
+            console.log('putting map');
+            console.log(maps);
         });
 
+        getAllMaps(function (maps: MapData[]) {
+            console.log('My maps');
+            console.log(maps);
+        });
+
+        getMapById(1, function (map: MapData) {
+            console.log('My first map');
+            console.log(map);
+        });
+
+        addPin(1, pin1, function (pin: PinData) {
+            console.log('want to add pin');
+            console.log(pin);
+        });
+
+        getAllPins(function (pins: PinData[]) {
+            console.log('my pins');
+            console.log(pins);
+            gotPins = pins;
+            console.log(gotPins);
+            // console.log('gotPins');
+            // console.log(gotPins);
+        });
+
+        for (let gotPin of this.state.gotPins) {
+            var tmpMarker: MarkerData;
+            console.log('marker');
+            tmpMarker = gotPin.data;
+            console.log(tmpMarker);
+            this.setState((prevState: any) => ({
+                markers: [...prevState.markers, tmpMarker]
+            }));
+        }
         // this.setState((prevState: any) => ({
-        //     markers: [...prevState.markers, marker]
+        //      markers: [...prevState.markers, marker]
         // }));
-        // this.setState({isNewMarker : true});
+        this.setState({isNewMarker : true});
     }
 
     handleSearchBoxMounted(searchBox: any) {
@@ -178,7 +237,8 @@ export default class MapContainer extends React.Component<{}, MapContainerState>
 
             this.setState(prevState => ({
                 center: nextCenter,
-                markers: [...prevState.markers, {position: searchBoxMarkers[0].position, isWindowOpened: false}]
+                markers: [...prevState.markers, {position: searchBoxMarkers[0].position, isWindowOpened: false,
+                    groupName: 'red'}]
             }));
         }
 
@@ -190,6 +250,7 @@ export default class MapContainer extends React.Component<{}, MapContainerState>
             <MarkerInfoWindow
                 lat={marker.position.lat()}
                 lng={marker.position.lng()}
+                groupName={marker.groupName}
                 index={index}
                 key={index}
                 isNewMarker={this.state.isNewMarker}
