@@ -9,6 +9,12 @@ import { MarkerData } from '../types/MarkerData';
 import LeftBarComponent from './LeftBarComponent';
 import SearchBox from 'react-google-maps/lib/components/places/SearchBox';
 import { ReactElement } from 'react';
+import { addPin } from '../api/MapApi';
+import { PinData } from '../types/PinData';
+import { getAllPins } from '../api/PinApi';
+// import { addPin } from '../api/MapApi';
+// import { PinData } from '../types/PinData';
+// import {getAllPins} from "../api/PinApi";
 const INPUT_STYLE = {
     boxSizing: `border-box`,
     border: `1px solid transparent`,
@@ -102,10 +108,32 @@ export default class MapContainer extends React.Component<{}, MapContainerState>
     }
 
     handleMapClick(event: google.maps.MouseEvent) {
-        this.setState((prevState: any) => ({
-            markers: [...prevState.markers, {position: event.latLng, isWindowOpened: false, isNewMarker : true}]
-        }));
-        this.setState({isNewMarker : true});
+
+        var marker: MarkerData = {
+            position: new google.maps.LatLng(2.2, 5.6),
+            isWindowOpened: false,
+        };
+
+        // var marker: MarkerData = {
+        //     position: event.latLng,
+        //     isWindowOpened: false,
+        // };
+
+        var pin: PinData = {
+          data: marker,
+          id: 1,
+        };
+
+        addPin(1, pin, function () { console.log(pin); });
+
+        getAllPins(function (pins: PinData[]) {
+            console.log(pins);
+        });
+
+        // this.setState((prevState: any) => ({
+        //     markers: [...prevState.markers, marker]
+        // }));
+        // this.setState({isNewMarker : true});
     }
 
     handleSearchBoxMounted(searchBox: any) {
@@ -168,7 +196,6 @@ export default class MapContainer extends React.Component<{}, MapContainerState>
                 closePin={this.undoAddedMarker}
             />)
         );
-
         return (
             <div style={{height: '100%'}}>
                 <LeftBarComponent/>
