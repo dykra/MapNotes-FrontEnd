@@ -69,15 +69,24 @@
   float: right;
 }
 
-.complexAttributes {
-  margin-left:10%;
-  margin-right: 10%;
-  margin-top: 5%;
+
+/*complex attributes*/
+
+.ComplexAttributes {
+  margin: 3%;
 }
 
-.newComplexAttrButton {
-  float: right;
-  background-color: darkseagreen;
+.AttrTable {
+  margin-top: 4%;
+  margin-bottom:4%;
+}
+
+.NewComplexAttrButton {
+  margin-left: 0px;
+  float: left;
+}
+.DeleteComplexAttrButton{
+  display: flex;
 }
 
 .simpleAttrButton {
@@ -85,22 +94,20 @@
   margin-left: 2%;
 }
 
-.simpleAttrButtonList {
+.complexAttributeModalBody {
   text-align: center;
   margin-top: 2%;
 }
-
 .operatorButtonList {
   text-align: center;
-}
-
-.complexAttrButtons {
+  display: inline-block;
   margin-top: 2%;
-  float: right;
-  margin-bottom: 2%;
+  margin-left: 2%;
+}
+.simpleAttrButtonList {
+  text-align: center;
+  display: inline-block;
+  margin-top: 2%;
+  margin-left: 2%;
 }
 
-.saveComplexAttrButton {
-  margin-left: 2%;
-  margin-top: 1%;
-}
