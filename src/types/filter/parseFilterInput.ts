@@ -32,8 +32,35 @@ function parseParameter (parameter: string):  Filter {
 }
 
 function chooseValueMode(text: string): Value {
-    //todo
-    return Value.Exactly;
+    const firstPoint = text.indexOf('.');
+    if (firstPoint == -1) {
+        let returnType: Value = Value.Part;
+        if (text.indexOf('!=') == 0){
+            text = text.slice(2);
+            returnType = Value.NotEq;
+        } else if (text.indexOf('<=') == 0){
+            text = text.slice(2);
+            returnType = Value.LessEq;
+        } else if (text.indexOf('>=') == 0){
+            text = text.slice(2);
+            returnType = Value.GraterEq;
+        } else if (text.indexOf('>') == 0){
+            text = text.slice(1);
+            returnType = Value.Grater;
+        } else if (text.indexOf('<') == 0){
+            text = text.slice(1);
+            returnType = Value.Less;
+        }
+        if (containLessGraterEqual(text)) {
+            throw new Error('Operatory porównania dla pojednynczego warunku mogą występować najwyżej jeden raz');
+        }
+        return returnType
+    }
+    if (firstPoint != text.length - 1) {
+        throw new Error('Znak \'.\' może być użyty tylko na końcu wartości lub atrybutu');
+    } else {
+        return Value.Exactly;
+    }
 }
 
 function parseWithAttributeCondition (condition: string): Filter {
@@ -41,10 +68,19 @@ function parseWithAttributeCondition (condition: string): Filter {
     if (attributeValue.length !== 2) {
         throw new Error('W danym warunku może być co najwyżej jeden znacznik atrybutu \':\'');
     }
-    //todo
-    const keyFilter = attributeValue[0];
-    const valueFilter = attributeValue[1];
-    return new AttributeFilter(new TextFilterType("a"), new ValueFilterType("b"));
+    const keyFilter = attributeValue[0].replace('.', '').trim();
+    const valueFilter = attributeValue[1]
+                            .replace('.', '')
+                            .replace('>', '')
+                            .replace('<', '')
+                            .replace('!=', '')
+                            .trim();
+    return new AttributeFilter(
+        new TextFilterType(keyFilter),
+        chooseTextMode(attributeValue[0].trim()),
+        new ValueFilterType(valueFilter),
+        chooseValueMode(attributeValue[1].trim())
+    );
 }
 
 function parseFilterAndInput (condition: string): Filter {
