@@ -2,8 +2,9 @@ import React from 'react';
 import { Button } from 'react-bootstrap';
 import * as ButtonToolbar from 'react-bootstrap/lib/ButtonToolbar';
 import { PinData } from '../types/PinData';
-import { addPin } from '../api/MapApi';
+import { addPin, getMapById } from '../api/MapApi';
 import { MarkerData } from '../types/MarkerData';
+import { MapData } from '../types/MapData';
 
 interface GroupsComponentState {
     visibleColors: boolean;
@@ -16,7 +17,6 @@ export default class GroupsComponent extends React.Component<any, GroupsComponen
         this.showColors = this.showColors.bind(this);
         this.hideColors = this.hideColors.bind(this);
         this.handleRed = this.handleRed.bind(this);
-        // this.myCallback = this.myCallback.bind(this);
 
         this.state = {
             gotPins: [],
@@ -79,15 +79,20 @@ export default class GroupsComponent extends React.Component<any, GroupsComponen
             id: 3,
         };
 
-        addPin(17, pin1, function (pin: PinData) {
+        addPin(18, pin1, function (pin: PinData) {
+            console.log('pin1 added');
+            console.log(pin);
+            console.log('all pins in group component');
+            getMapById(18, function (map: MapData) {
+                console.log(map.pins);
+            });
+        });
+
+        addPin(18, pin2, function (pin: PinData) {
             console.log('pin1 added');
         });
 
-        addPin(17, pin2, function (pin: PinData) {
-            console.log('pin1 added');
-        });
-
-        addPin(17, pin3, function (pin: PinData) {
+        addPin(18, pin3, function (pin: PinData) {
             console.log('pin1 added');
         });
     }
