@@ -1,14 +1,21 @@
 import React from 'react';
 import { Button } from 'react-bootstrap';
 import TransportComponent from './TransportComponent';
+import FilterComponent from './FilterComponent';
+import { Filter } from '../types/filter/Filter';
 
 interface LeftBarState {
     visibleLeftBar: boolean;
 }
 
-export default class LeftBarComponent extends React.Component<any, LeftBarState> {
+interface LeftBarComponentProps {
+    filter: (filter: Filter) => void;
+    removeFilter: () => void;
+}
 
-    constructor(props: {}) {
+export default class LeftBarComponent extends React.Component<LeftBarComponentProps, LeftBarState> {
+
+    constructor(props: LeftBarComponentProps) {
         super(props);
         this.showLeftBar = this.showLeftBar.bind(this);
         this.hideLeftBar = this.hideLeftBar.bind(this);
@@ -43,6 +50,7 @@ export default class LeftBarComponent extends React.Component<any, LeftBarState>
                        </Button>
                    </div>
                    <TransportComponent/>
+                   <FilterComponent filter={this.props.filter} removeFilter={this.props.removeFilter}/>
                </div>
             );
        } else {

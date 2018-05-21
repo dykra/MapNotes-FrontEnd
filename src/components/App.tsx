@@ -1,16 +1,18 @@
+import MapMenu from './MapMenu';
 import * as React from 'react';
 import '../styles/App.css';
-import Map from './MapComponent';
+import 'bootstrap/dist/css/bootstrap.css';
+import 'bootstrap/dist/css/bootstrap-theme.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
-class App extends React.Component {
+class App extends React.Component<any, any> {
 
     render() {
         return (
             <div className="App">
-                <Map/>
+                <MapMenu/>
             </div>
         );
     }
 }
-
 export default App;
