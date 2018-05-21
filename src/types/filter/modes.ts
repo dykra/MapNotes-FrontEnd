@@ -1,9 +1,9 @@
-enum Text {
+export enum ModeText {
     Exactly = 0,
     Part = 1
 }
 
-enum Value {
+export enum ModeValue {
     LessEq = 0,
     GraterEq = 1,
     Less = 2,

@@ -5,20 +5,21 @@ import { AttributeFilter } from './AttributeFilter';
 import { TextFilterType } from './TextFilterType';
 import { ValueFilterType } from './ValueFilterType';
 import { SearchFilter } from './SearchFilter';
+import {ModeText, ModeValue} from "./modes";
 
 function containLessGraterEqual(input: string): boolean {
     return input.includes('<') || input.includes('>') || input.includes('=')
 }
 
-function chooseTextMode(text: string): Text {
+function chooseTextMode(text: string): ModeText {
     const firstPoint = text.indexOf('.');
     if (firstPoint == -1) {
-        return Text.Part;
+        return ModeText.Part;
     }
     if (firstPoint != text.length - 1) {
         throw new Error('Znak \'.\' może być użyty tylko na końcu wartości lub atrybutu');
     } else {
-        return Text.Exactly;
+        return ModeText.Exactly;
     }
 }
 
@@ -31,25 +32,25 @@ function parseParameter (parameter: string):  Filter {
     return new SearchFilter(new TextFilterType(parameter), chooseTextMode(parameter));
 }
 
-function chooseValueMode(text: string): Value {
+function chooseValueMode(text: string): ModeValue {
     const firstPoint = text.indexOf('.');
     if (firstPoint == -1) {
-        let returnType: Value = Value.Part;
+        let returnType: ModeValue = ModeValue.Part;
         if (text.indexOf('!=') == 0){
             text = text.slice(2);
-            returnType = Value.NotEq;
+            returnType = ModeValue.NotEq;
         } else if (text.indexOf('<=') == 0){
             text = text.slice(2);
-            returnType = Value.LessEq;
+            returnType = ModeValue.LessEq;
         } else if (text.indexOf('>=') == 0){
             text = text.slice(2);
-            returnType = Value.GraterEq;
+            returnType = ModeValue.GraterEq;
         } else if (text.indexOf('>') == 0){
             text = text.slice(1);
-            returnType = Value.Grater;
+            returnType = ModeValue.Grater;
         } else if (text.indexOf('<') == 0){
             text = text.slice(1);
-            returnType = Value.Less;
+            returnType = ModeValue.Less;
         }
         if (containLessGraterEqual(text)) {
             throw new Error('Operatory porównania dla pojednynczego warunku mogą występować najwyżej jeden raz');
@@ -59,7 +60,7 @@ function chooseValueMode(text: string): Value {
     if (firstPoint != text.length - 1) {
         throw new Error('Znak \'.\' może być użyty tylko na końcu wartości lub atrybutu');
     } else {
-        return Value.Exactly;
+        return ModeValue.Exactly;
     }
 }
 
