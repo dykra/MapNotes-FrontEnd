@@ -114,7 +114,7 @@ export default class MapContainer extends React.Component<{mapId: any}, MapConta
         var marker: MarkerData = {
             position: new google.maps.LatLng(event.latLng.lat(), event.latLng.lng()),
             isWindowOpened: false,
-            groupName: 'red',
+            groupName: 'http://maps.google.com/mapfiles/ms/icons/red.png',
         };
 
         var pin1: PinData = {
@@ -122,16 +122,15 @@ export default class MapContainer extends React.Component<{mapId: any}, MapConta
             id: 1,
         };
 
-        // let mypins: PinData[] = [pin1];
-
-        addPin(17, pin1, function (pin: PinData) {
+        addPin(this.state.mapId, pin1, function (pin: PinData) {
             console.log('Pin added');
             console.log(pin);
+
         });
 
         this.setState((prevState: any) => ({
             markers: [...prevState.markers, {position: {lat: event.latLng.lat(), lng: event.latLng.lng()},
-                isWindowOpened: false}]
+                isWindowOpened: false, groupName: marker.groupName}]
         }));
         this.setState({isNewMarker : true});
     }
@@ -160,7 +159,7 @@ export default class MapContainer extends React.Component<{mapId: any}, MapConta
             this.setState((prevState: any) => ({
                 markers: [...prevState.markers,
                     { position: tmpMarker.position
-                        , isWindowOpened: false, isNewMarker : true}]
+                        , isWindowOpened: false, isNewMarker : true, groupName: tmpMarker.groupName}]
             }));
         }
         this.setState({isNewMarker : true});
