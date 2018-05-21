@@ -12,21 +12,36 @@ interface TransportState {
 
 export default class TransportComponent extends React.Component<any, TransportState> {
 
+    references: {startDestination: any; endDestination: any; } =
+        {startDestination: null, endDestination: null};
+
     constructor(props: {}) {
         super(props);
         this.searchForTransport = this.searchForTransport.bind(this);
         this.onChangeDestinationInput = this.onChangeDestinationInput.bind(this);
-        this.getTransportResult = this.getTransportResult.bind(this);
+        // this.getTransportResult = this.getTransportResult.bind(this);
+        this.onChangeDestinationInput = this.onChangeDestinationInput.bind(this);
+
         this.state = {
             transportInput: '',
             transportRes: '',
         };
     }
 
-    onChangeDestinationInput(event: any) {
+    componentDidMount() {
+        this.props.onRef(this);
+    }
+
+    componentWillUnmount() {
+        this.props.onRef(null);
+    }
+
+    onChangeDestinationInput(index: any) {
         this.setState(({
-            transportInput: event.target.value
+            transportInput: index,
         }));
+        this.references.startDestination.value = index;
+
     }
 
     searchForTransport(event: any) {
@@ -35,23 +50,31 @@ export default class TransportComponent extends React.Component<any, TransportSt
         console.log(this.state.transportInput);
     }
 
-    getTransportResult(event: any) {
-        console.log('getting transport result');
-        this.setState(({
-            transportRes: event.target.value
-        }));
-    }
+    // getTransportResult(event: any) {
+    //     console.log('getting transport result');
+    //     this.setState(({
+    //         transportRes: event.target.value
+    //     }));
+    // }
 
     render() {
         return (
             <div className={'TransportBar'}>
-                <FormGroup>
+                <FormGroup controlId="destinations">
                     <Col componentClass={ControlLabel} sm={8}>Select Destiantion</Col>
                     <Col sm={8}>
                         <FormControl
-                            placeholder="enter destination"
+                            inputRef={(ref) => {this.references.startDestination = ref; }}
+                            readOnly={true}
+                            value={'Right click on marker to start ...'}
                             onChange={this.onChangeDestinationInput}
                         />
+                        <FormControl
+                            inputRef={(ref) => {this.references.endDestination = ref; }}
+                            placeholder="Enter index of final destination"
+                            onChange={this.onChangeDestinationInput}
+                        />
+
                     </Col>
                     <Button
                         className={'SearchTransportButton'}

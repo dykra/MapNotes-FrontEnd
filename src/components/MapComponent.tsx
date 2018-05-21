@@ -119,7 +119,7 @@ export default class MapContainer extends React.Component<{}, MapContainerState>
         this.onPlacesChanged = this.onPlacesChanged.bind(this);
         this.undoAddedMarker = this.undoAddedMarker.bind(this);
         this.showTransportComponent = this.showTransportComponent.bind(this);
-        
+
         this.state = {
             markers: [],
             visibleLeftBar: false,
@@ -205,8 +205,10 @@ export default class MapContainer extends React.Component<{}, MapContainerState>
         this.references.map.fitBounds(bounds);
     }
 
-    showTransportComponent() {
+    showTransportComponent(lat: any, lng: any, index: any) {
         this.references.leftBarComponent.showLeftBar();
+        this.references.leftBarComponent.updateTransportComponentWithStartDestionation(index);
+        // todo podanie  moze tez lat i lng albo nie wiem co
     }
 
     render() {

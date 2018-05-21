@@ -8,6 +8,9 @@ interface LeftBarState {
 
 export default class LeftBarComponent extends React.Component<any, LeftBarState> {
 
+    references: {transportComponent: any; } =
+        {transportComponent: null};
+
     constructor(props: {}) {
         super(props);
         this.showLeftBar = this.showLeftBar.bind(this);
@@ -38,6 +41,10 @@ export default class LeftBarComponent extends React.Component<any, LeftBarState>
         });
     }
 
+    updateTransportComponentWithStartDestionation(index: any) {
+        this.references.transportComponent.onChangeDestinationInput(index);
+    }
+
     render() {
        let leftBar;
        if (this.state.visibleLeftBar) {
@@ -50,7 +57,7 @@ export default class LeftBarComponent extends React.Component<any, LeftBarState>
                        >hide BAR
                        </Button>
                    </div>
-                   <TransportComponent/>
+                   <TransportComponent onRef={(ref: any) => (this.references.transportComponent = ref)} />
                </div>
             );
        } else {
