@@ -46,7 +46,7 @@ export function putMap(map: MapData, cb: (map: MapData) => void) {
 }
 
 export function addPin(id: number, pin: PinData, cb: (pin: PinData) => void) {
-    axios.put(MAP_URL + '/' + id, pin)
+    axios.put(MAP_URL + '/' + id + '/pin', pin)
         .then(function (response: any) {
             cb(response.data);
         })
