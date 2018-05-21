@@ -6,6 +6,7 @@ import { FormGroup } from 'react-bootstrap';
 import * as Col from 'react-bootstrap/lib/Col';
 
 interface TransportState {
+    travelMode: google.maps.TravelMode;
 }
 
 export default class TransportComponent extends React.Component<any, TransportState> {
@@ -19,6 +20,10 @@ export default class TransportComponent extends React.Component<any, TransportSt
         this.onChangeDestinationInput = this.onChangeDestinationInput.bind(this);
         this.onChangeDestinationInput = this.onChangeDestinationInput.bind(this);
         this.removeTransport = this.removeTransport.bind(this);
+
+        this.setState({
+            travelMode: google.maps.TravelMode.DRIVING,
+        });
 
     }
 
@@ -36,13 +41,13 @@ export default class TransportComponent extends React.Component<any, TransportSt
     }
 
     searchForTransport(event: any) {
-        console.log('search transport');
-        console.log(event);
+        var startPoint: any = this.references.startDestination.value;
+        var endPoint: any = this.references.endDestination.value;
 
-        if (this.references.endDestination.value !== '' && this.references.startDestination.value !== '' ) {
+        if (startPoint !== '' && endPoint !== '' && this.props.markers.length > Math.max(endPoint, startPoint)) {
             this.references.directionsService.route({
-                    origin: this.props.markers[this.references.startDestination.value].position,
-                    destination: this.props.markers[this.references.endDestination.value].position,
+                    origin: this.props.markers[startPoint].position,
+                    destination: this.props.markers[endPoint].position,
                     travelMode: google.maps.TravelMode.DRIVING,
                 },
                 (result: any,
