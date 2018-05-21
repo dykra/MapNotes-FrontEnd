@@ -114,7 +114,7 @@ export default class MapContainer extends React.Component<{mapId: any}, MapConta
         var marker: MarkerData = {
             position: new google.maps.LatLng(event.latLng.lat(), event.latLng.lng()),
             isWindowOpened: false,
-            groupName: "red",
+            groupName: 'red',
         };
 
         var pin1: PinData = {
