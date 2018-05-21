@@ -9,8 +9,10 @@ import { MarkerData } from '../types/MarkerData';
 import LeftBarComponent from './LeftBarComponent';
 import SearchBox from 'react-google-maps/lib/components/places/SearchBox';
 import { ReactElement } from 'react';
-import { PinData } from '../types/PinData';
+import { addPin, getMapById } from '../api/MapApi';
 import { MapData } from '../types/MapData';
+import { PinData } from '../types/PinData';
+
 const INPUT_STYLE = {
     boxSizing: `border-box`,
     border: `1px solid transparent`,
@@ -37,6 +39,7 @@ interface MapProps {
     onPlacesChanged: any;
     bounds: any;
     onDelete: any;
+    mapId: any;
 }
 
 type MapComposeProps = WithScriptjsProps & WithGoogleMapProps & MapProps;
@@ -73,22 +76,19 @@ const Map = compose<MapProps, MapComposeProps>(
 
 interface MapContainerState {
     markers: MarkerData[];
-    gotPins: PinData[];
     visibleLeftBar: boolean;
     transportInput: String;
     bounds: any;
     center: any;
     isNewMarker: boolean;
-    data: any;
-    actualLat: any;
-    actualLng: any;
+    mapId: any;
 }
 
-export default class MapContainer extends React.Component<{}, MapContainerState> {
+export default class MapContainer extends React.Component<{mapId: any}, MapContainerState> {
 
     references: { map: any; searchBox: any; } = {map: null, searchBox: null};
 
-    constructor(props: {}) {
+    constructor(props: {mapId: any}) {
         super(props);
         this.handleMapClick = this.handleMapClick.bind(this);
         this.handleMapMounted = this.handleMapMounted.bind(this);
@@ -96,7 +96,7 @@ export default class MapContainer extends React.Component<{}, MapContainerState>
         this.onBoundsChanged = this.onBoundsChanged.bind(this);
         this.onPlacesChanged = this.onPlacesChanged.bind(this);
         this.undoAddedMarker = this.undoAddedMarker.bind(this);
-        this.myCallback = this.myCallback.bind(this);
+        this.getMapByIdCallback = this.getMapByIdCallback.bind(this);
 
         this.state = {
             markers: [],
@@ -104,23 +104,36 @@ export default class MapContainer extends React.Component<{}, MapContainerState>
             transportInput: '',
             bounds: null,
             center: null,
-            isNewMarker: false,
-            gotPins: [],
-            data: null,
-            actualLat: 0,
-            actualLng: 0,
+            isNewMarker: true,
+            mapId: this.props.mapId,
         };
-
-    }
-
-    myCallback(map: MapData) {
-        console.log('my map from backend');
-        console.log(map);
-        this.setState({gotPins: map.pins});
     }
 
     handleMapClick(event: google.maps.MouseEvent) {
 
+        var marker: MarkerData = {
+            position: new google.maps.LatLng(event.latLng.lat(), event.latLng.lng()),
+            isWindowOpened: false,
+            groupName: "red",
+        };
+
+        var pin1: PinData = {
+            data: marker,
+            id: 1,
+        };
+
+        // let mypins: PinData[] = [pin1];
+
+        addPin(17, pin1, function (pin: PinData) {
+            console.log('Pin added');
+            console.log(pin);
+        });
+
+        this.setState((prevState: any) => ({
+            markers: [...prevState.markers, {position: {lat: event.latLng.lat(), lng: event.latLng.lng()},
+                isWindowOpened: false}]
+        }));
+        this.setState({isNewMarker : true});
     }
 
     handleSearchBoxMounted(searchBox: any) {
@@ -128,7 +141,30 @@ export default class MapContainer extends React.Component<{}, MapContainerState>
     }
 
     handleMapMounted(map: any) {
+        console.log('MAP ID', this.state.mapId);
+        getMapById(this.state.mapId, this.getMapByIdCallback);
+        console.log('i was here');
         this.references.map = map;
+    }
+
+    public getMapByIdCallback(mapData: MapData): void {
+        console.log('map data pins', mapData.pins);
+        console.log('markers', this.state.markers);
+        let gotPins = mapData.pins;
+
+        this.setState({markers: []});
+
+        for (let gotPin of gotPins) {
+            var tmpMarker: MarkerData;
+            tmpMarker = gotPin.data;
+            this.setState((prevState: any) => ({
+                markers: [...prevState.markers,
+                    { position: tmpMarker.position
+                        , isWindowOpened: false, isNewMarker : true}]
+            }));
+        }
+        this.setState({isNewMarker : true});
+
     }
 
     undoAddedMarker() {
@@ -170,8 +206,6 @@ export default class MapContainer extends React.Component<{}, MapContainerState>
             }));
         }
 
-        this.handleMapMounted(this.references.map);
-
         this.references.map.fitBounds(bounds);
     }
 
@@ -187,6 +221,7 @@ export default class MapContainer extends React.Component<{}, MapContainerState>
                 closePin={this.undoAddedMarker}
             />)
         );
+
         return (
             <div style={{height: '100%'}}>
                 <LeftBarComponent/>
@@ -205,6 +240,8 @@ export default class MapContainer extends React.Component<{}, MapContainerState>
                     bounds={this.state.bounds}
                     onPlacesChanged={this.onPlacesChanged}
                     onDelete={this.undoAddedMarker}
+                    mapId={this.state.mapId}
+
                 />
             </div>
         );
