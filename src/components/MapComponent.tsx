@@ -129,23 +129,6 @@ export default class MapContainer extends React.Component<{}, MapContainerState>
     handleMapMounted(map: any) {
         this.references.map = map;
         this.references.directionsService = new google.maps.DirectionsService();
-
-        this.references.directionsService.route({
-            origin: new google.maps.LatLng(41.8507300, -87.6512600),
-            destination: new google.maps.LatLng(41.8525800, -87.6514100),
-            travelMode: google.maps.TravelMode.DRIVING,
-        },
-            (result: any,
-             status: any) => {
-                if (status === google.maps.DirectionsStatus.OK) {
-                    this.setState({
-                        directions: result,
-                    });
-                } else {
-                    console.log(`error fetching directions ${result}`);
-                }
-        });
-
     }
 
     undoAddedMarker() {
@@ -195,8 +178,24 @@ export default class MapContainer extends React.Component<{}, MapContainerState>
     }
 
     showRoadBetweenMarkers(startIndex: any, endIndex: any) {
-        console.log(startIndex);
+        console.log('START' + startIndex);
         console.log(endIndex);
+
+        this.references.directionsService.route({
+                origin: this.state.markers[startIndex].position, // new google.maps.LatLng(41.8507300, -87.6512600),
+                destination: this.state.markers[endIndex].position, // new google.maps.LatLng(41.8525800, -87.6514100),
+                travelMode: google.maps.TravelMode.DRIVING,
+            },
+            (result: any,
+             status: any) => {
+                if (status === google.maps.DirectionsStatus.OK) {
+                    this.setState({
+                        directions: result,
+                    });
+                } else {
+                    console.log(`error fetching directions ${result}`);
+                }
+            });
     }
 
     render() {
