@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button, Checkbox, Modal } from 'react-bootstrap';
+import { Button, Modal } from 'react-bootstrap';
 import AddAttribute from './AddAttribute';
 
 interface NoteState {
@@ -29,7 +29,6 @@ export default class Note extends React.Component<any, NoteState> {
 
     closeAddingAttribute() {
         this.setState({isAddNewAttrClick: false});
-        console.log('canceling');
     }
 
     addAttribute() {
@@ -46,6 +45,8 @@ export default class Note extends React.Component<any, NoteState> {
         console.log(name.toString());
         console.log(type.toString());
         console.log(isDefault);
+        this.props.saveAttribute(name, type, isDefault);
+        this.closeAddingAttribute();
 
     }
 
@@ -73,7 +74,6 @@ export default class Note extends React.Component<any, NoteState> {
 
                                     <div key={index}>
 
-                                        {(input.name).localeCompare('') !== 0 &&
                                         <label>
 
                                             <div className="col-8 col-sm-6">
@@ -87,37 +87,28 @@ export default class Note extends React.Component<any, NoteState> {
                                                 />
                                             </div>
 
-                                        </label>}
-                                        {(input.name).localeCompare('') === 0 &&
-                                        <div>
-                                            <input
-                                                onChange={(evt) =>
-                                                    this.props.handleChange(evt, index, 'name')}
-                                                value={input.name}
-                                            />
-                                            <input
-                                                onChange={(evt) => this.props.handleChange(evt, index, 'type')}
-                                                value={input.value}
-                                            />
+                                        </label>
 
-                                            <select>
-                                                <option value="">Default Attribute</option>
-                                                {
-                                                    this.state.types.map(function(type: any) {
-                                                        return <option
-                                                            key={type.toString()}
-                                                            value={type.toString()}
-                                                        >
-                                                            {type.toString()}
-                                                        </option>;
-                                                    })
-                                                }
+                                    </div>)
+                                )}
+                                {this.props.newAttrs.map((input: any, index: any) => (
 
-                                            </select>
-                                            <Checkbox>Default attribute</Checkbox>
+                                    <div key={index}>
 
-                                        </div>
-                                        }
+                                        <label>
+
+                                            <div className="col-8 col-sm-6">
+                                                Ala ma kota
+                                                {input.name}
+                                            </div>
+                                            <div className="col-8 col-sm-6">
+                                                <input
+                                                    onChange={(evt) => this.props.handleChange(evt, index, 'type')}
+                                                    value={input.value}
+                                                />
+                                            </div>
+
+                                        </label>
 
                                     </div>)
                                 )}

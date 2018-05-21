@@ -5,7 +5,6 @@ import { FormGroup, FormControl, Form, Col, ControlLabel,
 
 interface AddAttributeState {
     types: String[];
-    type: String;
     selected: String;
     isDefault: boolean;
     name: String;
@@ -16,7 +15,6 @@ class AddAttribute extends React.Component<any, AddAttributeState> {
         super(props);
         this.state = {
             types: [ 'm^2', 'pln', 'yes', 'no', 'text', 'number', 'other'],
-            type: '',
             selected: 'Choose type',
             isDefault: false,
             name: ''
@@ -25,7 +23,7 @@ class AddAttribute extends React.Component<any, AddAttributeState> {
         this.handleCheckbox = this.handleCheckbox.bind(this);
         this.handleNameEnter = this.handleNameEnter.bind(this);
         this.handleSave = this.handleSave.bind(this);
-        
+
     }
 
     render() {
@@ -105,8 +103,7 @@ class AddAttribute extends React.Component<any, AddAttributeState> {
     }
 
     handleSave() {
-        console.log('handleSave');
-        this.props.saveNewAttribute(this.state.name, this.state.type, this.state.isDefault);
+        this.props.saveNewAttribute(this.state.name, this.state.selected, this.state.isDefault);
     }
 
     handleNameEnter(event: any) {
