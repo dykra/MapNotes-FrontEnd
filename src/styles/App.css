@@ -103,12 +103,14 @@
   text-align: center;
   margin-top: 2%;
 }
+
 .operatorButtonList {
   text-align: center;
   display: inline-block;
   margin-top: 2%;
   margin-left: 2%;
 }
+
 .simpleAttrButtonList {
   text-align: center;
   display: inline-block;
