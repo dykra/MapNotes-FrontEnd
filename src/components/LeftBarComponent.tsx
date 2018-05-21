@@ -37,7 +37,8 @@ export default class LeftBarComponent extends React.Component<any, LeftBarState>
            leftBar = (
                <div className={'OpenedLeftBar'}>
                    <div>
-                       <GroupsComponent/>
+                       <GroupsComponent
+                       />
                        <Button
                            className={'CloseLeftBarButton'}
                            onClick={this.hideLeftBar}

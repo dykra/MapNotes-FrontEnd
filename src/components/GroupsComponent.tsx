@@ -17,6 +17,12 @@ export default class GroupsComponent extends React.Component<any, GroupsComponen
         this.showColors = this.showColors.bind(this);
         this.hideColors = this.hideColors.bind(this);
         this.handleRed = this.handleRed.bind(this);
+        this.handlePink = this.handlePink.bind(this);
+        this.handleColor = this.handleColor.bind(this);
+        this.handleGreen = this.handleGreen.bind(this);
+        this.handleBlue = this.handleBlue.bind(this);
+        this.handleYellow = this.handleYellow.bind(this);
+        this.handlePurple = this.handlePurple.bind(this);
 
         this.state = {
             gotPins: [],
@@ -39,62 +45,82 @@ export default class GroupsComponent extends React.Component<any, GroupsComponen
     }
 
     handleRed(event: any) {
-        return;
+        this.handleColor('http://maps.google.com/mapfiles/ms/icons/red.png');
     }
 
     handlePink(event: any) {
+        this.handleColor('http://maps.google.com/mapfiles/ms/icons/pink.png');
+    }
 
-        let groupPink = 'http://maps.google.com/mapfiles/ms/icons/pink.png';
+    handleYellow(event: any) {
+        this.handleColor('http://maps.google.com/mapfiles/ms/icons/yellow.png');
+    }
+
+    handlePurple(event: any) {
+        this.handleColor('http://maps.google.com/mapfiles/ms/icons/purple.png');
+    }
+
+    handleBlue(event: any) {
+        this.handleColor('http://maps.google.com/mapfiles/ms/icons/blue.png');
+    }
+
+    handleGreen(event: any) {
+        this.handleColor('http://maps.google.com/mapfiles/ms/icons/green.png');
+    }
+
+    handleColor(color: string) {
 
         var marker: MarkerData = {
-            position: new google.maps.LatLng(50.22, 60.44),
+            position: new google.maps.LatLng(70.22, 60.44),
             isWindowOpened: false,
-            groupName: groupPink,
+            groupName: color,
         };
 
         var marker2: MarkerData = {
-            position: new google.maps.LatLng(50.22, 50.44),
+            position: new google.maps.LatLng(70.22, 50.44),
             isWindowOpened: false,
-            groupName: groupPink,
+            groupName: color,
         };
 
         var marker3: MarkerData = {
-            position: new google.maps.LatLng(50.22, 20.44),
+            position: new google.maps.LatLng(70.22, 20.44),
             isWindowOpened: false,
-            groupName: groupPink,
+            groupName: color,
         };
 
         var pin1: PinData = {
             data: marker,
-            id: 1,
+            id: 5,
         };
 
         var pin2: PinData = {
             data: marker2,
-            id: 2,
+            id: 6,
         };
 
         var pin3: PinData = {
             data: marker3,
-            id: 3,
+            id: 7,
         };
 
-        addPin(18, pin1, function (pin: PinData) {
+        addPin(20, pin1, function (pin: PinData) {
             console.log('pin1 added');
             console.log(pin);
             console.log('all pins in group component');
             getMapById(18, function (map: MapData) {
                 console.log(map.pins);
             });
+
+            addPin(20, pin2, function (pina: PinData) {
+                console.log('pin1 added');
+            });
+
+            addPin(20, pin3, function (pinb: PinData) {
+                console.log('pin1 added');
+            });
+
         });
 
-        addPin(18, pin2, function (pin: PinData) {
-            console.log('pin1 added');
-        });
-
-        addPin(18, pin3, function (pin: PinData) {
-            console.log('pin1 added');
-        });
     }
 
     render() {
@@ -106,8 +132,10 @@ export default class GroupsComponent extends React.Component<any, GroupsComponen
                     <ButtonToolbar>
                         <Button onClick={this.handleRed}>Red</Button>
                         <Button onClick={this.handlePink}>Pink</Button>
-                        <Button>Blue</Button>
-                        <Button>Green</Button>
+                        <Button onClick={this.handleBlue}>Blue</Button>
+                        <Button onClick={this.handleGreen}>Green</Button>
+                        <Button onClick={this.handleYellow}>Yellow</Button>
+                        <Button onClick={this.handlePurple}>Purple</Button>
                     </ButtonToolbar>
                 </div>
             );
