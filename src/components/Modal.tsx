@@ -65,6 +65,8 @@ export default class MyModal extends React.Component<any, any> {
                         <Button onClick={this.props.handleNewInput} bsSize="xsmall">Add new input</Button>
                         <Button onClick={this.props.closeClick}>Close</Button>
                         <Button onClick={(evt) => this.props.handleSubmit(evt)} bsStyle="primary">Save changes</Button>
+                        <Button onClick={this.props.handleAddComplexAttr} bsStyle="primary">
+                            AddComplexAttr</Button>
                     </Modal.Footer>
                 </Modal.Dialog>
             </div>

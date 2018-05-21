@@ -10,7 +10,8 @@ import { MarkerData } from '../types/MarkerData';
 import LeftBarComponent from './LeftBarComponent';
 import SearchBox from 'react-google-maps/lib/components/places/SearchBox';
 import { ReactElement } from 'react';
-const INPUT_STYLE = {
+
+export const INPUT_STYLE: React.CSSProperties = {
     boxSizing: `border-box`,
     border: `1px solid transparent`,
     width: `240px`,
