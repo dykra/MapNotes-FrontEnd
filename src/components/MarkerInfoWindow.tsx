@@ -3,6 +3,8 @@ import { Marker, InfoWindow } from 'react-google-maps';
 import Note from './Note';
 import { Component } from 'react';
 import '../images/markers/pink.png';
+import '../images/markers/red.png';
+import '../images/markers/blue.png';
 
 interface MarkerInfoWindowState {
     isOpen: boolean;

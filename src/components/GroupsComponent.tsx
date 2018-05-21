@@ -1,13 +1,13 @@
 import React from 'react';
 import { Button } from 'react-bootstrap';
 import * as ButtonToolbar from 'react-bootstrap/lib/ButtonToolbar';
-import { MarkerData } from '../types/MarkerData';
-import { deletePin, getAllPins } from '../api/PinApi';
 import { PinData } from '../types/PinData';
 import { addPin } from '../api/MapApi';
+import { MarkerData } from '../types/MarkerData';
 
 interface GroupsComponentState {
     visibleColors: boolean;
+    gotPins: PinData[];
 }
 
 export default class GroupsComponent extends React.Component<any, GroupsComponentState> {
@@ -16,7 +16,10 @@ export default class GroupsComponent extends React.Component<any, GroupsComponen
         this.showColors = this.showColors.bind(this);
         this.hideColors = this.hideColors.bind(this);
         this.handleRed = this.handleRed.bind(this);
+        // this.myCallback = this.myCallback.bind(this);
+
         this.state = {
+            gotPins: [],
             visibleColors: false,
         };
     }
@@ -41,44 +44,52 @@ export default class GroupsComponent extends React.Component<any, GroupsComponen
 
     handlePink(event: any) {
 
-        var gotPins: PinData[] = [];
-        getAllPins(function (pins: PinData[]) {
-            console.log('my pins');
-            console.log(pins);
-            gotPins = pins;
+        let groupPink = 'http://maps.google.com/mapfiles/ms/icons/pink.png';
+
+        var marker: MarkerData = {
+            position: new google.maps.LatLng(50.22, 60.44),
+            isWindowOpened: false,
+            groupName: groupPink,
+        };
+
+        var marker2: MarkerData = {
+            position: new google.maps.LatLng(50.22, 50.44),
+            isWindowOpened: false,
+            groupName: groupPink,
+        };
+
+        var marker3: MarkerData = {
+            position: new google.maps.LatLng(50.22, 20.44),
+            isWindowOpened: false,
+            groupName: groupPink,
+        };
+
+        var pin1: PinData = {
+            data: marker,
+            id: 1,
+        };
+
+        var pin2: PinData = {
+            data: marker2,
+            id: 2,
+        };
+
+        var pin3: PinData = {
+            data: marker3,
+            id: 3,
+        };
+
+        addPin(17, pin1, function (pin: PinData) {
+            console.log('pin1 added');
         });
 
-        for (let pin of gotPins) {
-            console.log(pin);
-            deletePin(pin.id, function () { return; });
-            var oldMarker: MarkerData = pin.data;
-            var newMarker: MarkerData = {
-                position: oldMarker.position,
-                isWindowOpened: oldMarker.isWindowOpened,
-                groupName: 'pink',
-            };
-            var newPin: PinData = {
-                data: newMarker,
-                id: pin.id,
-            };
-            addPin(1, newPin, function () { return; });
-        }
+        addPin(17, pin2, function (pin: PinData) {
+            console.log('pin1 added');
+        });
 
-        // var marker: MarkerData = {
-        //     position: new google.maps.LatLng(5.2, 10.6),
-        //     isWindowOpened: false,
-        //     groupName: 'pink',
-        // };
-        //
-        // var marker2: MarkerData = {
-        //     position: new google.maps.LatLng(5.2, 12.6),
-        //     isWindowOpened: false,
-        //     groupName: 'pink',
-        // };
-        //
-        // let markers = [];
-        // let
-
+        addPin(17, pin3, function (pin: PinData) {
+            console.log('pin1 added');
+        });
     }
 
     render() {
