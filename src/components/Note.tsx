@@ -61,72 +61,86 @@ export default class Note extends React.Component<any, NoteState> {
         return(
             <div>
 
-                <Modal.Dialog>
+            <Modal.Dialog>
 
-                    <Modal.Header>
-                        <Modal.Title>Create new note</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                        <div className="container-fluid">
-                            <form onSubmit={(evt) => this.props.handleSubmit(evt)}>
+                <Modal.Header>
+                    <Modal.Title>Create new note</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <div className="container-fluid">
 
-                                {this.props.inputs.map((input: any, index: any) => (
+                        <form onSubmit={(evt) => this.props.handleSubmit(evt)}>
 
-                                    <div key={index}>
+                            {this.props.inputs.map((input: any, index: any) => (
 
-                                        <label>
+                                <div key={index}>
 
-                                            <div className="col-8 col-sm-6">
+                                    <label>
 
-                                                {input.name}
-                                            </div>
-                                            <div className="col-8 col-sm-6">
-                                                <input
-                                                    onChange={(evt) => this.props.handleChange(evt, index, 'type')}
-                                                    value={input.value}
-                                                />
-                                            </div>
+                                        <div className="col-8 col-sm-6">
 
-                                        </label>
+                                            {input.name}
+                                        </div>
+                                        <div className="col-8 col-sm-6">
+                                            <input
+                                                onChange={(evt) => this.props.handleChange(evt, index, 'type')}
+                                                value={input.value}
+                                            />
+                                        </div>
 
-                                    </div>)
-                                )}
+                                    </label>
+
+                                </div>)
+                            )}
+
                                 {this.props.newAttrs.map((input: any, index: any) => (
 
-                                    <div key={index}>
+                                        <div key={index}>
 
-                                        <label>
+                                            <label>
+                                                <div className="col-8 col-sm-6">
+                                                    {input.name}
+                                                </div>
 
-                                            <div className="col-8 col-sm-6">
-                                                Ala ma kota
-                                                {input.name}
-                                            </div>
-                                            <div className="col-8 col-sm-6">
-                                                <input
-                                                    onChange={(evt) => this.props.handleChange(evt, index, 'type')}
-                                                    value={input.value}
-                                                />
-                                            </div>
+                                                    <input
+                                                        onChange={(evt) => this.props.handleChange(evt, index, 'type')}
+                                                        value={input.value}
+                                                    />
 
-                                        </label>
+                                                        <Button
+                                                            bsSize="xsmall"
+                                                            onClick={() => this.deleteAttr(input, index)}
+                                                        >
+                                                            X
+                                                        </Button>
 
-                                    </div>)
+                                            </label>
+
+                                        </div>
+                                    )
                                 )}
 
-                            </form>
-                        </div>
-                        <div>{returnFunction}</div>
-                    </Modal.Body>
-                    <Modal.Footer>
+                        </form>
+                    </div>
+                    <div>{returnFunction}</div>
+                </Modal.Body>
+                <Modal.Footer>
 
-                        <Button onClick={this.handleAddNew} bsSize="xsmall">Add new attribute</Button>
-                        <button className="btn btn-secondary" onClick={this.props.closeClick}> Close</button>
-                        <button onClick={(evt) => this.props.handleSubmit(evt)} className="btn btn-primary">
-                            Save changes
-                        </button>
-                    </Modal.Footer>
-                </Modal.Dialog>
-            </div>);
+                    <Button onClick={this.handleAddNew} bsSize="xsmall">Add new attribute</Button>
+                    <button className="btn btn-secondary" onClick={this.props.closeClick}> Close</button>
+                    <button onClick={(evt) => this.props.handleSubmit(evt)} className="btn btn-primary">
+                        Save changes
+                    </button>
+                </Modal.Footer>
+            </Modal.Dialog>
+        </div>
+        );
     }
 
+    deleteAttr(input: any, index: any) {
+        console.log('input');
+        console.log(index);
+        console.log(input);
+        this.props.deleteAttribute(input, index);
+    }
 }
