@@ -6,8 +6,6 @@ import { FormGroup } from 'react-bootstrap';
 import * as Col from 'react-bootstrap/lib/Col';
 
 interface TransportState {
-    transportInput: string;
-    transportRes: any;
 }
 
 export default class TransportComponent extends React.Component<any, TransportState> {
@@ -19,13 +17,8 @@ export default class TransportComponent extends React.Component<any, TransportSt
         super(props);
         this.searchForTransport = this.searchForTransport.bind(this);
         this.onChangeDestinationInput = this.onChangeDestinationInput.bind(this);
-        // this.getTransportResult = this.getTransportResult.bind(this);
         this.onChangeDestinationInput = this.onChangeDestinationInput.bind(this);
 
-        this.state = {
-            transportInput: '',
-            transportRes: '',
-        };
     }
 
     componentDidMount() {
@@ -37,25 +30,18 @@ export default class TransportComponent extends React.Component<any, TransportSt
     }
 
     onChangeDestinationInput(index: any) {
-        this.setState(({
-            transportInput: index,
-        }));
         this.references.startDestination.value = index;
-
     }
 
     searchForTransport(event: any) {
         console.log('search transport');
         console.log(event);
-        console.log(this.state.transportInput);
-    }
 
-    // getTransportResult(event: any) {
-    //     console.log('getting transport result');
-    //     this.setState(({
-    //         transportRes: event.target.value
-    //     }));
-    // }
+        if (this.references.endDestination.value !== '' && this.references.startDestination.value !== '' ) {
+            this.props.showRoadBetweenMarkers(this.references.startDestination.value,
+                this.references.endDestination.value);
+        }
+    }
 
     render() {
         return (
@@ -66,13 +52,12 @@ export default class TransportComponent extends React.Component<any, TransportSt
                         <FormControl
                             inputRef={(ref) => {this.references.startDestination = ref; }}
                             readOnly={true}
-                            value={'Right click on marker to start ...'}
+                            placeholder={'Right click on marker to start ...'}
                             onChange={this.onChangeDestinationInput}
                         />
                         <FormControl
                             inputRef={(ref) => {this.references.endDestination = ref; }}
                             placeholder="Enter index of final destination"
-                            onChange={this.onChangeDestinationInput}
                         />
 
                     </Col>

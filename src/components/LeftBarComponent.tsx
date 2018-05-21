@@ -15,6 +15,7 @@ export default class LeftBarComponent extends React.Component<any, LeftBarState>
         super(props);
         this.showLeftBar = this.showLeftBar.bind(this);
         this.hideLeftBar = this.hideLeftBar.bind(this);
+        this.showRoadBetweenMarkers = this.showRoadBetweenMarkers.bind(this);
         this.state = {
             visibleLeftBar: false,
         };
@@ -45,6 +46,10 @@ export default class LeftBarComponent extends React.Component<any, LeftBarState>
         this.references.transportComponent.onChangeDestinationInput(index);
     }
 
+    showRoadBetweenMarkers(start: any, end: any) {
+        this.props.showRoadBetweenMarkers(start, end);
+    }
+
     render() {
        let leftBar;
        if (this.state.visibleLeftBar) {
@@ -57,7 +62,10 @@ export default class LeftBarComponent extends React.Component<any, LeftBarState>
                        >hide BAR
                        </Button>
                    </div>
-                   <TransportComponent onRef={(ref: any) => (this.references.transportComponent = ref)} />
+                   <TransportComponent
+                       onRef={(ref: any) => (this.references.transportComponent = ref)}
+                       showRoadBetweenMarkers={this.showRoadBetweenMarkers}
+                   />
                </div>
             );
        } else {

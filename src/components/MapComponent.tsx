@@ -91,23 +91,6 @@ export default class MapContainer extends React.Component<{}, MapContainerState>
 
     componentDidMount() {
         console.log('Mounted');
-        // const DirectionsService = new google.maps.DirectionsService();
-        //
-        // DirectionsService.route({
-        //     origin: new google.maps.LatLng(41.8507300, -87.6512600),
-        //     destination: new google.maps.LatLng(41.8525800, -87.6514100),
-        //     travelMode: google.maps.TravelMode.DRIVING,
-        // },
-        //     (result,
-        //      status) => {
-        //         if (status === google.maps.DirectionsStatus.OK) {
-        //             this.setState({
-        //                 directions: result,
-        //             });
-        //         } else {
-        //             console.log(`error fetching directions ${result}`);
-        //         }
-        // });
     }
 
     constructor(props: {}) {
@@ -119,6 +102,7 @@ export default class MapContainer extends React.Component<{}, MapContainerState>
         this.onPlacesChanged = this.onPlacesChanged.bind(this);
         this.undoAddedMarker = this.undoAddedMarker.bind(this);
         this.showTransportComponent = this.showTransportComponent.bind(this);
+        this.showRoadBetweenMarkers = this.showRoadBetweenMarkers.bind(this);
 
         this.state = {
             markers: [],
@@ -208,7 +192,11 @@ export default class MapContainer extends React.Component<{}, MapContainerState>
     showTransportComponent(lat: any, lng: any, index: any) {
         this.references.leftBarComponent.showLeftBar();
         this.references.leftBarComponent.updateTransportComponentWithStartDestionation(index);
-        // todo podanie  moze tez lat i lng albo nie wiem co
+    }
+
+    showRoadBetweenMarkers(startIndex: any, endIndex: any) {
+        console.log(startIndex);
+        console.log(endIndex);
     }
 
     render() {
@@ -226,7 +214,10 @@ export default class MapContainer extends React.Component<{}, MapContainerState>
 
         return (
             <div style={{height: '100%'}} >
-                <LeftBarComponent onRef={(ref: any) => (this.references.leftBarComponent = ref)} />
+                <LeftBarComponent
+                    onRef={(ref: any) => (this.references.leftBarComponent = ref)}
+                    showRoadBetweenMarkers={this.showRoadBetweenMarkers}
+                />
                 <Map
                     googleMapURL={GOOGLE_MAP_URL}
                     loadingElement={<div style={{height: `100%`}}/>}
