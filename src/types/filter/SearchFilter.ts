@@ -6,7 +6,7 @@ export class SearchFilter implements Filter {
 
     private filter: TextFilterType;
 
-    constructor(filter: TextFilterType) {
+    constructor(filter: TextFilterType, mode: Text) {
         this.filter = filter;
     }
 

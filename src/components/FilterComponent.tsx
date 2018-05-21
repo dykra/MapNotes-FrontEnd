@@ -5,7 +5,7 @@ import * as ControlLabel from 'react-bootstrap/lib/ControlLabel';
 import { FormGroup } from 'react-bootstrap';
 import * as Col from 'react-bootstrap/lib/Col';
 import { Filter } from '../types/filter/Filter';
-import { parseFilterInput } from '../utils/filter/parseFilterInput';
+import { parseFilterInput } from '../types/filter/parseFilterInput';
 
 interface FilterState {
     input: string;
