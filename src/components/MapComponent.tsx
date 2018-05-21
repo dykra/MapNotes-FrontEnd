@@ -128,7 +128,6 @@ export default class MapContainer extends React.Component<{}, MapContainerState>
 
     handleMapMounted(map: any) {
         this.references.map = map;
-        this.references.directionsService = new google.maps.DirectionsService();
     }
 
     undoAddedMarker() {
@@ -177,25 +176,10 @@ export default class MapContainer extends React.Component<{}, MapContainerState>
         this.references.leftBarComponent.updateTransportComponentWithStartDestionation(index);
     }
 
-    showRoadBetweenMarkers(startIndex: any, endIndex: any) {
-        console.log('START' + startIndex);
-        console.log(endIndex);
-
-        this.references.directionsService.route({
-                origin: this.state.markers[startIndex].position, // new google.maps.LatLng(41.8507300, -87.6512600),
-                destination: this.state.markers[endIndex].position, // new google.maps.LatLng(41.8525800, -87.6514100),
-                travelMode: google.maps.TravelMode.DRIVING,
-            },
-            (result: any,
-             status: any) => {
-                if (status === google.maps.DirectionsStatus.OK) {
-                    this.setState({
-                        directions: result,
-                    });
-                } else {
-                    console.log(`error fetching directions ${result}`);
-                }
-            });
+    showRoadBetweenMarkers(result: any) {
+        this.setState({
+            directions: result,
+        });
     }
 
     render() {
@@ -216,6 +200,7 @@ export default class MapContainer extends React.Component<{}, MapContainerState>
                 <LeftBarComponent
                     onRef={(ref: any) => (this.references.leftBarComponent = ref)}
                     showRoadBetweenMarkers={this.showRoadBetweenMarkers}
+                    markers={this.state.markers}
                 />
                 <Map
                     googleMapURL={GOOGLE_MAP_URL}

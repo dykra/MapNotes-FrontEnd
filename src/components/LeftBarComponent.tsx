@@ -46,8 +46,8 @@ export default class LeftBarComponent extends React.Component<any, LeftBarState>
         this.references.transportComponent.onChangeDestinationInput(index);
     }
 
-    showRoadBetweenMarkers(start: any, end: any) {
-        this.props.showRoadBetweenMarkers(start, end);
+    showRoadBetweenMarkers(result: any) {
+        this.props.showRoadBetweenMarkers(result);
     }
 
     render() {
@@ -65,6 +65,7 @@ export default class LeftBarComponent extends React.Component<any, LeftBarState>
                    <TransportComponent
                        onRef={(ref: any) => (this.references.transportComponent = ref)}
                        showRoadBetweenMarkers={this.showRoadBetweenMarkers}
+                       markers={this.props.markers}
                    />
                </div>
             );

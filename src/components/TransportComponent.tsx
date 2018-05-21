@@ -10,19 +10,21 @@ interface TransportState {
 
 export default class TransportComponent extends React.Component<any, TransportState> {
 
-    references: {startDestination: any; endDestination: any; } =
-        {startDestination: null, endDestination: null};
+    references: {startDestination: any; endDestination: any; directionsService: any } =
+        {startDestination: null, endDestination: null, directionsService: null};
 
     constructor(props: {}) {
         super(props);
         this.searchForTransport = this.searchForTransport.bind(this);
         this.onChangeDestinationInput = this.onChangeDestinationInput.bind(this);
         this.onChangeDestinationInput = this.onChangeDestinationInput.bind(this);
+        this.removeTransport = this.removeTransport.bind(this);
 
     }
 
     componentDidMount() {
         this.props.onRef(this);
+        this.references.directionsService = new google.maps.DirectionsService();
     }
 
     componentWillUnmount() {
@@ -38,9 +40,24 @@ export default class TransportComponent extends React.Component<any, TransportSt
         console.log(event);
 
         if (this.references.endDestination.value !== '' && this.references.startDestination.value !== '' ) {
-            this.props.showRoadBetweenMarkers(this.references.startDestination.value,
-                this.references.endDestination.value);
+            this.references.directionsService.route({
+                    origin: this.props.markers[this.references.startDestination.value].position,
+                    destination: this.props.markers[this.references.endDestination.value].position,
+                    travelMode: google.maps.TravelMode.DRIVING,
+                },
+                (result: any,
+                 status: any) => {
+                    if (status === google.maps.DirectionsStatus.OK) {
+                        this.props.showRoadBetweenMarkers(result);
+                    } else {
+                        console.log(`error fetching directions ${result}`);
+                    }
+                });
         }
+    }
+
+    removeTransport() {
+        this.props.showRoadBetweenMarkers(null);
     }
 
     render() {
@@ -67,6 +84,13 @@ export default class TransportComponent extends React.Component<any, TransportSt
                         active={true}
                         onClick={this.searchForTransport}
                     >SEARCH
+                    </Button>
+                    <Button
+                        className={'RemoveTransport'}
+                        bsSize="small"
+                        active={true}
+                        onClick={this.removeTransport}
+                    >REMOVE PATH
                     </Button>
                 </FormGroup>
             </div>
