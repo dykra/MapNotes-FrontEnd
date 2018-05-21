@@ -9,18 +9,21 @@ import { MapData } from '../types/MapData';
 interface GroupsComponentState {
     visibleColors: boolean;
     gotPins: PinData[];
+    mapId: any;
 }
 
-export default class GroupsComponent extends React.Component<any, GroupsComponentState> {
-    constructor(props: {}) {
+export default class GroupsComponent extends React.Component<{mapId: any}, GroupsComponentState> {
+    constructor(props: {mapId: any}) {
         super(props);
         this.showColors = this.showColors.bind(this);
         this.hideColors = this.hideColors.bind(this);
         this.handleRed = this.handleRed.bind(this);
+        this.handlePink = this.handlePink.bind(this);
 
         this.state = {
             gotPins: [],
             visibleColors: false,
+            mapId: this.props.mapId,
         };
     }
 
@@ -79,7 +82,7 @@ export default class GroupsComponent extends React.Component<any, GroupsComponen
             id: 3,
         };
 
-        addPin(18, pin1, function (pin: PinData) {
+        addPin(this.state.mapId, pin1, function (pin: PinData) {
             console.log('pin1 added');
             console.log(pin);
             console.log('all pins in group component');
@@ -88,11 +91,11 @@ export default class GroupsComponent extends React.Component<any, GroupsComponen
             });
         });
 
-        addPin(18, pin2, function (pin: PinData) {
+        addPin(this.state.mapId, pin2, function (pin: PinData) {
             console.log('pin1 added');
         });
 
-        addPin(18, pin3, function (pin: PinData) {
+        addPin(this.state.mapId, pin3, function (pin: PinData) {
             console.log('pin1 added');
         });
     }

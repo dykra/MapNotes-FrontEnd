@@ -223,7 +223,7 @@ export default class MapContainer extends React.Component<{mapId: any}, MapConta
 
         return (
             <div style={{height: '100%'}}>
-                <LeftBarComponent/>
+                <LeftBarComponent mapId={this.state.mapId}/>
                 <Map
                     googleMapURL={GOOGLE_MAP_URL}
                     loadingElement={<div style={{height: `100%`}}/>}
