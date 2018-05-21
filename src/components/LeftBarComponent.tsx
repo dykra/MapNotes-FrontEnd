@@ -17,6 +17,14 @@ export default class LeftBarComponent extends React.Component<any, LeftBarState>
         };
     }
 
+    componentDidMount() {
+        this.props.onRef(this);
+    }
+
+    componentWillUnmount() {
+        this.props.onRef(null);
+    }
+
     showLeftBar(event: any) {
         this.setState(
             {

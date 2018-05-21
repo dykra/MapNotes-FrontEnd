@@ -85,8 +85,9 @@ interface MapContainerState {
 
 export default class MapContainer extends React.Component<{}, MapContainerState> {
 
-    references: { map: any; searchBox: any; directionsService: any; } =
-        {map: null, searchBox: null, directionsService: null};
+    references: {leftBarComponent: any;
+        map: any; searchBox: any; directionsService: any; } =
+        {leftBarComponent: null, map: null, searchBox: null, directionsService: null};
 
     componentDidMount() {
         console.log('Mounted');
@@ -201,6 +202,11 @@ export default class MapContainer extends React.Component<{}, MapContainerState>
         }
 
         this.references.map.fitBounds(bounds);
+        this.onTransportShow();
+    }
+
+    onTransportShow() {
+        this.references.leftBarComponent.showLeftBar();
     }
 
     render() {
@@ -216,8 +222,8 @@ export default class MapContainer extends React.Component<{}, MapContainerState>
         );
 
         return (
-            <div style={{height: '100%'}}>
-                <LeftBarComponent/>
+            <div style={{height: '100%'}} >
+                <LeftBarComponent onRef={(ref: any) => (this.references.leftBarComponent = ref)} />
                 <Map
                     googleMapURL={GOOGLE_MAP_URL}
                     loadingElement={<div style={{height: `100%`}}/>}
