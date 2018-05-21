@@ -28,8 +28,9 @@ function parseParameter (parameter: string):  Filter {
     if (containLessGraterEqual(parameter)) {
         throw new Error('Aby użyć operatorów porównania należy podać atrybut danego pola');
     }
+    const textMode = chooseTextMode(parameter);
     parameter = parameter.replace('.', '').trim();
-    return new SearchFilter(new TextFilterType(parameter), chooseTextMode(parameter));
+    return new SearchFilter(new TextFilterType(parameter), textMode);
 }
 
 function chooseValueMode(text: string): ModeValue {
