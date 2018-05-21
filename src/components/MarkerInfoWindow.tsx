@@ -59,6 +59,8 @@ export default class MarkerInfoWindow extends Component<any, MarkerInfoWindowSta
         console.log(this.props.lat);
         console.log(this.props.lng);
 
+        this.props.showTransportComponent();
+
     }
 
     handleAddNote(markerState: any) {

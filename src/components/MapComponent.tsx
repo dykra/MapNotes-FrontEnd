@@ -118,7 +118,8 @@ export default class MapContainer extends React.Component<{}, MapContainerState>
         this.onBoundsChanged = this.onBoundsChanged.bind(this);
         this.onPlacesChanged = this.onPlacesChanged.bind(this);
         this.undoAddedMarker = this.undoAddedMarker.bind(this);
-
+        this.showTransportComponent = this.showTransportComponent.bind(this);
+        
         this.state = {
             markers: [],
             visibleLeftBar: false,
@@ -202,10 +203,9 @@ export default class MapContainer extends React.Component<{}, MapContainerState>
         }
 
         this.references.map.fitBounds(bounds);
-        this.onTransportShow();
     }
 
-    onTransportShow() {
+    showTransportComponent() {
         this.references.leftBarComponent.showLeftBar();
     }
 
@@ -218,6 +218,7 @@ export default class MapContainer extends React.Component<{}, MapContainerState>
                 key={index}
                 isNewMarker={this.state.isNewMarker}
                 closePin={this.undoAddedMarker}
+                showTransportComponent={this.showTransportComponent}
             />)
         );
 
