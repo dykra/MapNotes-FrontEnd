@@ -1,7 +1,7 @@
 import { PinData } from '../PinData';
 import { Filter } from './Filter';
 import { TextFilterType } from './TextFilterType';
-import {ModeText} from "./modes";
+import { ModeText } from './modes';
 
 export class SearchFilter implements Filter {
 

@@ -2,7 +2,7 @@ import { PinData } from '../PinData';
 import { Filter } from './Filter';
 import { TextFilterType } from './TextFilterType';
 import { ValueFilterType } from './ValueFilterType';
-import {ModeText, ModeValue} from "./modes";
+import { ModeText, ModeValue } from './modes';
 
 export class AttributeFilter implements Filter {
 
