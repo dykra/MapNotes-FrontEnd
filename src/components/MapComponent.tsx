@@ -119,7 +119,7 @@ export default class MapContainer extends React.Component<{}, MapContainerState>
             center: null,
             isNewMarker: false,
             isFilter: false,
-            directions : null,
+            directions : null
         };
     }
 
@@ -179,7 +179,7 @@ export default class MapContainer extends React.Component<{}, MapContainerState>
 
         this.references.map.fitBounds(bounds);
     }
-  
+
     showTransportComponent(lat: any, lng: any, index: any) {
         this.references.leftBarComponent.showLeftBar();
         this.references.leftBarComponent.updateTransportComponentWithStartDestionation(index);
@@ -233,7 +233,7 @@ export default class MapContainer extends React.Component<{}, MapContainerState>
             );
         }
     }
-    
+
     render() {
         const markers = this.renderMarkers();
 

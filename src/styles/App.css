@@ -94,9 +94,6 @@
   margin-left: 0px;
   float: left;
 }
-.DeleteComplexAttrButton{
-  display: flex;
-}
 
 .simpleAttrButton {
   margin-right: 2%;

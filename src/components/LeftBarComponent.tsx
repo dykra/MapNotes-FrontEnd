@@ -17,8 +17,8 @@ interface LeftBarComponentProps {
 }
 
 export default class LeftBarComponent extends React.Component<LeftBarComponentProps, LeftBarState> {
-  
-  references: {transportComponent: any; } =
+
+    references: {transportComponent: any; } =
         {transportComponent: null};
 
     constructor(props: LeftBarComponentProps) {
@@ -61,39 +61,39 @@ export default class LeftBarComponent extends React.Component<LeftBarComponentPr
     }
 
     render() {
-       let leftBar;
-       if (this.state.visibleLeftBar) {
-           leftBar = (
-               <div className={'OpenedLeftBar'}>
-                   <div>
-                       <Button
-                           className={'CloseLeftBarButton'}
-                           onClick={this.hideLeftBar}
-                       >hide BAR
-                       </Button>
-                   </div>
-                   <TransportComponent
-                       onRef={(ref: any) => (this.references.transportComponent = ref)}
-                       showRoadBetweenMarkers={this.showRoadBetweenMarkers}
-                       markers={this.props.markers}
-                   />
-                   <FilterComponent filter={this.props.filter} removeFilter={this.props.removeFilter}/>
-               </div>
+        let leftBar;
+        if (this.state.visibleLeftBar) {
+            leftBar = (
+                <div className={'OpenedLeftBar'}>
+                    <div>
+                        <Button
+                            className={'CloseLeftBarButton'}
+                            onClick={this.hideLeftBar}
+                        >hide BAR
+                        </Button>
+                    </div>
+                    <TransportComponent
+                        onRef={(ref: any) => (this.references.transportComponent = ref)}
+                        showRoadBetweenMarkers={this.showRoadBetweenMarkers}
+                        markers={this.props.markers}
+                    />
+                    <FilterComponent filter={this.props.filter} removeFilter={this.props.removeFilter}/>
+                </div>
             );
-       } else {
-           leftBar = (
-               <div className={'ClosedLeftBar'}>
-                   <button
-                       className={'OpenLeftBarButton'}
-                       onClick={this.showLeftBar}
-                   > open BAR
-                   </button>
-               </div>
-           );
-       }
-       return (
-           <div>
-               {leftBar}
-           </div>);
+        } else {
+            leftBar = (
+                <div className={'ClosedLeftBar'}>
+                    <button
+                        className={'OpenLeftBarButton'}
+                        onClick={this.showLeftBar}
+                    > open BAR
+                    </button>
+                </div>
+            );
+        }
+        return (
+            <div>
+                {leftBar}
+            </div>);
     }
 }
