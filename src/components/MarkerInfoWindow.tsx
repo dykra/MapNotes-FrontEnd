@@ -54,6 +54,15 @@ export default class MarkerInfoWindow extends Component<any, MarkerInfoWindowSta
 
     }
 
+    handleRightClick(id: any) {
+        // console.log('show route for ' + id);
+        // console.log(this.props.lat);
+        // console.log(this.props.lng);
+
+        this.props.showTransportComponent(this.props.lat, this.props.lng, this.props.index);
+
+    }
+
     handleAddNote(markerState: any) {
         this.setState({isNewMarker: markerState});
     }
@@ -141,7 +150,7 @@ export default class MarkerInfoWindow extends Component<any, MarkerInfoWindowSta
                 onMouseOut={
                         () => this.handleMouseOut(this.props.index)
                     }
-
+                onRightClick={() => this.handleRightClick(this.props.index)}
             >
                 {
                     this.handleSmallNote()
