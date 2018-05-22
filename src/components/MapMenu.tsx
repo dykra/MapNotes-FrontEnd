@@ -2,6 +2,7 @@ import * as React from 'react';
 import Map from './MapComponent';
 import MyModal from './Modal';
 import { Button } from 'react-bootstrap';
+import ComplexAttribute from './ComplexAttribiute';
 
 interface MapMenuState {
     inputValue: String;
@@ -11,6 +12,8 @@ interface MapMenuState {
     todos: any;
     isSubmit: boolean;
     openMap: boolean;
+    complexAttrBox: boolean;
+    complexAttr: Array<ComplexAttribute>;
 }
 
 class MapMenu extends React.Component <{}, MapMenuState> {
@@ -24,7 +27,9 @@ class MapMenu extends React.Component <{}, MapMenuState> {
             isOpen : false,
             todos: [],
             isSubmit : false,
-            openMap : false
+            openMap : false,
+            complexAttrBox: false,
+            complexAttr: []
         };
 
         this.handleChange = this.handleChange.bind(this);
@@ -33,7 +38,10 @@ class MapMenu extends React.Component <{}, MapMenuState> {
         this.openMapButtonClicked = this.openMapButtonClicked.bind(this);
         this.handleNewInput = this.handleNewInput.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-
+        this.renderComplexAttr = this.renderComplexAttr.bind(this);
+        this.handleAddComplexAttr = this.handleAddComplexAttr.bind(this);
+        this.handleBackToSimpleAttr = this.handleBackToSimpleAttr.bind(this);
+        this.handleSaveComplexAttr = this.handleSaveComplexAttr.bind(this);
     }
 
     handleChange (evt: any, index: any, fieldName: any) {
@@ -120,8 +128,44 @@ class MapMenu extends React.Component <{}, MapMenuState> {
                 inputs={this.state.inputs}
                 handleSubmit={this.handleSubmit}
                 closeClick={() => this.toggleModal()}
+                handleAddComplexAttr={this.handleAddComplexAttr}
 
             />
+        );
+    }
+
+    handleAddComplexAttr() {
+        console.log('handle complex attr clicked ');
+        this.toggleModal();
+        this.setState({
+            complexAttrBox: true
+        });
+    }
+
+    handleSaveComplexAttr(complexAt: Array<ComplexAttribute>) {
+        this.setState({
+            complexAttr: complexAt,
+            complexAttrBox: false
+        });
+
+    }
+
+    handleBackToSimpleAttr() {
+        console.log('handle rendering back to simple attr');
+        this.setState({
+            isNewMapClicked: true,
+            complexAttrBox: false
+        });
+        this.renderModal();
+    }
+
+    renderComplexAttr() {
+        return (
+        <ComplexAttribute
+            simpleAttr={this.state.inputs}
+            handleBackToSimpleAttr={this.handleBackToSimpleAttr}
+            handleSaveComplexAttr={this.handleSaveComplexAttr}
+        />
         );
     }
 
@@ -138,6 +182,8 @@ class MapMenu extends React.Component <{}, MapMenuState> {
 
         if ( !this.state.isNewMapClicked && !this.state.isOpen && !this.state.openMap ) {
             returnFunction = this.renderMainMenu();
+        } else if (this.state.complexAttrBox) {
+            returnFunction = this.renderComplexAttr();
         } else if ( this.state.isNewMapClicked ) {
             returnFunction = this.renderModal();
         } else if ( this.state.openMap ) {

@@ -14,14 +14,26 @@ interface LeftBarComponentProps {
 }
 
 export default class LeftBarComponent extends React.Component<LeftBarComponentProps, LeftBarState> {
+  
+  references: {transportComponent: any; } =
+        {transportComponent: null};
 
     constructor(props: LeftBarComponentProps) {
         super(props);
         this.showLeftBar = this.showLeftBar.bind(this);
         this.hideLeftBar = this.hideLeftBar.bind(this);
+        this.showRoadBetweenMarkers = this.showRoadBetweenMarkers.bind(this);
         this.state = {
             visibleLeftBar: false,
         };
+    }
+
+    componentDidMount() {
+        this.props.onRef(this);
+    }
+
+    componentWillUnmount() {
+        this.props.onRef(null);
     }
 
     showLeftBar(event: any) {
@@ -37,6 +49,14 @@ export default class LeftBarComponent extends React.Component<LeftBarComponentPr
         });
     }
 
+    updateTransportComponentWithStartDestionation(index: any) {
+        this.references.transportComponent.onChangeDestinationInput(index);
+    }
+
+    showRoadBetweenMarkers(result: any) {
+        this.props.showRoadBetweenMarkers(result);
+    }
+
     render() {
        let leftBar;
        if (this.state.visibleLeftBar) {
@@ -49,7 +69,11 @@ export default class LeftBarComponent extends React.Component<LeftBarComponentPr
                        >hide BAR
                        </Button>
                    </div>
-                   <TransportComponent/>
+                   <TransportComponent
+                       onRef={(ref: any) => (this.references.transportComponent = ref)}
+                       showRoadBetweenMarkers={this.showRoadBetweenMarkers}
+                       markers={this.props.markers}
+                   />
                    <FilterComponent filter={this.props.filter} removeFilter={this.props.removeFilter}/>
                </div>
             );
