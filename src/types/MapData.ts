@@ -2,6 +2,6 @@ import { PinData } from './PinData';
 
 export interface MapData {
     data: any;
-    id: number;
+    id?: number;
     pins: PinData[];
 }
