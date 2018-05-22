@@ -2,6 +2,7 @@ import React from 'react';
 import { Button } from 'react-bootstrap';
 import TransportComponent from './TransportComponent';
 import GroupsComponent from './GroupsComponent';
+// import { PinData } from '../types/PinData';
 
 interface LeftBarState {
     visibleLeftBar: boolean;
@@ -36,6 +37,7 @@ export default class LeftBarComponent extends React.Component<{mapId: any}, Left
     render() {
        console.log('state in left bar', this.state.mapId);
        let leftBar;
+       // let filteredList: PinData[] = [];
        if (this.state.visibleLeftBar) {
            leftBar = (
                <div className={'OpenedLeftBar'}>

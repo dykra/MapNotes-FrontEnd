@@ -4,15 +4,21 @@ import * as ButtonToolbar from 'react-bootstrap/lib/ButtonToolbar';
 import { PinData } from '../types/PinData';
 import { addPin } from '../api/MapApi';
 import { MarkerData } from '../types/MarkerData';
+import '../styles/GroupsStyle.css';
+import MapContainer from './MapComponent';
+import ReactDOM from 'react-dom';
 
 interface GroupsComponentState {
     visibleColors: boolean;
     gotPins: PinData[];
     mapId: any;
+    buttonClicked: boolean;
+    // filteredList: PinData[];
 }
 
-export default class GroupsComponent extends React.Component<{mapId: any}, GroupsComponentState> {
-    constructor(props: {mapId: any}) {
+export default class GroupsComponent extends React.Component<{mapId: any } , // , filteredList: PinData[] },
+    GroupsComponentState> {
+    constructor(props: {mapId: any} ) { // , filteredList: PinData[]}) {
         super(props);
         this.showColors = this.showColors.bind(this);
         this.hideColors = this.hideColors.bind(this);
@@ -22,12 +28,14 @@ export default class GroupsComponent extends React.Component<{mapId: any}, Group
         this.handleGreen = this.handleGreen.bind(this);
         this.handleBlue = this.handleBlue.bind(this);
         this.handleYellow = this.handleYellow.bind(this);
-        this.handlePurple = this.handlePurple.bind(this);
+        this.myCallback = this.myCallback.bind(this);
 
         this.state = {
             gotPins: [],
             visibleColors: false,
             mapId: this.props.mapId,
+            buttonClicked: false,
+            // filteredList: this.props.filteredList,
         };
     }
 
@@ -46,80 +54,64 @@ export default class GroupsComponent extends React.Component<{mapId: any}, Group
     }
 
     handleRed(event: any) {
-        this.handleColor('http://maps.google.com/mapfiles/ms/icons/red.png');
+        this.handleColor('red',  new google.maps.LatLng(10.22, 45.33));
+        this.handleColor('red',  new google.maps.LatLng(50.22, 70.33));
     }
 
     handlePink(event: any) {
-        this.handleColor('http://maps.google.com/mapfiles/ms/icons/pink.png');
+        this.handleColor('pink',  new google.maps.LatLng(20.22, 30.33));
+        this.handleColor('pink',  new google.maps.LatLng(20.22, 50.33));
+        this.handleColor('pink',  new google.maps.LatLng(20.22, 60.33));
     }
 
     handleYellow(event: any) {
-        this.handleColor('http://maps.google.com/mapfiles/ms/icons/yellow.png');
-    }
-
-    handlePurple(event: any) {
-        this.handleColor('http://maps.google.com/mapfiles/ms/icons/purple.png');
+        this.handleColor('yellow',  new google.maps.LatLng(30.90, 45.33));
+        this.handleColor('yellow',  new google.maps.LatLng(40.22, 70.33));
+        this.handleColor('yellow',  new google.maps.LatLng(10.22, 65.33));
     }
 
     handleBlue(event: any) {
-        this.handleColor('http://maps.google.com/mapfiles/ms/icons/blue.png');
+        this.handleColor('blue',  new google.maps.LatLng(50.22, 45.33));
+        this.handleColor('blue',  new google.maps.LatLng(60.77, 50.33));
+        this.handleColor('blue',  new google.maps.LatLng(12.22, 37.33));
     }
 
     handleGreen(event: any) {
-        this.handleColor('http://maps.google.com/mapfiles/ms/icons/green.png');
+        this.handleColor('green', new google.maps.LatLng(60.22, 45.33));
+        this.handleColor('green', new google.maps.LatLng(11.22, 122.33));
+        this.handleColor('green', new google.maps.LatLng(98.22, 65.33));
     }
 
-    handleColor(color: string) {
+    handleColor(color: string, pos: google.maps.LatLng) {
 
         var marker: MarkerData = {
-            position: new google.maps.LatLng(70.22, 60.44),
-            isWindowOpened: false,
-            groupName: color,
-        };
-
-        var marker2: MarkerData = {
-            position: new google.maps.LatLng(70.22, 50.44),
-            isWindowOpened: false,
-            groupName: color,
-        };
-
-        var marker3: MarkerData = {
-            position: new google.maps.LatLng(70.22, 20.44),
+            // position: new google.maps.LatLng(10.22, 60.44),
+            position: pos,
             isWindowOpened: false,
             groupName: color,
         };
 
         var pin1: PinData = {
             data: marker,
-            id: 5,
+            id: 0,
         };
 
-        var pin2: PinData = {
-            data: marker2,
-            id: 6,
-        };
+        // will be used after connection with filtering
+        // for( let pinElement of this.state.filteredList ) {
+        //     addPin(this.state.mapId, pinElement, this.myCallback);
+        // }
 
-        var pin3: PinData = {
-            data: marker3,
-            id: 7,
-        };
+        addPin(this.state.mapId, pin1, this.myCallback);
+    }
 
-        addPin(this.state.mapId, pin1, function (pin: PinData) {
-            console.log('pin1 added');
-            console.log(pin);
-        });
+    myCallback ( pin: PinData) {
 
-
-        addPin(this.state.mapId, pin2, function (pin: PinData) {
-            console.log('pin1 added');
-        });
-
-            addPin(this.state.mapId, pin3, function (pinb: PinData) {
-                console.log('pin1 added');
-            });
-
-
-
+        console.log('added pin1');
+        console.log(pin);
+        this.setState({buttonClicked: true});
+    }
+    renderMap() {
+        ReactDOM.render(<MapContainer mapId={this.props.mapId}/>, document.getElementById('root'));
     }
 
     render() {
@@ -129,16 +121,22 @@ export default class GroupsComponent extends React.Component<{mapId: any}, Group
                 <div className={'OpenedColors'}>
                     <Button onClick={this.hideColors}>Hide</Button>
                     <ButtonToolbar>
-                        <Button onClick={this.handleRed}>Red</Button>
-                        <Button onClick={this.handlePink}>Pink</Button>
-                        <Button>Blue</Button>
-                        <Button>Green</Button>
+                        <Button bsClass="redButton" onClick={this.handleRed}>Red</Button>
+                        <Button bsClass="pinkButton" onClick={this.handlePink}>Pink</Button>
+                        <Button bsClass="greenButton" onClick={this.handleGreen}>Green</Button>
+                        <Button bsClass="yellowButton" onClick={this.handleYellow}>Yellow</Button>
+                        <Button bsClass="blueButton" onClick={this.handleBlue}>Blue</Button>
                     </ButtonToolbar>
                 </div>
             );
         }
+        if ( this.state.visibleColors && this.state.buttonClicked ) {
+           console.log('jestem tutaj');
+           this.setState({buttonClicked: false});
+           this.renderMap();
+        }
         return (
-            <div>
+            <div className={'groups'}>
                 {colors}
                 <Button onClick={this.showColors}>New group
                 </Button>

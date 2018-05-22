@@ -2,9 +2,6 @@ import * as React from 'react';
 import { Marker, InfoWindow } from 'react-google-maps';
 import Note from './Note';
 import { Component } from 'react';
-import '../images/markers/pink.png';
-import '../images/markers/red.png';
-import '../images/markers/blue.png';
 
 interface MarkerInfoWindowState {
     isOpen: boolean;
@@ -126,6 +123,8 @@ export default class MarkerInfoWindow extends Component<any, MarkerInfoWindowSta
     }
 
     renderMap() {
+        var baseURL = 'http://maps.google.com/mapfiles/ms/icons/';
+        var newUrl = baseURL + this.props.groupName + '.png';
         return(
             <Marker
                 key={this.props.index}
@@ -133,7 +132,8 @@ export default class MarkerInfoWindow extends Component<any, MarkerInfoWindowSta
                 lat: this.props.lat,
                 lng: this.props.lng
             }}
-                icon={this.props.groupName}
+                // icon={this.props.groupName}
+                icon={newUrl}
                 label={this.props.index.toString()}
                 onClick={
                     () => this.handleNewMarker()

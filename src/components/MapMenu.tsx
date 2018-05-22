@@ -5,7 +5,6 @@ import { Button } from 'react-bootstrap';
 import { MapData } from '../types/MapData';
 import { PinData } from '../types/PinData';
 import { getAllMaps, putMap } from '../api/MapApi';
-// import { getAllMaps, putMap } from '../api/MapApi';
 
 interface MapMenuState {
     inputValue: String;
@@ -142,6 +141,7 @@ class MapMenu extends React.Component <{}, MapMenuState> {
     }
 
     renderMainMenu() {
+
         console.log('printing my array in main menu!', this.state.todos);
         return (
             <div className="MapMenu">
