@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@types/react-bootstrap": "^0.32.9",
     "@types/googlemaps": "^3.30.8",
     "@types/lodash": "^4.14.109",
     "@types/markerclustererplus": "^2.1.33",
@@ -47,7 +48,7 @@
     "eject": "react-scripts-ts eject"
   },
   "devDependencies": {
-    "@types/googlemaps": "latest",
+    "@types/googlemaps": "^3.30.8",
     "@types/jest": "^22.2.2",
     "@types/markerclustererplus": "^2.1.33",
     "@types/node": "^9.6.1",

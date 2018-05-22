@@ -12,7 +12,6 @@ interface MarkerInfoWindowState {
     isSubmit: boolean;
     isDetailOpen: boolean;
     newAttributes: any;
-    pinAttr: any;
 
 }
 export default class MarkerInfoWindow extends Component<any, MarkerInfoWindowState> {
@@ -28,14 +27,12 @@ export default class MarkerInfoWindow extends Component<any, MarkerInfoWindowSta
             todos: [],
             isSubmit : false,
             isDetailOpen: false,
-            newAttributes: [],
-            pinAttr: []
+            newAttributes: []
         };
         this.handleNewInput = this.handleNewInput.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleAddingAttribute = this.handleAddingAttribute.bind(this);
-        this.deleteAttribute = this.deleteAttribute.bind(this);
 
     }
 
@@ -60,12 +57,12 @@ export default class MarkerInfoWindow extends Component<any, MarkerInfoWindowSta
 
     }
 
-    deleteAttribute(input: any, index: any) {
+    handleRightClick(id: any) {
+        // console.log('show route for ' + id);
+        // console.log(this.props.lat);
+        // console.log(this.props.lng);
 
-        while (this.state.newAttributes.indexOf(input) !== -1) {
-            this.state.newAttributes.splice(this.state.newAttributes.indexOf(input), 1);
-        }
-        this.forceUpdate();
+        this.props.showTransportComponent(this.props.lat, this.props.lng, this.props.index);
 
     }
 
@@ -77,44 +74,9 @@ export default class MarkerInfoWindow extends Component<any, MarkerInfoWindowSta
         this.setState({isNoteAdded: !this.state.isNoteAdded});
     }
 
-    handleChange(evt: any, index: any, fieldName: any, type: any) {
-        console.log('handle');
-        console.log(evt.target.value);
+    handleChange(evt: any, index: any, fieldName: any) {
 
-        console.log(this.state.pinAttr);
-        if (this.state.pinAttr.length === 0) {
-
-            this.setState({pinAttr:
-                    this.state.pinAttr.push({name: fieldName, type: type, value: ''})});
-            console.log('value');
-            this.forceUpdate();
-            console.log('handle1');
-            console.log(this.state.pinAttr);
-            console.log(this.state.pinAttr[0].value);
-
-        } else if (evt.target.value.length === 1) {
-            console.log('handle2');
-            console.log(this.state.pinAttr);
-            console.log(this.state.pinAttr[0]);
-            this.setState({pinAttr:
-                    this.state.pinAttr.concat({name: fieldName, type: type, value: ''})});
-
-        } else {
-
-            console.log('handle3');
-
-            console.log(this.state.pinAttr);
-            console.log('ulaula');
-            console.log(index);
-            console.log(this.state.pinAttr[index.toString()]);
-            this.state.pinAttr[index].value = evt.target.value;
-
-        }
-
-        // this.state.inputs[index][fieldName] = evt.target.value;
-        // this.forceUpdate();
-
-        // this.state.inputs[index][fieldName] = evt.target.value;
+        this.state.inputs[index][fieldName] = evt.target.value;
         this.forceUpdate();
     }
 
@@ -138,7 +100,6 @@ export default class MarkerInfoWindow extends Component<any, MarkerInfoWindowSta
 
     handleSubmit(evt: any) {
         evt.preventDefault();
-        console.log(this.state.pinAttr);
 
         const newTodos = this.state.inputs.map((input: any) => {
             return {
@@ -206,7 +167,7 @@ export default class MarkerInfoWindow extends Component<any, MarkerInfoWindowSta
                 onMouseOut={
                         () => this.handleMouseOut(this.props.index)
                     }
-
+                onRightClick={() => this.handleRightClick(this.props.index)}
             >
                 {
                     this.handleSmallNote()
@@ -227,9 +188,7 @@ export default class MarkerInfoWindow extends Component<any, MarkerInfoWindowSta
                 handleSubmit={this.handleSubmit}
                 handleChangeName={this.handleChangeName}
                 inputs={this.state.inputs}
-                pinAttribute={this.state.pinAttr}
                 newAttrs={this.state.newAttributes}
-                deleteAttribute={this.deleteAttribute}
                 saveAttribute={this.handleAddingAttribute}
                 closeClick={() => {
                     this.handleNotes();
