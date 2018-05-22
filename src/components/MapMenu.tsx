@@ -100,16 +100,9 @@ class MapMenu extends React.Component <{}, MapMenuState> {
 
         let mydata = newTodos;
 
-        let t: any;
-        t = this.state.todos;
-        t.push(newTodos);
-
         this.setState({
-            todos : t, inputs: [{name: '', type: ''}], isSubmit: true
+            todos :  this.state.todos.concat(newTodos), inputs: [{name: '', type: ''}], isSubmit: true
         });
-
-        console.log('todos', this.state.todos);
-        console.log('my data as new todos', mydata);
 
         this.setState({
             todos : [], inputs: [{name: '', type: ''}], isSubmit: true
@@ -123,9 +116,11 @@ class MapMenu extends React.Component <{}, MapMenuState> {
             id: 0,
             pins: pin
         };
-
-        console.log(map);
         putMap(map, this.myCallback);
+
+        this.setState({
+            todos : [], inputs: [{name: '', type: ''}], isSubmit: true
+        });
 
         this.toggleModal();
     }

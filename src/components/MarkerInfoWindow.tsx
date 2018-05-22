@@ -168,7 +168,6 @@ export default class MarkerInfoWindow extends Component<any, MarkerInfoWindowSta
                 lat: this.props.lat,
                 lng: this.props.lng
             }}
-                // icon={this.props.groupName}
                 icon={newUrl}
                 label={this.props.index.toString()}
                 onClick={

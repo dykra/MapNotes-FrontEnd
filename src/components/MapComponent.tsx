@@ -131,7 +131,6 @@ export default class MapContainer extends React.Component<{mapId: any}, MapConta
     }
 
     handleMapClick(event: google.maps.MouseEvent) {
-        console.log(event.latLng.lat());
         var marker: MarkerData = {
             position: new google.maps.LatLng(event.latLng.lat(), event.latLng.lng()),
             isWindowOpened: false,
@@ -141,11 +140,9 @@ export default class MapContainer extends React.Component<{mapId: any}, MapConta
 
         var pin1: PinData = {
             data: marker,
-            // id: 1,
         };
 
         addPin(this.state.mapId, pin1, function (pin: PinData) {
-            console.log('Pin added');
             console.log(pin);
         });
 
