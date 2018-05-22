@@ -11,6 +11,7 @@ interface MarkerInfoWindowState {
     todos: String[];
     isSubmit: boolean;
     isDetailOpen: boolean;
+    newAttributes: any;
 
 }
 export default class MarkerInfoWindow extends Component<any, MarkerInfoWindowState> {
@@ -25,11 +26,13 @@ export default class MarkerInfoWindow extends Component<any, MarkerInfoWindowSta
             inputs : json,
             todos: [],
             isSubmit : false,
-            isDetailOpen: false
+            isDetailOpen: false,
+            newAttributes: []
         };
         this.handleNewInput = this.handleNewInput.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleAddingAttribute = this.handleAddingAttribute.bind(this);
 
     }
 
@@ -104,22 +107,18 @@ export default class MarkerInfoWindow extends Component<any, MarkerInfoWindowSta
                 value: input.value
             };
         });
-
         const t = this.state.todos;
         t.push(newTodos);
 
         this.setState({
             todos : t, inputs: [{name: '', type: ''}], isSubmit: true
         });
-
         let json = JSON.stringify(this.state.todos);
         console.log('checking json', json);
-
         this.setState({
             todos : [], inputs: [{name: '', type: ''}], isSubmit: true
         });
         this.handleAddNote(false);
-
     }
 
     handleNewMarker() {
@@ -129,6 +128,24 @@ export default class MarkerInfoWindow extends Component<any, MarkerInfoWindowSta
         } else {
             this.handleClicks(this.props.index);
         }
+    }
+
+    handleAddingAttribute(n: String, t: String, isDefault: boolean) {
+        if (isDefault) {
+            if (this.state.inputs.length !== 0) {
+                this.setState({inputs: this.state.inputs.concat({name: n, type: t})});
+            } else {
+                this.setState({inputs: this.state.inputs.push({name: n, type: t})});
+            }
+
+        } else {
+            if (this.state.inputs.length !== 0) {
+                this.setState({newAttributes: this.state.newAttributes.concat({name: n, type: t})});
+            } else {
+                this.setState({newAttributes: this.state.newAttributes.push({name: n, type: t})});
+            }
+        }
+
     }
 
     renderMap() {
@@ -171,6 +188,8 @@ export default class MarkerInfoWindow extends Component<any, MarkerInfoWindowSta
                 handleSubmit={this.handleSubmit}
                 handleChangeName={this.handleChangeName}
                 inputs={this.state.inputs}
+                newAttrs={this.state.newAttributes}
+                saveAttribute={this.handleAddingAttribute}
                 closeClick={() => {
                     this.handleNotes();
                     this.handleAddNote(false);
