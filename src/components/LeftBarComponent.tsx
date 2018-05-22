@@ -11,6 +11,9 @@ interface LeftBarState {
 interface LeftBarComponentProps {
     filter: (filter: Filter) => void;
     removeFilter: () => void;
+    onRef: any;
+    showRoadBetweenMarkers: any;
+    markers: any;
 }
 
 export default class LeftBarComponent extends React.Component<LeftBarComponentProps, LeftBarState> {

@@ -118,7 +118,7 @@ export default class MapContainer extends React.Component<{}, MapContainerState>
             bounds: null,
             center: null,
             isNewMarker: false,
-            isFilter: false
+            isFilter: false,
             directions : null,
         };
     }
