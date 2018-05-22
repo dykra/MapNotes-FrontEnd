@@ -1,19 +1,21 @@
+/* global google */
 import * as React from 'react';
 import { compose } from 'recompose';
-import { GoogleMap, withGoogleMap, withScriptjs } from 'react-google-maps';
+import { GoogleMap, withGoogleMap, withScriptjs, DirectionsRenderer } from 'react-google-maps';
 import MarkerInfoWindow from './MarkerInfoWindow';
 import { WithScriptjsProps } from 'react-google-maps/lib/withScriptjs';
 import { WithGoogleMapProps } from 'react-google-maps/lib/withGoogleMap';
 import { GOOGLE_MAP_URL } from '../constants';
-import { MarkerData } from '../types/MarkerData';
 import LeftBarComponent from './LeftBarComponent';
 import SearchBox from 'react-google-maps/lib/components/places/SearchBox';
 import { ReactElement } from 'react';
 import { addPin, getMapById } from '../api/MapApi';
 import { MapData } from '../types/MapData';
 import { PinData } from '../types/PinData';
+import { Filter } from '../types/filter/Filter';
 
-const INPUT_STYLE = {
+
+export const INPUT_STYLE: React.CSSProperties = {
     boxSizing: `border-box`,
     border: `1px solid transparent`,
     width: `240px`,
@@ -30,6 +32,7 @@ const INPUT_STYLE = {
 interface MapProps {
     googleMapURL: String;
     markers: ReactElement<any>[];
+    directions: any;
     onMapClick: (e: google.maps.MouseEvent) => void;
     defaultCenter: google.maps.LatLngLiteral;
     defaultZoom: number;
@@ -56,6 +59,7 @@ const Map = compose<MapProps, MapComposeProps>(
             onClick={props.onMapClick}
             onBoundsChanged={props.onBoundsChanged}
             ref={props.handleMapMounted}
+
         >
             <SearchBox
                 bounds={props.bounds}
@@ -70,23 +74,33 @@ const Map = compose<MapProps, MapComposeProps>(
                 />
             </SearchBox>
             {props.markers}
+            {props.directions && <DirectionsRenderer directions={props.directions} />}
         </GoogleMap>
     );
 });
 
 interface MapContainerState {
-    markers: MarkerData[];
+    markers: PinData[];
+    shownMarkers: PinData[];
     visibleLeftBar: boolean;
     transportInput: String;
     bounds: any;
     center: any;
     isNewMarker: boolean;
     mapId: any;
+    isFilter: boolean;
+    directions: any;
 }
 
 export default class MapContainer extends React.Component<{mapId: any}, MapContainerState> {
 
-    references: { map: any; searchBox: any; } = {map: null, searchBox: null};
+    references: {leftBarComponent: any;
+        map: any; searchBox: any; directionsService: any; } =
+        {leftBarComponent: null, map: null, searchBox: null, directionsService: null};
+
+    componentDidMount() {
+        console.log('Mounted');
+    }
 
     constructor(props: {mapId: any}) {
         super(props);
@@ -97,20 +111,26 @@ export default class MapContainer extends React.Component<{mapId: any}, MapConta
         this.onPlacesChanged = this.onPlacesChanged.bind(this);
         this.undoAddedMarker = this.undoAddedMarker.bind(this);
         this.getMapByIdCallback = this.getMapByIdCallback.bind(this);
+        this.filterMarkers = this.filterMarkers.bind(this);
+        this.removeFilter = this.removeFilter.bind(this);
+        this.showTransportComponent = this.showTransportComponent.bind(this);
+        this.showRoadBetweenMarkers = this.showRoadBetweenMarkers.bind(this);
 
         this.state = {
             markers: [],
+            shownMarkers: [],
             visibleLeftBar: false,
             transportInput: '',
             bounds: null,
             center: null,
-            isNewMarker: true,
+            isNewMarker: false,
             mapId: this.props.mapId,
+            isFilter: false,
+            directions : null,
         };
     }
 
     handleMapClick(event: google.maps.MouseEvent) {
-
         var marker: MarkerData = {
             position: new google.maps.LatLng(event.latLng.lat(), event.latLng.lng()),
             isWindowOpened: false,
@@ -131,6 +151,7 @@ export default class MapContainer extends React.Component<{mapId: any}, MapConta
         this.setState((prevState: any) => ({
             markers: [...prevState.markers, {position: {lat: event.latLng.lat(), lng: event.latLng.lng()},
                 isWindowOpened: false, groupName: marker.groupName}]
+        
         }));
         this.setState({isNewMarker : true});
     }
@@ -196,8 +217,8 @@ export default class MapContainer extends React.Component<{mapId: any}, MapConta
         }));
 
         const nextCenter = searchBoxMarkers.length > 0 ? searchBoxMarkers[0].position : this.state.center;
-        if (!this.state.markers.some(item => item.position.equals(searchBoxMarkers[0].position))) {
-
+        if (!this.state.markers.some(item => item.data.position.equals(searchBoxMarkers[0].position))) {
+            const newPin = {data: {position: searchBoxMarkers[0].position, isWindowOpened: false, attributes: {}}};
             this.setState(prevState => ({
                 center: nextCenter,
                 markers: [...prevState.markers, {position: searchBoxMarkers[0].position, isWindowOpened: false,
@@ -207,23 +228,77 @@ export default class MapContainer extends React.Component<{mapId: any}, MapConta
 
         this.references.map.fitBounds(bounds);
     }
+  
+    showTransportComponent(lat: any, lng: any, index: any) {
+        this.references.leftBarComponent.showLeftBar();
+        this.references.leftBarComponent.updateTransportComponentWithStartDestionation(index);
+    }
 
+    showRoadBetweenMarkers(result: any) {
+        this.setState({
+            directions: result,
+        });
+    }
+
+    filterMarkers(filter: Filter) {
+        console.log(filter);
+        this.setState({
+            shownMarkers: this.state.markers.filter((marker) => filter.doFilter(marker)),
+            isFilter: true
+        });
+    }
+
+    removeFilter() {
+        this.setState({
+            shownMarkers: [],
+            isFilter: false
+        });
+    }
+
+    renderMarkers() {
+        if (this.state.isFilter) {
+            return this.state.shownMarkers.map((marker: PinData, index: any) => (
+                <MarkerInfoWindow
+                    lat={marker.data.position.lat()}
+                    lng={marker.data.position.lng()}
+                    index={index}
+                    key={index}
+                    isNewMarker={this.state.isNewMarker}
+                    closePin={this.undoAddedMarker}
+                    groupName={marker.groupName}
+
+                />)
+            );
+        } else {
+            console.log(this.state.markers);
+            return this.state.markers.map((marker: PinData, index: any) => (
+                <MarkerInfoWindow
+                    lat={marker.data.position.lat()}
+                    lng={marker.data.position.lng()}
+                    groupName={marker.groupName}
+                    index={index}
+                    key={index}
+                    isNewMarker={this.state.isNewMarker}
+                    closePin={this.undoAddedMarker}
+                    showTransportComponent={this.showTransportComponent}
+                />)
+            );
+        }
+    }
+    
     render() {
-        const markers = this.state.markers.map((marker: MarkerData, index: any) => (
-            <MarkerInfoWindow
-                lat={marker.position.lat}
-                lng={marker.position.lng}
-                groupName={marker.groupName}
-                index={index}
-                key={index}
-                isNewMarker={this.state.isNewMarker}
-                closePin={this.undoAddedMarker}
-            />)
-        );
+        const markers = this.renderMarkers();
 
         return (
-            <div style={{height: '100%'}}>
-                <LeftBarComponent mapId={this.state.mapId}/>
+            <div style={{height: '100%'}} >
+                <LeftBarComponent
+                   mapId={this.state.mapId}
+                    onRef={(ref: any) => (this.references.leftBarComponent = ref)}
+                    showRoadBetweenMarkers={this.showRoadBetweenMarkers}
+                    markers={this.state.markers}
+                    filter={this.filterMarkers}
+                    removeFilter={this.removeFilter}
+                />
                 <Map
                     googleMapURL={GOOGLE_MAP_URL}
                     loadingElement={<div style={{height: `100%`}}/>}
@@ -231,6 +306,7 @@ export default class MapContainer extends React.Component<{mapId: any}, MapConta
                     mapElement={<div style={{height: `100%`}}/>}
                     onMapClick={this.handleMapClick}
                     markers={markers}
+                    directions={this.state.directions}
                     defaultCenter={{lat: -34.397, lng: 150.644}}
                     defaultZoom={8}
                     handleMapMounted={this.handleMapMounted}

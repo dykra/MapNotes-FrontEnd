@@ -2,23 +2,46 @@ import React from 'react';
 import { Button } from 'react-bootstrap';
 import TransportComponent from './TransportComponent';
 import GroupsComponent from './GroupsComponent';
-// import { PinData } from '../types/PinData';
+
+import FilterComponent from './FilterComponent';
+import { Filter } from '../types/filter/Filter';
 
 interface LeftBarState {
     visibleLeftBar: boolean;
     mapId: any;
 }
 
-export default class LeftBarComponent extends React.Component<{mapId: any}, LeftBarState> {
 
-    constructor(props: {mapId: any}) {
+interface LeftBarComponentProps {
+    filter: (filter: Filter) => void;
+    removeFilter: () => void;
+    onRef: any;
+    showRoadBetweenMarkers: any;
+    markers: any;
+}
+
+export default class LeftBarComponent extends React.Component<LeftBarComponentProps, {mapId: any}, LeftBarState> {
+  
+  references: {transportComponent: any; } =
+        {transportComponent: null};
+
+    constructor(props: LeftBarComponentProps, {mapId: any}) {
         super(props);
         this.showLeftBar = this.showLeftBar.bind(this);
         this.hideLeftBar = this.hideLeftBar.bind(this);
+        this.showRoadBetweenMarkers = this.showRoadBetweenMarkers.bind(this);
         this.state = {
             visibleLeftBar: false,
             mapId: this.props.mapId,
         };
+    }
+
+    componentDidMount() {
+        this.props.onRef(this);
+    }
+
+    componentWillUnmount() {
+        this.props.onRef(null);
     }
 
     showLeftBar(event: any) {
@@ -32,6 +55,14 @@ export default class LeftBarComponent extends React.Component<{mapId: any}, Left
         this.setState({
             visibleLeftBar: false
         });
+    }
+
+    updateTransportComponentWithStartDestionation(index: any) {
+        this.references.transportComponent.onChangeDestinationInput(index);
+    }
+
+    showRoadBetweenMarkers(result: any) {
+        this.props.showRoadBetweenMarkers(result);
     }
 
     render() {
@@ -49,7 +80,12 @@ export default class LeftBarComponent extends React.Component<{mapId: any}, Left
                        >hide BAR
                        </Button>
                    </div>
-                   <TransportComponent/>
+                   <TransportComponent
+                       onRef={(ref: any) => (this.references.transportComponent = ref)}
+                       showRoadBetweenMarkers={this.showRoadBetweenMarkers}
+                       markers={this.props.markers}
+                   />
+                   <FilterComponent filter={this.props.filter} removeFilter={this.props.removeFilter}/>
                </div>
             );
        } else {

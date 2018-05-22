@@ -1,4 +1,6 @@
+import { MarkerData } from './MarkerData';
+
 export interface PinData {
-    data: any;
-    id: number;
+    data: MarkerData;
+    id?: number;
 }
