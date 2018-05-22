@@ -81,11 +81,11 @@ export default class Note extends React.Component<any, NoteState> {
                         {this.props.inputs.map((input: any, index: any) => (
 
                                 <div key={index}>
-                            <Col sm={2}>
+                            <Col sm={4}>
                                 {input.name}
 
                             </Col>
-                            <Col sm={10}>
+                            <Col sm={8}>
                                 <FormControl
                                     onChange={(evt) => this.props.handleChange(evt, index, input.name, input.type)}
                                     placeholder="Enter a value"
@@ -102,11 +102,11 @@ export default class Note extends React.Component<any, NoteState> {
                                             controlId="NewNote"
                                             // validationState={this.getValidationStateName()}
                                         >
-                                        <Col sm={2}>
+                                        <Col sm={4}>
                                             {input.name}
 
                                         </Col>
-                                        <Col sm={8}>
+                                        <Col sm={6}>
                                             <FormControl
                                                 onChange={(evt) =>
                                                     this.props.handleChange(evt, index, input.name, input.type)}
@@ -146,4 +146,14 @@ export default class Note extends React.Component<any, NoteState> {
     deleteAttr(input: any, index: any) {
         this.props.deleteAttribute(input, index);
     }
+
+    // getValidationStateName() {
+    //     const length = this.state.name.length;
+    //     if (length > 2) {
+    //         return 'success';
+    //     } else if (length < 1) {
+    //         return 'error';
+    //     }
+    //     return null;
+    // }
 }

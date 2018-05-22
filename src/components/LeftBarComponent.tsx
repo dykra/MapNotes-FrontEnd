@@ -1,11 +1,14 @@
 import React from 'react';
 import { Button } from 'react-bootstrap';
 import TransportComponent from './TransportComponent';
+import GroupsComponent from './GroupsComponent';
+
 import FilterComponent from './FilterComponent';
 import { Filter } from '../types/filter/Filter';
 
 interface LeftBarState {
     visibleLeftBar: boolean;
+    mapIdState: any;
 }
 
 interface LeftBarComponentProps {
@@ -14,11 +17,12 @@ interface LeftBarComponentProps {
     onRef: any;
     showRoadBetweenMarkers: any;
     markers: any;
+    mapId: any;
 }
 
 export default class LeftBarComponent extends React.Component<LeftBarComponentProps, LeftBarState> {
-  
-  references: {transportComponent: any; } =
+
+    references: {transportComponent: any; } =
         {transportComponent: null};
 
     constructor(props: LeftBarComponentProps) {
@@ -28,6 +32,7 @@ export default class LeftBarComponent extends React.Component<LeftBarComponentPr
         this.showRoadBetweenMarkers = this.showRoadBetweenMarkers.bind(this);
         this.state = {
             visibleLeftBar: false,
+            mapIdState: this.props.mapId,
         };
     }
 
@@ -66,6 +71,7 @@ export default class LeftBarComponent extends React.Component<LeftBarComponentPr
            leftBar = (
                <div className={'OpenedLeftBar'}>
                    <div>
+                       <GroupsComponent mapId={this.state.mapIdState}/>
                        <Button
                            className={'CloseLeftBarButton'}
                            onClick={this.hideLeftBar}
@@ -80,20 +86,20 @@ export default class LeftBarComponent extends React.Component<LeftBarComponentPr
                    <FilterComponent filter={this.props.filter} removeFilter={this.props.removeFilter}/>
                </div>
             );
-       } else {
-           leftBar = (
-               <div className={'ClosedLeftBar'}>
-                   <button
-                       className={'OpenLeftBarButton'}
-                       onClick={this.showLeftBar}
-                   > open BAR
-                   </button>
-               </div>
-           );
-       }
-       return (
-           <div>
-               {leftBar}
-           </div>);
+        } else {
+            leftBar = (
+                <div className={'ClosedLeftBar'}>
+                    <button
+                        className={'OpenLeftBarButton'}
+                        onClick={this.showLeftBar}
+                    > open BAR
+                    </button>
+                </div>
+            );
+        }
+        return (
+            <div>
+                {leftBar}
+            </div>);
     }
 }
