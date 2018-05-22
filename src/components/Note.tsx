@@ -1,6 +1,10 @@
 import * as React from 'react';
 import { Button, Modal } from 'react-bootstrap';
 import AddAttribute from './AddAttribute';
+import Form from 'reactstrap/lib/Form';
+import * as FormGroup from 'react-bootstrap/lib/FormGroup';
+import Col from 'reactstrap/lib/Col';
+import * as FormControl from 'react-bootstrap/lib/FormControl';
 
 interface NoteState {
     input: any;
@@ -59,7 +63,7 @@ export default class Note extends React.Component<any, NoteState> {
         }
 
         return(
-            <div>
+            <div className="static-modal">
 
             <Modal.Dialog>
 
@@ -67,61 +71,63 @@ export default class Note extends React.Component<any, NoteState> {
                     <Modal.Title>Create new note</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <div className="container-fluid">
+                    <Form >
+                        <FormGroup
+                            onSubmit={(evt) => this.props.handleSubmit(evt)}
+                            controlId="NewNote"
+                            // validationState={this.getValidationStateName()}
+                        >
 
-                        <form onSubmit={(evt) => this.props.handleSubmit(evt)}>
-
-                            {this.props.inputs.map((input: any, index: any) => (
+                        {this.props.inputs.map((input: any, index: any) => (
 
                                 <div key={index}>
+                            <Col sm={2}>
+                                {input.name}
 
-                                    <label>
+                            </Col>
+                            <Col sm={10}>
+                                <FormControl
+                                    onChange={(evt) => this.props.handleChange(evt, index, input.name, input.type)}
+                                    placeholder="Enter a value"
+                                />
+                            </Col>
+                                </div>
+                            )
+                            )}
+                        </FormGroup>
 
-                                        <div className="col-8 col-sm-6">
-
+                            {this.props.newAttrs.map((input: any, index: any) => (
+                                    <div key={index}>
+                                        <FormGroup
+                                            controlId="NewNote"
+                                            // validationState={this.getValidationStateName()}
+                                        >
+                                        <Col sm={2}>
                                             {input.name}
-                                        </div>
-                                        <div className="col-8 col-sm-6">
-                                            <input
-                                                onChange={(evt) => this.props.handleChange(evt, index, 'type')}
-                                                value={input.value}
+
+                                        </Col>
+                                        <Col sm={8}>
+                                            <FormControl
+                                                onChange={(evt) =>
+                                                    this.props.handleChange(evt, index, input.name, input.type)}
+                                                placeholder="Enter a value"
                                             />
-                                        </div>
-
-                                    </label>
-
-                                </div>)
+                                        </Col>
+                                        <Col sm={2}>
+                                            <Button
+                                                className={'deleteNewAttrNote'}
+                                                bsSize="xsmall"
+                                                onClick={() => this.deleteAttr(input, index)}
+                                            >X
+                                            </Button>
+                                        </Col>
+                                        </FormGroup>
+                                    </div>
+                                )
                             )}
 
-                                {this.props.newAttrs.map((input: any, index: any) => (
+                    </Form>
 
-                                        <div key={index}>
-
-                                            <label>
-                                                <div className="col-8 col-sm-6">
-                                                    {input.name}
-                                                </div>
-
-                                                    <input
-                                                        onChange={(evt) => this.props.handleChange(evt, index, 'type')}
-                                                        value={input.value}
-                                                    />
-
-                                                        <Button
-                                                            bsSize="xsmall"
-                                                            onClick={() => this.deleteAttr(input, index)}
-                                                        >
-                                                            X
-                                                        </Button>
-
-                                            </label>
-
-                                        </div>
-                                    )
-                                )}
-
-                        </form>
-                    </div>
                     <div>{returnFunction}</div>
                 </Modal.Body>
                 <Modal.Footer>
@@ -138,9 +144,6 @@ export default class Note extends React.Component<any, NoteState> {
     }
 
     deleteAttr(input: any, index: any) {
-        console.log('input');
-        console.log(index);
-        console.log(input);
         this.props.deleteAttribute(input, index);
     }
 }

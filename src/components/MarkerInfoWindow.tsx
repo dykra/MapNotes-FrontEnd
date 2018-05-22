@@ -110,6 +110,7 @@ export default class MarkerInfoWindow extends Component<any, MarkerInfoWindowSta
 
     handleSubmit(evt: any) {
         evt.preventDefault();
+        console.log(this.state.pinAttr);
 
         const newTodos = this.state.inputs.map((input: any) => {
             return {
