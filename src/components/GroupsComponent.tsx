@@ -16,9 +16,8 @@ interface GroupsComponentState {
     // filteredList: PinData[];
 }
 
-export default class GroupsComponent extends React.Component<{mapId: any } , // , filteredList: PinData[] },
-    GroupsComponentState> {
-    constructor(props: {mapId: any} ) { // , filteredList: PinData[]}) {
+export default class GroupsComponent extends React.Component<{mapId: any } , GroupsComponentState> {
+    constructor(props: {mapId: any} ) {
         super(props);
         this.showColors = this.showColors.bind(this);
         this.hideColors = this.hideColors.bind(this);
@@ -35,7 +34,6 @@ export default class GroupsComponent extends React.Component<{mapId: any } , // 
             visibleColors: false,
             mapId: this.props.mapId,
             buttonClicked: false,
-            // filteredList: this.props.filteredList,
         };
     }
 
@@ -54,42 +52,33 @@ export default class GroupsComponent extends React.Component<{mapId: any } , // 
     }
 
     handleRed(event: any) {
-        this.handleColor('red',  new google.maps.LatLng(10.22, 45.33));
-        this.handleColor('red',  new google.maps.LatLng(50.22, 70.33));
+        this.handleColor('red');
     }
 
     handlePink(event: any) {
-        this.handleColor('pink',  new google.maps.LatLng(20.22, 30.33));
-        this.handleColor('pink',  new google.maps.LatLng(20.22, 50.33));
-        this.handleColor('pink',  new google.maps.LatLng(20.22, 60.33));
+        this.handleColor('pink');
     }
 
     handleYellow(event: any) {
-        this.handleColor('yellow',  new google.maps.LatLng(30.90, 45.33));
-        this.handleColor('yellow',  new google.maps.LatLng(40.22, 70.33));
-        this.handleColor('yellow',  new google.maps.LatLng(10.22, 65.33));
+        this.handleColor('yellow');
     }
 
     handleBlue(event: any) {
-        this.handleColor('blue',  new google.maps.LatLng(50.22, 45.33));
-        this.handleColor('blue',  new google.maps.LatLng(60.77, 50.33));
-        this.handleColor('blue',  new google.maps.LatLng(12.22, 37.33));
+        this.handleColor('blue');
     }
 
     handleGreen(event: any) {
-        this.handleColor('green', new google.maps.LatLng(60.22, 45.33));
-        this.handleColor('green', new google.maps.LatLng(11.22, 122.33));
-        this.handleColor('green', new google.maps.LatLng(98.22, 65.33));
+        this.handleColor('green');
     }
 
-    handleColor(color: string, pos: google.maps.LatLng) {
+    handleColor(color: string) {
 
         var marker: MarkerData = {
-            // position: new google.maps.LatLng(10.22, 60.44),
-            position: pos,
+            position: new google.maps.LatLng(10.22, 60.44),
             isWindowOpened: false,
             groupName: color,
-        };
+            attributes: {},
+    };
 
         var pin1: PinData = {
             data: marker,
@@ -98,7 +87,7 @@ export default class GroupsComponent extends React.Component<{mapId: any } , // 
 
         // will be used after connection with filtering
         // for( let pinElement of this.state.filteredList ) {
-        //     addPin(this.state.mapId, pinElement, this.myCallback);
+        //     addPin(this.state.mapIdState, pinElement, this.myCallback);
         // }
 
         addPin(this.state.mapId, pin1, this.myCallback);

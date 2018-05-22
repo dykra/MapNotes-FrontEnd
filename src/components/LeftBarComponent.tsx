@@ -8,9 +8,8 @@ import { Filter } from '../types/filter/Filter';
 
 interface LeftBarState {
     visibleLeftBar: boolean;
-    mapId: any;
+    mapIdState: any;
 }
-
 
 interface LeftBarComponentProps {
     filter: (filter: Filter) => void;
@@ -18,21 +17,22 @@ interface LeftBarComponentProps {
     onRef: any;
     showRoadBetweenMarkers: any;
     markers: any;
+    mapId: any;
 }
 
-export default class LeftBarComponent extends React.Component<LeftBarComponentProps, {mapId: any}, LeftBarState> {
+export default class LeftBarComponent extends React.Component<LeftBarComponentProps, LeftBarState> {
   
   references: {transportComponent: any; } =
         {transportComponent: null};
 
-    constructor(props: LeftBarComponentProps, {mapId: any}) {
+    constructor(props: LeftBarComponentProps) {
         super(props);
         this.showLeftBar = this.showLeftBar.bind(this);
         this.hideLeftBar = this.hideLeftBar.bind(this);
         this.showRoadBetweenMarkers = this.showRoadBetweenMarkers.bind(this);
         this.state = {
             visibleLeftBar: false,
-            mapId: this.props.mapId,
+            mapIdState: this.props.mapId,
         };
     }
 
@@ -66,14 +66,14 @@ export default class LeftBarComponent extends React.Component<LeftBarComponentPr
     }
 
     render() {
-       console.log('state in left bar', this.state.mapId);
+       console.log('state in left bar', this.state.mapIdState);
        let leftBar;
        // let filteredList: PinData[] = [];
        if (this.state.visibleLeftBar) {
            leftBar = (
                <div className={'OpenedLeftBar'}>
                    <div>
-                       <GroupsComponent mapId={this.state.mapId}/>
+                       <GroupsComponent mapId={this.state.mapIdState}/>
                        <Button
                            className={'CloseLeftBarButton'}
                            onClick={this.hideLeftBar}
