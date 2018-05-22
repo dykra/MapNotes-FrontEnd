@@ -11,6 +11,8 @@ interface MarkerInfoWindowState {
     todos: String[];
     isSubmit: boolean;
     isDetailOpen: boolean;
+    newAttributes: any;
+    pinAttr: any;
 
 }
 export default class MarkerInfoWindow extends Component<any, MarkerInfoWindowState> {
@@ -25,11 +27,15 @@ export default class MarkerInfoWindow extends Component<any, MarkerInfoWindowSta
             inputs : json,
             todos: [],
             isSubmit : false,
-            isDetailOpen: false
+            isDetailOpen: false,
+            newAttributes: [],
+            pinAttr: []
         };
         this.handleNewInput = this.handleNewInput.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleAddingAttribute = this.handleAddingAttribute.bind(this);
+        this.deleteAttribute = this.deleteAttribute.bind(this);
 
     }
 
@@ -54,6 +60,15 @@ export default class MarkerInfoWindow extends Component<any, MarkerInfoWindowSta
 
     }
 
+    deleteAttribute(input: any, index: any) {
+
+        while (this.state.newAttributes.indexOf(input) !== -1) {
+            this.state.newAttributes.splice(this.state.newAttributes.indexOf(input), 1);
+        }
+        this.forceUpdate();
+
+    }
+
     handleAddNote(markerState: any) {
         this.setState({isNewMarker: markerState});
     }
@@ -62,9 +77,44 @@ export default class MarkerInfoWindow extends Component<any, MarkerInfoWindowSta
         this.setState({isNoteAdded: !this.state.isNoteAdded});
     }
 
-    handleChange(evt: any, index: any, fieldName: any) {
+    handleChange(evt: any, index: any, fieldName: any, type: any) {
+        console.log('handle');
+        console.log(evt.target.value);
 
-        this.state.inputs[index][fieldName] = evt.target.value;
+        console.log(this.state.pinAttr);
+        if (this.state.pinAttr.length === 0) {
+
+            this.setState({pinAttr:
+                    this.state.pinAttr.push({name: fieldName, type: type, value: ''})});
+            console.log('value');
+            this.forceUpdate();
+            console.log('handle1');
+            console.log(this.state.pinAttr);
+            console.log(this.state.pinAttr[0].value);
+
+        } else if (evt.target.value.length === 1) {
+            console.log('handle2');
+            console.log(this.state.pinAttr);
+            console.log(this.state.pinAttr[0]);
+            this.setState({pinAttr:
+                    this.state.pinAttr.concat({name: fieldName, type: type, value: ''})});
+
+        } else {
+
+            console.log('handle3');
+
+            console.log(this.state.pinAttr);
+            console.log('ulaula');
+            console.log(index);
+            console.log(this.state.pinAttr[index.toString()]);
+            this.state.pinAttr[index].value = evt.target.value;
+
+        }
+
+        // this.state.inputs[index][fieldName] = evt.target.value;
+        // this.forceUpdate();
+
+        // this.state.inputs[index][fieldName] = evt.target.value;
         this.forceUpdate();
     }
 
@@ -88,6 +138,7 @@ export default class MarkerInfoWindow extends Component<any, MarkerInfoWindowSta
 
     handleSubmit(evt: any) {
         evt.preventDefault();
+        console.log(this.state.pinAttr);
 
         const newTodos = this.state.inputs.map((input: any) => {
             return {
@@ -95,22 +146,18 @@ export default class MarkerInfoWindow extends Component<any, MarkerInfoWindowSta
                 value: input.value
             };
         });
-
         const t = this.state.todos;
         t.push(newTodos);
 
         this.setState({
             todos : t, inputs: [{name: '', type: ''}], isSubmit: true
         });
-
         let json = JSON.stringify(this.state.todos);
         console.log('checking json', json);
-
         this.setState({
             todos : [], inputs: [{name: '', type: ''}], isSubmit: true
         });
         this.handleAddNote(false);
-
     }
 
     handleNewMarker() {
@@ -120,6 +167,24 @@ export default class MarkerInfoWindow extends Component<any, MarkerInfoWindowSta
         } else {
             this.handleClicks(this.props.index);
         }
+    }
+
+    handleAddingAttribute(n: String, t: String, isDefault: boolean) {
+        if (isDefault) {
+            if (this.state.inputs.length !== 0) {
+                this.setState({inputs: this.state.inputs.concat({name: n, type: t})});
+            } else {
+                this.setState({inputs: this.state.inputs.push({name: n, type: t})});
+            }
+
+        } else {
+            if (this.state.inputs.length !== 0) {
+                this.setState({newAttributes: this.state.newAttributes.concat({name: n, type: t})});
+            } else {
+                this.setState({newAttributes: this.state.newAttributes.push({name: n, type: t})});
+            }
+        }
+
     }
 
     renderMap() {
@@ -162,6 +227,10 @@ export default class MarkerInfoWindow extends Component<any, MarkerInfoWindowSta
                 handleSubmit={this.handleSubmit}
                 handleChangeName={this.handleChangeName}
                 inputs={this.state.inputs}
+                pinAttribute={this.state.pinAttr}
+                newAttrs={this.state.newAttributes}
+                deleteAttribute={this.deleteAttribute}
+                saveAttribute={this.handleAddingAttribute}
                 closeClick={() => {
                     this.handleNotes();
                     this.handleAddNote(false);
