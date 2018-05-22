@@ -69,6 +69,10 @@
   float: right;
 }
 
+.deleteNewAttrNote {
+  float: right;
+
+}
 
 .ComplexAttributes {
   margin: 3%;
@@ -89,9 +93,6 @@
 .NewComplexAttrButton {
   margin-left: 0px;
   float: left;
-}
-.DeleteComplexAttrButton{
-  display: flex;
 }
 
 .simpleAttrButton {

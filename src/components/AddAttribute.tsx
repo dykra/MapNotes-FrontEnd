@@ -32,7 +32,11 @@ class AddAttribute extends React.Component<any, AddAttributeState> {
             <Modal.Dialog>
                 <Modal.Body>
                     <Form horizontal={true}>
-                        <FormGroup controlId="NewAttrName">
+
+                        <FormGroup
+                            controlId="NewAttrName"
+                            validationState={this.getValidationStateName()}
+                        >
                             <Col componentClass={ControlLabel} sm={2}>
                                 Name
                             </Col>
@@ -44,7 +48,10 @@ class AddAttribute extends React.Component<any, AddAttributeState> {
                                 />
                             </Col>
                         </FormGroup>
-                        <FormGroup controlId="newAttrType">
+                        <FormGroup
+                            controlId="newAttrType"
+                            validationState={this.getValidationStateType()}
+                        >
                             <Col componentClass={ControlLabel} sm={2}>
                                 Type
                             </Col>
@@ -103,7 +110,11 @@ class AddAttribute extends React.Component<any, AddAttributeState> {
     }
 
     handleSave() {
-        this.props.saveNewAttribute(this.state.name, this.state.selected, this.state.isDefault);
+        if (this.getValidationStateName() === 'success' && this.getValidationStateType() === 'success') {
+            this.props.saveNewAttribute(this.state.name, this.state.selected, this.state.isDefault);
+        } else {
+            alert('Fill out all mandatory fields');
+        }
     }
 
     handleNameEnter(event: any) {
@@ -112,5 +123,22 @@ class AddAttribute extends React.Component<any, AddAttributeState> {
         });
     }
 
+     getValidationStateName() {
+         const length = this.state.name.length;
+         if (length > 2) {
+             return 'success';
+         } else if (length < 1) {
+             return 'error';
+         }
+         return null;
+    }
+
+    getValidationStateType() {
+        if (this.state.selected === 'Choose type') {
+            return 'error';
+        } else {
+            return 'success';
+        }
+    }
 }
 export default AddAttribute;

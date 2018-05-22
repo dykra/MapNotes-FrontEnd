@@ -1,6 +1,10 @@
 import * as React from 'react';
 import { Button, Modal } from 'react-bootstrap';
 import AddAttribute from './AddAttribute';
+import Form from 'reactstrap/lib/Form';
+import * as FormGroup from 'react-bootstrap/lib/FormGroup';
+import Col from 'reactstrap/lib/Col';
+import * as FormControl from 'react-bootstrap/lib/FormControl';
 
 interface NoteState {
     input: any;
@@ -59,74 +63,97 @@ export default class Note extends React.Component<any, NoteState> {
         }
 
         return(
-            <div>
+            <div className="static-modal">
 
-                <Modal.Dialog>
+            <Modal.Dialog>
 
-                    <Modal.Header>
-                        <Modal.Title>Create new note</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                        <div className="container-fluid">
-                            <form onSubmit={(evt) => this.props.handleSubmit(evt)}>
+                <Modal.Header>
+                    <Modal.Title>Create new note</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form >
+                        <FormGroup
+                            onSubmit={(evt) => this.props.handleSubmit(evt)}
+                            controlId="NewNote"
+                            // validationState={this.getValidationStateName()}
+                        >
 
-                                {this.props.inputs.map((input: any, index: any) => (
+                        {this.props.inputs.map((input: any, index: any) => (
 
+                                <div key={index}>
+                            <Col sm={4}>
+                                {input.name}
+
+                            </Col>
+                            <Col sm={8}>
+                                <FormControl
+                                    onChange={(evt) => this.props.handleChange(evt, index, input.name, input.type)}
+                                    placeholder="Enter a value"
+                                />
+                            </Col>
+                                </div>
+                            )
+                            )}
+                        </FormGroup>
+
+                            {this.props.newAttrs.map((input: any, index: any) => (
                                     <div key={index}>
+                                        <FormGroup
+                                            controlId="NewNote"
+                                            // validationState={this.getValidationStateName()}
+                                        >
+                                        <Col sm={4}>
+                                            {input.name}
 
-                                        <label>
+                                        </Col>
+                                        <Col sm={6}>
+                                            <FormControl
+                                                onChange={(evt) =>
+                                                    this.props.handleChange(evt, index, input.name, input.type)}
+                                                placeholder="Enter a value"
+                                            />
+                                        </Col>
+                                        <Col sm={2}>
+                                            <Button
+                                                className={'deleteNewAttrNote'}
+                                                bsSize="xsmall"
+                                                onClick={() => this.deleteAttr(input, index)}
+                                            >X
+                                            </Button>
+                                        </Col>
+                                        </FormGroup>
+                                    </div>
+                                )
+                            )}
 
-                                            <div className="col-8 col-sm-6">
+                    </Form>
 
-                                                {input.name}
-                                            </div>
-                                            <div className="col-8 col-sm-6">
-                                                <input
-                                                    onChange={(evt) => this.props.handleChange(evt, index, 'type')}
-                                                    value={input.value}
-                                                />
-                                            </div>
+                    <div>{returnFunction}</div>
+                </Modal.Body>
+                <Modal.Footer>
 
-                                        </label>
-
-                                    </div>)
-                                )}
-                                {this.props.newAttrs.map((input: any, index: any) => (
-
-                                    <div key={index}>
-
-                                        <label>
-
-                                            <div className="col-8 col-sm-6">
-                                                Ala ma kota
-                                                {input.name}
-                                            </div>
-                                            <div className="col-8 col-sm-6">
-                                                <input
-                                                    onChange={(evt) => this.props.handleChange(evt, index, 'type')}
-                                                    value={input.value}
-                                                />
-                                            </div>
-
-                                        </label>
-
-                                    </div>)
-                                )}
-
-                            </form>
-                        </div>
-                        <div>{returnFunction}</div>
-                    </Modal.Body>
-                    <Modal.Footer>
-
-                        <Button onClick={this.handleAddNew} bsSize="xsmall">Add new attribute</Button>
-                        <button className="btn btn-secondary" onClick={this.props.closeClick}> Close</button>
-                        <button onClick={(evt) => this.props.handleSubmit(evt)} className="btn btn-primary">
-                            Save changes
-                        </button>
-                    </Modal.Footer>
-                </Modal.Dialog>
-            </div>);
+                    <Button onClick={this.handleAddNew} bsSize="xsmall">Add new attribute</Button>
+                    <button className="btn btn-secondary" onClick={this.props.closeClick}> Close</button>
+                    <button onClick={(evt) => this.props.handleSubmit(evt)} className="btn btn-primary">
+                        Save changes
+                    </button>
+                </Modal.Footer>
+            </Modal.Dialog>
+        </div>
+        );
     }
 
+    deleteAttr(input: any, index: any) {
+        this.props.deleteAttribute(input, index);
+    }
+
+    // getValidationStateName() {
+    //     const length = this.state.name.length;
+    //     if (length > 2) {
+    //         return 'success';
+    //     } else if (length < 1) {
+    //         return 'error';
+    //     }
+    //     return null;
+    // }
 }

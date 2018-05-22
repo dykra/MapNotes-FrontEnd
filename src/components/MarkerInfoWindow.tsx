@@ -33,6 +33,7 @@ export default class MarkerInfoWindow extends Component<any, MarkerInfoWindowSta
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleAddingAttribute = this.handleAddingAttribute.bind(this);
+        this.deleteAttribute = this.deleteAttribute.bind(this);
 
     }
 
@@ -54,6 +55,15 @@ export default class MarkerInfoWindow extends Component<any, MarkerInfoWindowSta
         if (!this.state.isDetailOpen) {
             this.handleToggleOpen();
         }
+
+    }
+
+    deleteAttribute(input: any, index: any) {
+
+        while (this.state.newAttributes.indexOf(input) !== -1) {
+            this.state.newAttributes.splice(this.state.newAttributes.indexOf(input), 1);
+        }
+        this.forceUpdate();
 
     }
 
@@ -193,6 +203,7 @@ export default class MarkerInfoWindow extends Component<any, MarkerInfoWindowSta
                 handleChangeName={this.handleChangeName}
                 inputs={this.state.inputs}
                 newAttrs={this.state.newAttributes}
+                deleteAttribute={this.deleteAttribute}
                 saveAttribute={this.handleAddingAttribute}
                 closeClick={() => {
                     this.handleNotes();

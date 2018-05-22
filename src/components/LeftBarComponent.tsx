@@ -21,8 +21,8 @@ interface LeftBarComponentProps {
 }
 
 export default class LeftBarComponent extends React.Component<LeftBarComponentProps, LeftBarState> {
-  
-  references: {transportComponent: any; } =
+
+    references: {transportComponent: any; } =
         {transportComponent: null};
 
     constructor(props: LeftBarComponentProps) {
@@ -66,9 +66,7 @@ export default class LeftBarComponent extends React.Component<LeftBarComponentPr
     }
 
     render() {
-       console.log('state in left bar', this.state.mapIdState);
        let leftBar;
-       // let filteredList: PinData[] = [];
        if (this.state.visibleLeftBar) {
            leftBar = (
                <div className={'OpenedLeftBar'}>
@@ -88,20 +86,20 @@ export default class LeftBarComponent extends React.Component<LeftBarComponentPr
                    <FilterComponent filter={this.props.filter} removeFilter={this.props.removeFilter}/>
                </div>
             );
-       } else {
-           leftBar = (
-               <div className={'ClosedLeftBar'}>
-                   <button
-                       className={'OpenLeftBarButton'}
-                       onClick={this.showLeftBar}
-                   > open BAR
-                   </button>
-               </div>
-           );
-       }
-       return (
-           <div>
-               {leftBar}
-           </div>);
+        } else {
+            leftBar = (
+                <div className={'ClosedLeftBar'}>
+                    <button
+                        className={'OpenLeftBarButton'}
+                        onClick={this.showLeftBar}
+                    > open BAR
+                    </button>
+                </div>
+            );
+        }
+        return (
+            <div>
+                {leftBar}
+            </div>);
     }
 }
