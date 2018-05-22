@@ -2,17 +2,17 @@ import React from 'react';
 import { Button } from 'react-bootstrap';
 import * as ButtonToolbar from 'react-bootstrap/lib/ButtonToolbar';
 import { PinData } from '../types/PinData';
-import { addPin, getMapById } from '../api/MapApi';
+import { addPin } from '../api/MapApi';
 import { MarkerData } from '../types/MarkerData';
-import { MapData } from '../types/MapData';
 
 interface GroupsComponentState {
     visibleColors: boolean;
     gotPins: PinData[];
+    mapId: any;
 }
 
-export default class GroupsComponent extends React.Component<any, GroupsComponentState> {
-    constructor(props: {}) {
+export default class GroupsComponent extends React.Component<{mapId: any}, GroupsComponentState> {
+    constructor(props: {mapId: any}) {
         super(props);
         this.showColors = this.showColors.bind(this);
         this.hideColors = this.hideColors.bind(this);
@@ -27,6 +27,7 @@ export default class GroupsComponent extends React.Component<any, GroupsComponen
         this.state = {
             gotPins: [],
             visibleColors: false,
+            mapId: this.props.mapId,
         };
     }
 
@@ -103,23 +104,21 @@ export default class GroupsComponent extends React.Component<any, GroupsComponen
             id: 7,
         };
 
-        addPin(20, pin1, function (pin: PinData) {
+        addPin(this.state.mapId, pin1, function (pin: PinData) {
             console.log('pin1 added');
             console.log(pin);
-            console.log('all pins in group component');
-            getMapById(18, function (map: MapData) {
-                console.log(map.pins);
-            });
-
-            addPin(20, pin2, function (pina: PinData) {
-                console.log('pin1 added');
-            });
-
-            addPin(20, pin3, function (pinb: PinData) {
-                console.log('pin1 added');
-            });
-
         });
+
+
+        addPin(this.state.mapId, pin2, function (pin: PinData) {
+            console.log('pin1 added');
+        });
+
+            addPin(this.state.mapId, pin3, function (pinb: PinData) {
+                console.log('pin1 added');
+            });
+
+
 
     }
 
@@ -132,10 +131,8 @@ export default class GroupsComponent extends React.Component<any, GroupsComponen
                     <ButtonToolbar>
                         <Button onClick={this.handleRed}>Red</Button>
                         <Button onClick={this.handlePink}>Pink</Button>
-                        <Button onClick={this.handleBlue}>Blue</Button>
-                        <Button onClick={this.handleGreen}>Green</Button>
-                        <Button onClick={this.handleYellow}>Yellow</Button>
-                        <Button onClick={this.handlePurple}>Purple</Button>
+                        <Button>Blue</Button>
+                        <Button>Green</Button>
                     </ButtonToolbar>
                 </div>
             );

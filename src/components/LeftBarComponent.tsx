@@ -5,16 +5,18 @@ import GroupsComponent from './GroupsComponent';
 
 interface LeftBarState {
     visibleLeftBar: boolean;
+    mapId: any;
 }
 
-export default class LeftBarComponent extends React.Component<any, LeftBarState> {
+export default class LeftBarComponent extends React.Component<{mapId: any}, LeftBarState> {
 
-    constructor(props: {}) {
+    constructor(props: {mapId: any}) {
         super(props);
         this.showLeftBar = this.showLeftBar.bind(this);
         this.hideLeftBar = this.hideLeftBar.bind(this);
         this.state = {
             visibleLeftBar: false,
+            mapId: this.props.mapId,
         };
     }
 
@@ -32,13 +34,13 @@ export default class LeftBarComponent extends React.Component<any, LeftBarState>
     }
 
     render() {
+       console.log('state in left bar', this.state.mapId);
        let leftBar;
        if (this.state.visibleLeftBar) {
            leftBar = (
                <div className={'OpenedLeftBar'}>
                    <div>
-                       <GroupsComponent
-                       />
+                       <GroupsComponent mapId={this.state.mapId}/>
                        <Button
                            className={'CloseLeftBarButton'}
                            onClick={this.hideLeftBar}
