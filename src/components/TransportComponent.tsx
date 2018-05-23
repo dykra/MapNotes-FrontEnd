@@ -46,8 +46,8 @@ export default class TransportComponent extends React.Component<any, TransportSt
 
         if (startPoint !== '' && endPoint !== '' && this.props.markers.length > Math.max(endPoint, startPoint)) {
             this.references.directionsService.route({
-                    origin: this.props.markers[startPoint].position,
-                    destination: this.props.markers[endPoint].position,
+                    origin: this.props.markers[startPoint].data.position,
+                    destination: this.props.markers[endPoint].data.position,
                     travelMode: google.maps.TravelMode.DRIVING,
                 },
                 (result: any,
