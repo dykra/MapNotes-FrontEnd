@@ -7,5 +7,5 @@ describe('app component', function () {
    it('should work', function () {
      ReactDOM.render(e(App), document.getElementById('container'));
 
-   })
+   });
 });
