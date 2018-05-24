@@ -4,17 +4,25 @@ import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/css/bootstrap-theme.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-interface MapMenu
+// todo przenieść cześc logiki z MapComponentu
 
-export class MapMenu extends React.Component<any, any> {
+export interface MapMenuProps{
 
-    constructor(props: any) {
+}
+
+export interface MapMenuState{
+
+}
+
+export class MapMenu extends React.Component<MapMenuProps, MapMenuState> {
+
+    constructor(props: MapMenuProps) {
         super(props);
     }
 
     render() {
         return (
-            <div>Home</div>
+            <div>MapMenu</div>
         );
     }
 }

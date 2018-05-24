@@ -5,6 +5,10 @@ import { PinData } from '../../types/api/PinData';
 import { getAllMaps, putMap } from '../../api/MapApi';
 import ComplexAttribute from './ComplexAttribiute';
 
+//todo Generalnie ten komponent robił za dużo, rozbiłęm go ale nie zdażyłem go przeanalizować moim zdaniem nalezało by w nim trzymać tylko atrybuty i ostateczny sumbit ustawień
+//a dododatkowo używać twóch komponetów(jeden dla typów prostych, drugi dla typów złożonych) w który edytujemy i tylko końcowe atrybuty przesyłąmy tutaj
+//ponad to trzeba zmienić nazwy typo Modal bo nic nie mówi i wywalić consol logi(używać ich tylko do debugowania)
+
 interface CreationMenuProps {
 
 }

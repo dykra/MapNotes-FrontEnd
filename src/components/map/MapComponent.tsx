@@ -15,7 +15,10 @@ import { PinData } from '../../types/api/PinData';
 import { Filter } from '../../types/filter/Filter';
 import { MarkerData } from '../../types/map/MarkerData';
 
-//todo to spokojnie możę pójść do klasy
+//todo Generalnie wydaje mi sie że ten plik jest duży, bo ma dużą role, przeniósłbym cześć logiki z stąd do MapMenu, aby tutaj było tylko wyświetlanie mapy
+
+
+//todo to spokojnie możę pójść do css
 export const INPUT_STYLE: React.CSSProperties = {
     boxSizing: `border-box`,
     border: `1px solid transparent`,
@@ -30,6 +33,7 @@ export const INPUT_STYLE: React.CSSProperties = {
     textOverflow: `ellipses`,
 };
 
+// todo wydaje mi się że tutaj jest za dużo
 interface MapProps {
     googleMapURL: String;
     markers: ReactElement<any>[];
