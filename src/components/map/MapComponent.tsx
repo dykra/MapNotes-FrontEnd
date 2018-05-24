@@ -2,19 +2,20 @@
 import * as React from 'react';
 import { compose } from 'recompose';
 import { GoogleMap, withGoogleMap, withScriptjs, DirectionsRenderer } from 'react-google-maps';
-import MarkerInfoWindow from './MarkerInfoWindow';
+import MarkerInfoWindow from './marker/MarkerInfoWindow';
 import { WithScriptjsProps } from 'react-google-maps/lib/withScriptjs';
 import { WithGoogleMapProps } from 'react-google-maps/lib/withGoogleMap';
-import { GOOGLE_MAP_URL } from '../constants';
-import LeftBarComponent from './LeftBarComponent';
+import { GOOGLE_MAP_URL } from '../../constants/index';
+import LeftBarComponent from './sidebar/LeftBarComponent';
 import SearchBox from 'react-google-maps/lib/components/places/SearchBox';
 import { ReactElement } from 'react';
-import { addPin, getMapById } from '../api/MapApi';
-import { MapData } from '../types/MapData';
-import { PinData } from '../types/PinData';
-import { Filter } from '../types/filter/Filter';
-import { MarkerData } from '../types/MarkerData';
+import { addPin, getMapById } from '../../api/MapApi';
+import { MapData } from '../../types/api/MapData';
+import { PinData } from '../../types/api/PinData';
+import { Filter } from '../../types/filter/Filter';
+import { MarkerData } from '../../types/map/MarkerData';
 
+//todo to spokojnie możę pójść do klasy
 export const INPUT_STYLE: React.CSSProperties = {
     boxSizing: `border-box`,
     border: `1px solid transparent`,

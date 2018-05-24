@@ -18,7 +18,7 @@ export default class MarkerInfoWindow extends Component<any, MarkerInfoWindowSta
 
     constructor(props: any) {
         super(props);
-        const json = require('./data.json');
+        const json = require('../../../constants/data.json');
         this.state = {
             isOpen: false,
             isNewMarker: false,

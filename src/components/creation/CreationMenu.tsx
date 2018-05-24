@@ -1,13 +1,15 @@
 import * as React from 'react';
-import Map from './MapComponent';
 import MyModal from './Modal';
-import { Button } from 'react-bootstrap';
-import { MapData } from '../types/MapData';
-import { PinData } from '../types/PinData';
-import { getAllMaps, putMap } from '../api/MapApi';
+import { MapData } from '../../types/api/MapData';
+import { PinData } from '../../types/api/PinData';
+import { getAllMaps, putMap } from '../../api/MapApi';
 import ComplexAttribute from './ComplexAttribiute';
 
-interface MapMenuState {
+interface CreationMenuProps {
+
+}
+
+interface CreationMenuState {
     inputValue: String;
     markers: any;
     inputs: any;
@@ -21,7 +23,7 @@ interface MapMenuState {
     complexAttr: Array<ComplexAttribute>;
 }
 
-class MapMenu extends React.Component <{}, MapMenuState> {
+export class CreationMenu extends React.Component <CreationMenuProps, CreationMenuState> {
 
     constructor(props: any) {
         super(props);
@@ -143,23 +145,6 @@ class MapMenu extends React.Component <{}, MapMenuState> {
         this.setState({openMap: true });
     }
 
-    renderMainMenu() {
-
-        console.log('printing my array in main menu!', this.state.todos);
-        return (
-            <div className="MapMenu">
-            <Button className="NewMapButton" bsSize="large" bsStyle="primary" onClick={this.buttonClicked} >
-                Create new map
-            </Button>
-            <div>
-                <Button className="OpenMapButton" bsSize="small" bsStyle="primary" onClick={this.openMapButtonClicked} >
-                        Open map
-                </Button>
-            </div>
-
-        </div>);
-    }
-
     renderModal() {
         return(
             <MyModal
@@ -193,12 +178,10 @@ class MapMenu extends React.Component <{}, MapMenuState> {
     }
 
     handleBackToSimpleAttr() {
-        console.log('handle rendering back to simple attr');
         this.setState({
             isNewMapClicked: true,
             complexAttrBox: false
         });
-        this.renderModal();
     }
 
     renderComplexAttr() {
@@ -211,30 +194,12 @@ class MapMenu extends React.Component <{}, MapMenuState> {
         );
     }
 
-    renderMap() {
-        return(
-            <div className="App">
-                <Map mapId={this.state.mapId} />
+    render() {
+        return (
+            <div className="HomeMenu">
+                {this.renderComplexAttr()}
+                {this.renderModal()}
             </div>
         );
     }
-
-    render() {
-        let returnFunction;
-
-        if ( !this.state.isNewMapClicked && !this.state.isOpen && !this.state.openMap ) {
-            returnFunction = this.renderMainMenu();
-        } else if (this.state.complexAttrBox) {
-            returnFunction = this.renderComplexAttr();
-        } else if ( this.state.isNewMapClicked ) {
-            returnFunction = this.renderModal();
-        } else if ( this.state.openMap ) {
-            returnFunction = this.renderMap();
-        } else {
-            returnFunction = this.renderMainMenu();
-        }
-        return returnFunction;
-    }
 }
-
-export default MapMenu;

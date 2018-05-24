@@ -4,7 +4,7 @@ import TransportComponent from './TransportComponent';
 import GroupsComponent from './GroupsComponent';
 
 import FilterComponent from './FilterComponent';
-import { Filter } from '../types/filter/Filter';
+import { Filter } from '../../../types/filter/Filter';
 
 interface LeftBarState {
     visibleLeftBar: boolean;
