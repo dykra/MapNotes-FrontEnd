@@ -5,7 +5,7 @@ import { PinData } from '../../../types/api/PinData';
 import { addPin } from '../../../api/MapApi';
 import { MarkerData } from '../../../types/map/MarkerData';
 import '../../../styles/GroupsStyle.css';
-import MapContainer from '../map/MapComponent';
+import MapContainer from '../MapComponent';
 import ReactDOM from 'react-dom';
 
 interface GroupsComponentState {
