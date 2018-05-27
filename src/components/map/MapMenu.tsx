@@ -6,11 +6,11 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 // todo przenieść cześc logiki z MapComponentu
 
-export interface MapMenuProps{
+export interface MapMenuProps {
 
 }
 
-export interface MapMenuState{
+export interface MapMenuState {
 
 }
 

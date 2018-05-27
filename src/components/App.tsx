@@ -12,7 +12,7 @@ interface AppState {
     menu: MenuType;
 }
 
-export class App extends React.Component<{}, AppState> {
+class App extends React.Component<{}, AppState> {
 
     constructor(props: {}) {
         super(props);
@@ -48,3 +48,4 @@ export class App extends React.Component<{}, AppState> {
         );
     }
 }
+export default App;

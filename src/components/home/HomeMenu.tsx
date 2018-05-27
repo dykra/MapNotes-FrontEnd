@@ -2,14 +2,14 @@ import * as React from 'react';
 import * as Button from 'react-bootstrap/lib/Button';
 import { MenuType } from '../../types/menu/MenuType';
 
-//todo dodać obsługe wybóru mapy z listy
+// todo dodać obsługe wybóru mapy z listy
 
 export interface HomeMenuProps {
     changeMenu: (menu: MenuType) => void;
 }
 
 export interface HomeMenuState {
-    
+
 }
 
 export class HomeMenu extends React.Component<HomeMenuProps, HomeMenuState> {

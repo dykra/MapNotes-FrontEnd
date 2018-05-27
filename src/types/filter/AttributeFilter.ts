@@ -8,7 +8,7 @@ export class AttributeFilter implements Filter {
     private keyFilter: TextFilterType;
     private valueFilter: ValueFilterType;
 
-    constructor(keyFilter: TextFilterType, valueFilter: ValueFilterType,) {
+    constructor( keyFilter: TextFilterType, valueFilter: ValueFilterType) {
         this.keyFilter = keyFilter;
         this.valueFilter = valueFilter;
     }

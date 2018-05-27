@@ -15,10 +15,10 @@ import { PinData } from '../../types/api/PinData';
 import { Filter } from '../../types/filter/Filter';
 import { MarkerData } from '../../types/map/MarkerData';
 
-//todo Generalnie wydaje mi sie że ten plik jest duży, bo ma dużą role, przeniósłbym cześć logiki z stąd do MapMenu, aby tutaj było tylko wyświetlanie mapy
+// todo Generalnie wydaje mi sie że ten plik jest duży, bo ma dużą role, przeniósłbym
+// cześć logiki z stąd do MapMenu, aby tutaj było tylko wyświetlanie mapy
 
-
-//todo to spokojnie możę pójść do css
+// todo to spokojnie możę pójść do css
 export const INPUT_STYLE: React.CSSProperties = {
     boxSizing: `border-box`,
     border: `1px solid transparent`,
@@ -143,7 +143,7 @@ export default class MapContainer extends React.Component<{mapId: any}, MapConta
             attributes: {},
         };
 
-        var pin1: PinData = {
+        let pin1: PinData = {
             data: marker,
         };
 

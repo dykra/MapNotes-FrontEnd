@@ -3,7 +3,7 @@ import { OrFilter } from '../../types/filter/OrFilter';
 import { AndFilter } from '../../types/filter/AndFilter';
 import { AttributeFilter } from '../../types/filter/AttributeFilter';
 import { TextCheckMode, TextFilterType } from '../../types/filter/TextFilterType';
-import { ValueCheckMode, ValueFilterType} from '../../types/filter/ValueFilterType';
+import { ValueCheckMode, ValueFilterType } from '../../types/filter/ValueFilterType';
 import { SearchFilter } from '../../types/filter/SearchFilter';
 
 function containLessGraterEqual(input: string): boolean {
