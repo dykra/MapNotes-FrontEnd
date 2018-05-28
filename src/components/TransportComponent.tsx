@@ -4,7 +4,6 @@ import * as FormControl from 'react-bootstrap/lib/FormControl';
 import * as ControlLabel from 'react-bootstrap/lib/ControlLabel';
 import { FormGroup } from 'react-bootstrap';
 import * as Col from 'react-bootstrap/lib/Col';
-// import $ from 'jquery';
 
 interface TransportState {
     travelMode: google.maps.TravelMode;
@@ -74,6 +73,7 @@ export default class TransportComponent extends React.Component<any, TransportSt
 
     removeTransport() {
         this.props.showRoadBetweenMarkers(null);
+        this.setCurrentDistance(0);
     }
 
     setCurrentDistance(distance: any) {
