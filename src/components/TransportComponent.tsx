@@ -13,8 +13,8 @@ interface TransportState {
 
 export default class TransportComponent extends React.Component<any, TransportState> {
 
-    references: {startDestination: any; endDestination: any; directionsService: any } =
-        {startDestination: null, endDestination: null, directionsService: null};
+    references: {startDestination: any; endDestination: any; directionsService: any, currentDistance: any} =
+        {startDestination: null, endDestination: null, directionsService: null, currentDistance: '0'};
 
     constructor(props: {}) {
         super(props);
@@ -71,6 +71,7 @@ export default class TransportComponent extends React.Component<any, TransportSt
         console.log(distance);
         console.log(document.getElementsByTagName('distance'));
         // document.getElementById("distance").value = 'Yourvalue';
+        this.references.currentDistance.value = distance;
 
     }
 
@@ -78,11 +79,9 @@ export default class TransportComponent extends React.Component<any, TransportSt
         this.props.showRoadBetweenMarkers(null);
     }
 
-    // setCurrentDistance(distance: any) {
-    //     this.setState({
-    //         currentDistance: distance
-    //     });
-    // }
+    setCurrentDistance(distance: any) {
+        this.references.currentDistance.value = distance / 1000 + 'km';
+    }
 
     render() {
         return (
@@ -117,10 +116,14 @@ export default class TransportComponent extends React.Component<any, TransportSt
                     >REMOVE PATH
                     </Button>
                 </FormGroup>
-                {/*<label>*/}
-                    {/*Distance:*/}
-                    <i>{this.state.currentDistance}</i>
-                {/*</label>*/}
+                <label>
+                    Distance:
+                <FormControl
+                    inputRef={(ref) => {this.references.currentDistance = ref; }}
+                    readOnly={true}
+                    onChange={this.setCurrentDistance}
+                />
+                </label>
             </div>
         );
     }
