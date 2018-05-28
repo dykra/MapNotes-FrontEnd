@@ -79,8 +79,7 @@ export default class GroupsComponent extends React.Component<GroupsComponentProp
 
         for (let gotPin of this.props.shownMarkers) {
             var marker: MarkerData = {
-                // position: new google.maps.LatLng(10.22, 60.44),
-                position: new google.maps.LatLng(gotPin.data.position.lat(), gotPin.data.position.lng()),
+                position: gotPin.data.position,
                 isWindowOpened: false,
                 groupName: color,
                 attributes: {},
@@ -88,13 +87,8 @@ export default class GroupsComponent extends React.Component<GroupsComponentProp
 
             var pin1: PinData = {
                 data: marker,
-                id: 0,
+                id: gotPin.id
             };
-
-            // will be used after connection with filtering
-            // for( let pinElement of this.state.filteredList ) {
-            //     addPin(this.state.mapIdState, pinElement, this.myCallback);
-            // }
 
             addPin(this.state.mapId, pin1, this.myCallback);
         }

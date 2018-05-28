@@ -135,7 +135,7 @@ export default class MapContainer extends React.Component<{mapId: any}, MapConta
             position: new google.maps.LatLng(event.latLng.lat(), event.latLng.lng()),
             isWindowOpened: false,
             groupName: 'red',
-            attributes: {},
+            attributes: '{garden: yes}, {door: black}',
         };
 
         var pin1: PinData = {
@@ -149,7 +149,7 @@ export default class MapContainer extends React.Component<{mapId: any}, MapConta
         this.setState((prevState: any) => ({
             markers: [...prevState.markers, {data:
                     {position: {lat: event.latLng.lat(), lng: event.latLng.lng()},
-                        groupName: 'red', attributes: {} , isWindowOpened: false }}]
+                        groupName: 'red', attributes: '{garden: yes}, {door: black}' , isWindowOpened: false }}]
         }));
         this.setState({isNewMarker : true});
     }
@@ -239,8 +239,25 @@ export default class MapContainer extends React.Component<{mapId: any}, MapConta
 
     filterMarkers(filter: Filter) {
         console.log(filter);
+
+        var marker: MarkerData = {
+            position: new google.maps.LatLng(77.99, 44.88),
+            isWindowOpened: false,
+            groupName: 'red',
+            attributes: '',
+        };
+
+        var pin1: PinData = {
+            data: marker,
+            id: this.props.mapId
+        };
+
+        console.log(pin1);
+
         this.setState({
-            shownMarkers: this.state.markers.filter((marker) => filter.doFilter(marker)),
+
+            shownMarkers: this.state.markers,
+            // shownMarkers: this.state.markers.filter((marker) => filter.doFilter(marker)),
             isFilter: true
         });
     }
