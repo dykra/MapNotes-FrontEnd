@@ -4,7 +4,6 @@ import { MapData } from '../../types/api/MapData';
 import { PinData } from '../../types/api/PinData';
 import { getAllMaps, putMap } from '../../api/MapApi';
 import ComplexAttribute from './ComplexAttribiute';
-// import { Route } from 'react-router-dom';
 
 // todo Generalnie ten komponent robił za dużo, rozbiłęm go ale nie zdażyłem go przeanalizować moim zdaniem
 // nalezało by w nim trzymać tylko atrybuty i ostateczny sumbit ustawień
@@ -12,9 +11,9 @@ import ComplexAttribute from './ComplexAttribiute';
 // i tylko końcowe atrybuty przesyłąmy tutaj
 // ponad to trzeba zmienić nazwy typo Modal bo nic nie mówi i wywalić consol logi(używać ich tylko do debugowania)
 
-interface CreationMenuProps {
-
-}
+// interface CreationMenuProps {
+//
+// }
 
 interface CreationMenuState {
     inputValue: String;
@@ -30,7 +29,7 @@ interface CreationMenuState {
     complexAttr: Array<ComplexAttribute>;
 }
 
-export class CreationMenu extends React.Component <CreationMenuProps, CreationMenuState> {
+export class CreationMenu extends React.Component <any, CreationMenuState> {
 
     constructor(props: any) {
         super(props);
@@ -98,48 +97,28 @@ export class CreationMenu extends React.Component <CreationMenuProps, CreationMe
         let mydata = newTodos;
 
         this.setState({
-            todos :  this.state.todos.concat(newTodos), inputs: [{name: '', type: ''}], isSubmit: true
+            todos: this.state.todos.concat(newTodos), inputs: [{name: '', type: ''}], isSubmit: true
         });
 
         this.setState({
-            todos : [], inputs: [{name: '', type: ''}], isSubmit: true
+            todos: [], inputs: [{name: '', type: ''}], isSubmit: true
         });
 
-        const pin: PinData[] = [
-        ];
+        const pin: PinData[] = [];
 
         const map: MapData = {
-            data: {attributes : mydata},
+            data: {attributes: mydata},
             id: 0,
             pins: pin
         };
         putMap(map, this.myCallback);
 
         this.toggleModal();
-        {/*<Route*/}
-            {/*render={({history}) => {*/}
-                {/*return (*/}
-                    {/*<div className="App">*/}
-                        {/*<Map mapId={this.state.mapId} />*/}
-                    {/*</div>*/}
-                {/*);*/}
-            {/*}}*/}
-        {/*/>*/}
-        {/*<Route path={`${this.props.match.params}/:id`} component={MapC} />*/}
-        // <Route
-        //     render={({history}) => {
-        //         return(
-        //             history.push('/')
-        //         );
-        // }}
-        //     />
-        // return <Redirect to={'/map/' + this.state.mapId} />;
-
     }
 
     public myCallback(map: MapData): void {
-        console.log('Callback worked!!!');
-        console.log(map);
+        let path = '/map/' + map.id;
+        return this.props.history.push(path);
     }
 
     public myCallbackAllMaps(maps: MapData[]): void {
