@@ -7,6 +7,7 @@ import { MenuType } from '../types/menu/MenuType';
 import { CreationMenu } from './creation/CreationMenu';
 import { MapMenu } from './map/MapMenu';
 import { HomeMenu } from './home/HomeMenu';
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 
 interface AppState {
     menu: MenuType;
@@ -40,12 +41,40 @@ class App extends React.Component<{}, AppState> {
         }
     }
 
+    // render() {
+    //     return (
+    //         <div className="App">
+    //             {this.renderMenu()}
+    //         </div>
+    //     );
+    // }
+
     render() {
         return (
-            <div className="App">
-                {this.renderMenu()}
-            </div>
+            <Router>
+
+                <div className="container">
+                    <ul>
+                        <li>
+                            <Link to="/">HomeMenu</Link>
+                        </li>
+                        <li>
+                            <Link to="/menu/1">MapMenu</Link>
+                        </li>
+                        <li>
+                            <Link to="/create">CreationMenu</Link>
+                        </li>
+                    </ul>
+                    <Route exact={true} path="/" component={HomeMenu} />
+                    <Route path="/menu/:id" component={MapMenu} />
+                    <Route path="/create" component={CreationMenu}/>
+                    {/*<div className="App">*/}
+                        {/*{this.renderMenu()}*/}
+                        {/*</div>*/}
+                </div>
+            </Router>
         );
     }
+
 }
 export default App;
