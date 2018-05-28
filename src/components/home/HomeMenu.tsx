@@ -51,7 +51,9 @@ export class HomeMenu extends React.Component<HomeMenuProps, HomeMenuState> {
                 />
             <h2>Maps</h2>
             {getAllMaps(function (maps: MapData[]) {
+                console.log(maps);
                 maps.map(function (id: any) {
+                    console.log(id);
                     return (
                         <Button key={id}>
                             {id.toString()}

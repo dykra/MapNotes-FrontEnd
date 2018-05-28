@@ -7,6 +7,7 @@ import { MenuType } from '../types/menu/MenuType';
 import { CreationMenu } from './creation/CreationMenu';
 import { MapMenu } from './map/MapMenu';
 import { HomeMenu } from './home/HomeMenu';
+import MapComponent from './map/MapComponent';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 
 interface AppState {
@@ -68,6 +69,7 @@ class App extends React.Component<{}, AppState> {
                     <Route exact={true} path="/" component={HomeMenu} />
                     <Route path="/menu/:id" component={MapMenu} />
                     <Route path="/create" component={CreationMenu}/>
+                    <Route path="/map/:id" component={MapComponent}/>
                     {/*<div className="App">*/}
                         {/*{this.renderMenu()}*/}
                         {/*</div>*/}

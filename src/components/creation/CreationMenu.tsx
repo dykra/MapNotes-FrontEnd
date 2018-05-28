@@ -1,9 +1,10 @@
 import * as React from 'react';
-import MyModal from './Modal';
+import MapAttr from './MapAttribute';
 import { MapData } from '../../types/api/MapData';
 import { PinData } from '../../types/api/PinData';
 import { getAllMaps, putMap } from '../../api/MapApi';
 import ComplexAttribute from './ComplexAttribiute';
+// import { Route } from 'react-router-dom';
 
 // todo Generalnie ten komponent robił za dużo, rozbiłęm go ale nie zdażyłem go przeanalizować moim zdaniem
 // nalezało by w nim trzymać tylko atrybuty i ostateczny sumbit ustawień
@@ -48,8 +49,7 @@ export class CreationMenu extends React.Component <CreationMenuProps, CreationMe
         };
 
         this.handleChange = this.handleChange.bind(this);
-        this.handleClick = this.handleClick.bind(this);
-        this.buttonClicked = this.buttonClicked.bind(this);
+
         this.openMapButtonClicked = this.openMapButtonClicked.bind(this);
         this.handleNewInput = this.handleNewInput.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -64,17 +64,6 @@ export class CreationMenu extends React.Component <CreationMenuProps, CreationMe
     handleChange (evt: any, index: any, fieldName: any) {
         this.state.inputs[index][fieldName] = evt.target.value;
         this.forceUpdate();
-    }
-
-    handleClick (index: any) {
-        console.log('button clicked', index);
-        console.log(this.state.todos[index]);
-    }
-
-    buttonClicked () {
-        console.log('My button was clicked');
-        console.log(this.state);
-        this.setState({ isNewMapClicked: true });
     }
 
     toggleModal() {
@@ -126,11 +115,26 @@ export class CreationMenu extends React.Component <CreationMenuProps, CreationMe
         };
         putMap(map, this.myCallback);
 
-        this.setState({
-            todos : [], inputs: [{name: '', type: ''}], isSubmit: true
-        });
-
         this.toggleModal();
+        {/*<Route*/}
+            {/*render={({history}) => {*/}
+                {/*return (*/}
+                    {/*<div className="App">*/}
+                        {/*<Map mapId={this.state.mapId} />*/}
+                    {/*</div>*/}
+                {/*);*/}
+            {/*}}*/}
+        {/*/>*/}
+        {/*<Route path={`${this.props.match.params}/:id`} component={MapC} />*/}
+        // <Route
+        //     render={({history}) => {
+        //         return(
+        //             history.push('/')
+        //         );
+        // }}
+        //     />
+        // return <Redirect to={'/map/' + this.state.mapId} />;
+
     }
 
     public myCallback(map: MapData): void {
@@ -151,15 +155,14 @@ export class CreationMenu extends React.Component <CreationMenuProps, CreationMe
         this.setState({openMap: true });
     }
 
-    renderModal() {
+    renderMapAttribute() {
         return(
-            <MyModal
+            <MapAttr
                 handleChange={this.handleChange}
                 inputValue={this.state.inputValue}
                 handleNewInput={this.handleNewInput}
                 inputs={this.state.inputs}
                 handleSubmit={this.handleSubmit}
-                closeClick={() => this.toggleModal()}
                 mapId={this.state.mapId}
                 handleAddComplexAttr={this.handleAddComplexAttr}
 
@@ -168,7 +171,6 @@ export class CreationMenu extends React.Component <CreationMenuProps, CreationMe
     }
 
     handleAddComplexAttr() {
-        console.log('handle complex attr clicked ');
         this.toggleModal();
         this.setState({
             complexAttrBox: true
@@ -201,11 +203,13 @@ export class CreationMenu extends React.Component <CreationMenuProps, CreationMe
     }
 
     render() {
-        return (
-            <div className="HomeMenu">
-                {this.renderComplexAttr()}
-                {this.renderModal()}
-            </div>
-        );
+        let returnFunction;
+        if (this.state.complexAttrBox) {
+            returnFunction = this.renderComplexAttr();
+        } else {
+            returnFunction = this.renderMapAttribute();
+        }
+        return returnFunction;
     }
+
 }

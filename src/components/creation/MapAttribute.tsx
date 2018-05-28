@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Button, Modal } from 'react-bootstrap';
+import { Route } from 'react-router-dom';
 
 export default class MyModal extends React.Component<any, any> {
 
@@ -8,7 +9,7 @@ export default class MyModal extends React.Component<any, any> {
 
         this.state = {
             value: 'submit',
-            types: [ 'm^2', 'pln', 'yes', 'no' ]
+            types: [ 'm^2', 'pln', 'yes/no', 'text', 'number', 'other']
         };
         this.handleChangeModal = this.handleChangeModal.bind(this);
     }
@@ -63,7 +64,19 @@ export default class MyModal extends React.Component<any, any> {
 
                     <Modal.Footer>
                         <Button onClick={this.props.handleNewInput} bsSize="xsmall">Add new input</Button>
-                        <Button onClick={this.props.closeClick}>Close</Button>
+                        <Route
+                            render={({history}) => {
+                                return (
+                                    <Button
+                                        className="closeMapAttrButton"
+                                        onClick={() => history.push('/')}
+                                    >
+                                        Close
+                                    </Button>
+                                );
+                            }}
+                        />
+
                         <Button onClick={(evt) => this.props.handleSubmit(evt)} bsStyle="primary">Save changes</Button>
                         <Button onClick={this.props.handleAddComplexAttr} bsStyle="primary">
                             AddComplexAttr</Button>

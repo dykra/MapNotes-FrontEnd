@@ -97,7 +97,7 @@ interface MapContainerState {
     directions: any;
 }
 
-export default class MapContainer extends React.Component<{mapId: any}, MapContainerState> {
+export default class MapContainer extends React.Component<any, MapContainerState> {
 
     references: {leftBarComponent: any;
         map: any; searchBox: any; directionsService: any; } =
@@ -107,7 +107,7 @@ export default class MapContainer extends React.Component<{mapId: any}, MapConta
         console.log('Mounted');
     }
 
-    constructor(props: {mapId: any}) {
+    constructor(props: any) {
         super(props);
         this.handleMapClick = this.handleMapClick.bind(this);
         this.handleMapMounted = this.handleMapMounted.bind(this);
@@ -129,7 +129,7 @@ export default class MapContainer extends React.Component<{mapId: any}, MapConta
             bounds: null,
             center: null,
             isNewMarker: false,
-            mapId: this.props.mapId,
+            mapId: this.props.match.params.id,
             isFilter: false,
             directions : null
         };
@@ -157,6 +157,7 @@ export default class MapContainer extends React.Component<{mapId: any}, MapConta
                         groupName: 'red', attributes: {} , isWindowOpened: false }}]
         }));
         this.setState({isNewMarker : true});
+
     }
 
     handleSearchBoxMounted(searchBox: any) {
