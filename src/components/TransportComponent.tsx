@@ -8,6 +8,7 @@ import * as Col from 'react-bootstrap/lib/Col';
 
 interface TransportState {
     travelMode: google.maps.TravelMode;
+    currentDistance: any;
 }
 
 export default class TransportComponent extends React.Component<any, TransportState> {
@@ -17,15 +18,16 @@ export default class TransportComponent extends React.Component<any, TransportSt
 
     constructor(props: {}) {
         super(props);
+
+        this.setState({
+            travelMode: google.maps.TravelMode.DRIVING,
+            currentDistance: '0',
+        });
+
         this.searchForTransport = this.searchForTransport.bind(this);
         this.onChangeDestinationInput = this.onChangeDestinationInput.bind(this);
         this.onChangeDestinationInput = this.onChangeDestinationInput.bind(this);
         this.removeTransport = this.removeTransport.bind(this);
-
-        this.setState({
-            travelMode: google.maps.TravelMode.DRIVING,
-        });
-
     }
 
     componentDidMount() {
@@ -67,11 +69,20 @@ export default class TransportComponent extends React.Component<any, TransportSt
             this.props.markers[endPoint].data.position.lng);
         const distance = google.maps.geometry.spherical.computeDistanceBetween(nyc, london);
         console.log(distance);
+        console.log(document.getElementsByTagName('distance'));
+        // document.getElementById("distance").value = 'Yourvalue';
+
     }
 
     removeTransport() {
         this.props.showRoadBetweenMarkers(null);
     }
+
+    // setCurrentDistance(distance: any) {
+    //     this.setState({
+    //         currentDistance: distance
+    //     });
+    // }
 
     render() {
         return (
@@ -106,6 +117,10 @@ export default class TransportComponent extends React.Component<any, TransportSt
                     >REMOVE PATH
                     </Button>
                 </FormGroup>
+                {/*<label>*/}
+                    {/*Distance:*/}
+                    <i>{this.state.currentDistance}</i>
+                {/*</label>*/}
             </div>
         );
     }
