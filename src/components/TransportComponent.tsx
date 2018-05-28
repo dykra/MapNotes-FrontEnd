@@ -67,7 +67,8 @@ export default class TransportComponent extends React.Component<any, TransportSt
             this.props.markers[startPoint].data.position.lng);
         const endDestination =  new google.maps.LatLng(this.props.markers[endPoint].data.position.lat,
             this.props.markers[endPoint].data.position.lng);
-        this.references.currentDistance.value = google.maps.geometry.spherical.computeDistanceBetween(startDestination, endDestination);
+        this.references.currentDistance.value =
+            google.maps.geometry.spherical.computeDistanceBetween(startDestination, endDestination);
 
     }
 
