@@ -68,3 +68,53 @@
   margin-right: 2.5%;
   float: right;
 }
+
+.deleteNewAttrNote {
+  float: right;
+
+}
+
+.ComplexAttributes {
+  margin: 3%;
+}
+
+.AttrTable {
+  margin-top: 4%;
+  margin-bottom:4%;
+}
+
+.ComplexAttrButtons {
+  margin-top: 2%;
+  float: right;
+  margin-bottom: 2%;
+  margin-left: 2%;
+}
+
+.NewComplexAttrButton {
+  margin-left: 0px;
+  float: left;
+}
+
+.simpleAttrButton {
+  margin-right: 2%;
+  margin-left: 2%;
+}
+
+.complexAttributeModalBody {
+  text-align: center;
+  margin-top: 2%;
+}
+
+.operatorButtonList {
+  text-align: center;
+  display: inline-block;
+  margin-top: 2%;
+  margin-left: 2%;
+}
+
+.simpleAttrButtonList {
+  text-align: center;
+  display: inline-block;
+  margin-top: 2%;
+  margin-left: 2%;
+}

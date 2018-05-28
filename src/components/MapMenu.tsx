@@ -2,16 +2,21 @@ import * as React from 'react';
 import Map from './MapComponent';
 import MyModal from './Modal';
 import { Button } from 'react-bootstrap';
+import { MapData } from '../types/MapData';
+import { PinData } from '../types/PinData';
+import { getAllMaps, putMap } from '../api/MapApi';
 import ComplexAttribute from './ComplexAttribiute';
 
 interface MapMenuState {
     inputValue: String;
+    markers: any;
     inputs: any;
     isNewMapClicked: boolean;
     isOpen: boolean;
     todos: any;
     isSubmit: boolean;
     openMap: boolean;
+    mapId: any;
     complexAttrBox: boolean;
     complexAttr: Array<ComplexAttribute>;
 }
@@ -26,8 +31,10 @@ class MapMenu extends React.Component <{}, MapMenuState> {
             isNewMapClicked : false,
             isOpen : false,
             todos: [],
+            markers : '',
             isSubmit : false,
             openMap : false,
+            mapId : 0,
             complexAttrBox: false,
             complexAttr: []
         };
@@ -38,6 +45,8 @@ class MapMenu extends React.Component <{}, MapMenuState> {
         this.openMapButtonClicked = this.openMapButtonClicked.bind(this);
         this.handleNewInput = this.handleNewInput.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.myCallback = this.myCallback.bind(this);
+        this.myCallbackAllMaps = this.myCallbackAllMaps.bind(this);
         this.renderComplexAttr = this.renderComplexAttr.bind(this);
         this.handleAddComplexAttr = this.handleAddComplexAttr.bind(this);
         this.handleBackToSimpleAttr = this.handleBackToSimpleAttr.bind(this);
@@ -73,8 +82,8 @@ class MapMenu extends React.Component <{}, MapMenuState> {
     }
 
     openMapButtonClicked () {
-        console.log('open map button clicked!!');
-        this.setState({openMap : true});
+        getAllMaps(this.myCallbackAllMaps);
+
     }
 
     handleSubmit(evt: any) {
@@ -87,15 +96,28 @@ class MapMenu extends React.Component <{}, MapMenuState> {
                 type: input.type
             };
         });
-        // let t: any;
+        console.log('new todos', newTodos);
+
+        let mydata = newTodos;
 
         this.setState({
             todos :  this.state.todos.concat(newTodos), inputs: [{name: '', type: ''}], isSubmit: true
         });
 
-        console.log('after setting state', this.state);
-        let json = JSON.stringify(this.state.todos);
-        console.log('checking json', json);
+        this.setState({
+            todos : [], inputs: [{name: '', type: ''}], isSubmit: true
+        });
+
+        const pin: PinData[] = [
+        ];
+
+        const map: MapData = {
+            data: {attributes : mydata},
+            id: 0,
+            pins: pin
+        };
+        putMap(map, this.myCallback);
+
         this.setState({
             todos : [], inputs: [{name: '', type: ''}], isSubmit: true
         });
@@ -103,7 +125,26 @@ class MapMenu extends React.Component <{}, MapMenuState> {
         this.toggleModal();
     }
 
+    public myCallback(map: MapData): void {
+        console.log('Callback worked!!!');
+        console.log(map);
+    }
+
+    public myCallbackAllMaps(maps: MapData[]): void {
+        console.log(maps);
+        let mapSize = maps.length - 1;
+
+        this.setState({
+            mapId: maps[mapSize].id,
+        });
+
+        console.log(this.state.markers);
+
+        this.setState({openMap: true });
+    }
+
     renderMainMenu() {
+
         console.log('printing my array in main menu!', this.state.todos);
         return (
             <div className="MapMenu">
@@ -128,6 +169,7 @@ class MapMenu extends React.Component <{}, MapMenuState> {
                 inputs={this.state.inputs}
                 handleSubmit={this.handleSubmit}
                 closeClick={() => this.toggleModal()}
+                mapId={this.state.mapId}
                 handleAddComplexAttr={this.handleAddComplexAttr}
 
             />
@@ -172,7 +214,7 @@ class MapMenu extends React.Component <{}, MapMenuState> {
     renderMap() {
         return(
             <div className="App">
-                <Map/>
+                <Map mapId={this.state.mapId} />
             </div>
         );
     }
