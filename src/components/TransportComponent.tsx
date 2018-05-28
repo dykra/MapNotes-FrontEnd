@@ -4,6 +4,7 @@ import * as FormControl from 'react-bootstrap/lib/FormControl';
 import * as ControlLabel from 'react-bootstrap/lib/ControlLabel';
 import { FormGroup } from 'react-bootstrap';
 import * as Col from 'react-bootstrap/lib/Col';
+// import $ from 'jquery';
 
 interface TransportState {
     travelMode: google.maps.TravelMode;
@@ -59,6 +60,13 @@ export default class TransportComponent extends React.Component<any, TransportSt
                     }
                 });
         }
+
+        const nyc = new google.maps.LatLng(this.props.markers[startPoint].data.position.lat,
+            this.props.markers[startPoint].data.position.lng);
+        const london =  new google.maps.LatLng(this.props.markers[endPoint].data.position.lat,
+            this.props.markers[endPoint].data.position.lng);
+        const distance = google.maps.geometry.spherical.computeDistanceBetween(nyc, london);
+        console.log(distance);
     }
 
     removeTransport() {
