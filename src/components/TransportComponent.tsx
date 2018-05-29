@@ -7,7 +7,7 @@ import * as Col from 'react-bootstrap/lib/Col';
 
 interface TransportState {
     travelMode: google.maps.TravelMode;
-    currentDistance: any;
+    currentDistance: number;
 }
 
 export default class TransportComponent extends React.Component<any, TransportState> {
@@ -20,7 +20,7 @@ export default class TransportComponent extends React.Component<any, TransportSt
 
         this.setState({
             travelMode: google.maps.TravelMode.DRIVING,
-            currentDistance: '0',
+            currentDistance: 0,
         });
 
         this.searchForTransport = this.searchForTransport.bind(this);
@@ -80,8 +80,8 @@ export default class TransportComponent extends React.Component<any, TransportSt
         this.references.currentDistance.value = this.getKilometersFromMeters(distance) + 'km';
     }
 
-    getKilometersFromMeters(number: number){
-        return  number / 1000;
+    getKilometersFromMeters(valueInMeters: number) {
+        return  valueInMeters / 1000;
     }
 
     render() {
