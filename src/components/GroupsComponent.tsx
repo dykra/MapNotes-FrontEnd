@@ -8,16 +8,20 @@ import '../styles/GroupsStyle.css';
 import MapContainer from './MapComponent';
 import ReactDOM from 'react-dom';
 
+interface GroupsComponentProps {
+    shownMarkers: PinData[];
+    mapId: any;
+}
+
 interface GroupsComponentState {
     visibleColors: boolean;
     gotPins: PinData[];
     mapId: any;
     buttonClicked: boolean;
-    // filteredList: PinData[];
 }
 
-export default class GroupsComponent extends React.Component<{mapId: any } , GroupsComponentState> {
-    constructor(props: {mapId: any} ) {
+export default class GroupsComponent extends React.Component<GroupsComponentProps , GroupsComponentState> {
+    constructor(props: GroupsComponentProps ) {
         super(props);
         this.showColors = this.showColors.bind(this);
         this.hideColors = this.hideColors.bind(this);
@@ -73,24 +77,22 @@ export default class GroupsComponent extends React.Component<{mapId: any } , Gro
 
     handleColor(color: string) {
 
-        var marker: MarkerData = {
-            position: new google.maps.LatLng(10.22, 60.44),
-            isWindowOpened: false,
-            groupName: color,
-            attributes: {},
-    };
+        for (let gotPin of this.props.shownMarkers) {
+            var marker: MarkerData = {
+                position: gotPin.data.position,
+                isWindowOpened: false,
+                groupName: color,
+                attributes: {},
+            };
 
-        var pin1: PinData = {
-            data: marker,
-            id: 0,
-        };
+            var pin1: PinData = {
+                data: marker,
+                id: gotPin.id
+            };
 
-        // will be used after connection with filtering
-        // for( let pinElement of this.state.filteredList ) {
-        //     addPin(this.state.mapIdState, pinElement, this.myCallback);
-        // }
+            addPin(this.state.mapId, pin1, this.myCallback);
+        }
 
-        addPin(this.state.mapId, pin1, this.myCallback);
     }
 
     myCallback ( pin: PinData) {

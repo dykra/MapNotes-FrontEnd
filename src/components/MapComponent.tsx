@@ -135,7 +135,7 @@ export default class MapContainer extends React.Component<{mapId: any}, MapConta
             position: new google.maps.LatLng(event.latLng.lat(), event.latLng.lng()),
             isWindowOpened: false,
             groupName: 'red',
-            attributes: {},
+            attributes: '{garden: yes}, {door: black}',
         };
 
         var pin1: PinData = {
@@ -149,7 +149,7 @@ export default class MapContainer extends React.Component<{mapId: any}, MapConta
         this.setState((prevState: any) => ({
             markers: [...prevState.markers, {data:
                     {position: {lat: event.latLng.lat(), lng: event.latLng.lng()},
-                        groupName: 'red', attributes: {} , isWindowOpened: false }}]
+                        groupName: 'red', attributes: '{garden: yes}, {door: black}' , isWindowOpened: false }}]
         }));
         this.setState({isNewMarker : true});
     }
@@ -209,14 +209,19 @@ export default class MapContainer extends React.Component<{mapId: any}, MapConta
         const nextCenter = searchBoxMarkers.length > 0 ? searchBoxMarkers[0].position : this.state.center;
         // if (!this.state.markers.some(item => item.data.position.equals(searchBoxMarkers[0].position))) {
             const newPin = {data:
-                    {position: searchBoxMarkers[0].position, groupName: searchBoxMarkers[0].groupName,
+                    {position: searchBoxMarkers[0].position,
+                        groupName: 'red',
                         isWindowOpened: false, attributes: {}}
             };
             this.setState(prevState => ({
                 center: nextCenter,
                 markers: [...prevState.markers, newPin]
             }));
-        // }
+
+            addPin(this.props.mapId, newPin, function () {
+                console.log('wants to add pin');
+                console.log(newPin);
+            });
 
         this.references.map.fitBounds(bounds);
     }
@@ -233,7 +238,6 @@ export default class MapContainer extends React.Component<{mapId: any}, MapConta
     }
 
     filterMarkers(filter: Filter) {
-        // console.log(filter);
         this.setState({
             shownMarkers: this.state.markers.filter((marker) => filter.doFilter(marker)),
             isFilter: true
@@ -290,6 +294,7 @@ export default class MapContainer extends React.Component<{mapId: any}, MapConta
                     markers={this.state.markers}
                     filter={this.filterMarkers}
                     removeFilter={this.removeFilter}
+                    shownMarkers={this.state.shownMarkers}
                 />
                 <Map
                     googleMapURL={GOOGLE_MAP_URL}
