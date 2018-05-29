@@ -26,11 +26,14 @@ export default class MapAttribute extends React.Component<any, MapAttributeState
     handlePrepareInputs(isNew: boolean) {
         let len = this.state.inputs.length;
         if ( len === 0 || len < 5) {
+            let temp: BasicAttr[];
+            temp = [];
             for (let i = 0; i < (5 - len); i++) {
-                this.setState((prevState: any) => ({
-                    inputs: [...prevState.inputs, {name: '', type: ''}]
-                }));
+                temp.push({name: '', type: ''});
             }
+            this.setState({
+                inputs: this.state.inputs.concat(temp)
+            });
         } else if (isNew) {
             this.setState((prevState: any) => ({
                 inputs: [...prevState.inputs, {name: '', type: ''}]
