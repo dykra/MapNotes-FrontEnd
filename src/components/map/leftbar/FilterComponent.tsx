@@ -20,11 +20,13 @@ export default class FilterComponent extends React.Component<FilterComponentProp
 
     constructor(props: FilterComponentProps) {
         super(props);
-        this.onChangeFilterInput = this.onChangeFilterInput.bind(this);
-        this.filter = this.filter.bind(this);
+
         this.state = {
             input: '',
         };
+
+        this.filter = this.filter.bind(this);
+        this.onChangeFilterInput = this.onChangeFilterInput.bind(this);
     }
 
     onChangeFilterInput(event: any) {

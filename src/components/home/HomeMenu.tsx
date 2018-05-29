@@ -12,7 +12,9 @@ export class HomeMenu extends React.Component<{}, HomeMenuState> {
 
     constructor(props: {}) {
         super(props);
-        this.state = { maps: []};
+        this.state = {
+            maps: []
+        };
     }
 
     componentWillMount() {

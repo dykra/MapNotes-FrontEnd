@@ -4,50 +4,42 @@ import * as FormControl from 'react-bootstrap/lib/FormControl';
 import * as ControlLabel from 'react-bootstrap/lib/ControlLabel';
 import { FormGroup } from 'react-bootstrap';
 import * as Col from 'react-bootstrap/lib/Col';
+import { PinData } from '../../../types/api/PinData';
 
-interface TransportState {
-    travelMode: google.maps.TravelMode;
+export interface TransportComponentProps {
+    visiblePins: PinData[];
+    showRoadBetweenMarkers: (result: any) => void;
 }
 
-export default class TransportComponent extends React.Component<any, TransportState> {
+export interface TransportComponentState {
+    travelMode: google.maps.TravelMode;
+    directionsService: any;
+    startDestination: any;
+    endDestination: any;
+}
 
-    references: {startDestination: any; endDestination: any; directionsService: any } =
-        {startDestination: null, endDestination: null, directionsService: null};
+export class TransportComponent extends React.Component<TransportComponentProps, TransportComponentState> {
 
-    constructor(props: {}) {
+    constructor(props: TransportComponentProps) {
         super(props);
-        this.searchForTransport = this.searchForTransport.bind(this);
-        this.onChangeDestinationInput = this.onChangeDestinationInput.bind(this);
-        this.onChangeDestinationInput = this.onChangeDestinationInput.bind(this);
-        this.removeTransport = this.removeTransport.bind(this);
 
         this.setState({
+            directionsService: new google.maps.DirectionsService(),
             travelMode: google.maps.TravelMode.DRIVING,
         });
 
+        this.searchForTransport = this.searchForTransport.bind(this);
+        this.removeTransport = this.removeTransport.bind(this);
     }
 
-    componentDidMount() {
-        this.props.onRef(this);
-        this.references.directionsService = new google.maps.DirectionsService();
-    }
+    searchForTransport() {
+        const startPoint: any = this.state.startDestination.value;
+        const endPoint: any = this.state.endDestination.value;
 
-    componentWillUnmount() {
-        this.props.onRef(null);
-    }
-
-    onChangeDestinationInput(index: any) {
-        this.references.startDestination.value = index;
-    }
-
-    searchForTransport(event: any) {
-        var startPoint: any = this.references.startDestination.value;
-        var endPoint: any = this.references.endDestination.value;
-
-        if (startPoint !== '' && endPoint !== '' && this.props.markers.length > Math.max(endPoint, startPoint)) {
-            this.references.directionsService.route({
-                    origin: this.props.markers[startPoint].data.position,
-                    destination: this.props.markers[endPoint].data.position,
+        if (startPoint !== '' && endPoint !== '' && this.props.visiblePins.length > Math.max(endPoint, startPoint)) {
+            this.state.directionsService.route({
+                    origin: this.props.visiblePins[startPoint].data.position,
+                    destination: this.props.visiblePins[endPoint].data.position,
                     travelMode: google.maps.TravelMode.DRIVING,
                 },
                 (result: any,
@@ -72,17 +64,16 @@ export default class TransportComponent extends React.Component<any, TransportSt
                     <Col componentClass={ControlLabel} sm={8}>Select Destiantion</Col>
                     <Col sm={8}>
                         <FormControl
-                            inputRef={(ref) => {this.references.startDestination = ref; }}
+                            inputRef={(input) => this.setState({startDestination: input})}
                             readOnly={true}
                             placeholder={'Right click on marker to start ...'}
-                            onChange={this.onChangeDestinationInput}
                         />
                         <FormControl
-                            inputRef={(ref) => {this.references.endDestination = ref; }}
+                            inputRef={(input) => this.setState({endDestination: input})}
                             placeholder="Enter index of final destination"
                         />
-
                     </Col>
+
                     <Button
                         className={'SearchTransportButton'}
                         bsSize="small"
