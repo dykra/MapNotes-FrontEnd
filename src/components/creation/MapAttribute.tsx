@@ -1,88 +1,131 @@
 import * as React from 'react';
-import { Button, Modal } from 'react-bootstrap';
+import { Button, Modal, Col, FormControl } from 'react-bootstrap';
 import { Route } from 'react-router-dom';
 
-export default class MyModal extends React.Component<any, any> {
+import { BasicAttr } from '../../types/creation/BasicAttr';
+import {  FormGroup, Form } from 'reactstrap';
+
+interface MapAttributeState {
+    types: String[];
+    value: String;
+    inputs: BasicAttr[];
+}
+
+export default class MapAttribute extends React.Component<any, MapAttributeState> {
 
     constructor(props: any) {
         super(props);
 
         this.state = {
+            inputs : [],
             value: 'submit',
             types: [ 'm^2', 'pln', 'yes/no', 'text', 'number', 'other']
         };
-        this.handleChangeModal = this.handleChangeModal.bind(this);
+        this.handleChangeType = this.handleChangeType.bind(this);
+        this.handlePrepareInputs = this.handlePrepareInputs.bind(this);
+        this.handleChange = this.handleChange.bind(this);
     }
 
-    handleChangeModal(event: any, index: any) {
+    handleChangeType(event: any, index: any) {
         this.setState({value: event.target.value});
-        console.log('chosen value ', event.target.value);
-        this.props.handleChange(event, index, 'type');
+        this.handleChange(event, index, 'type');
+    }
+
+    handlePrepareInputs(isNew: boolean) {
+        if (this.state.inputs.length === 0) {
+            for (let i = 0; i < 5; i++) {
+                this.setState((prevState: any) => ({
+                    inputs: [...prevState.inputs, {name: '', type: ''}]
+                }));
+            }
+        } else if (isNew) {
+            this.setState((prevState: any) => ({
+                inputs: [...prevState.inputs, {name: '', type: ''}]
+            }));
+
+        }
+
+    }
+
+    handleChange (evt: any, index: any, fieldName: any) {
+        this.state.inputs[index][fieldName] = evt.target.value;
+        this.forceUpdate();
     }
 
     render() {
-        return (
+        return(
             <div className="static-modal">
-                <Modal.Dialog>
-                    <Modal.Header>
-                        <Modal.Title> Hello in MapNotes </Modal.Title>
-                    </Modal.Header>
+            <Modal.Dialog>
+                <Modal.Header>
+                    <Modal.Title> Hello in MapNotes </Modal.Title>
+                </Modal.Header>
 
-                    <Modal.Body>
-                        <form onSubmit={(evt) => this.props.handleSubmit(evt)} >
-                            {this.props.inputs.map( ( input: any, index: any) =>
-                                <div className="form-inline" key={index}>
-                                    <input
-                                        onChange={(evt) => this.props.handleChange(evt, index, 'name')}
-                                        value={input.name}
-                                    />
-                                    <input
-                                        onChange={(evt) => this.props.handleChange(evt, index, 'type')}
-                                        value={input.type}
-                                    />
-                                        <label>
-                                            <select onClick={(evt) => this.handleChangeModal(evt, index)}>
-                                                <option value="">Default Attribute</option>
-                                                {
-                                                    this.state.types.map(function(type: any) {
-                                                        return <option
-                                                            key={type.toString()}
-                                                            value={type.toString()}
-                                                        >
-                                                            {type.toString()}
-                                                        </option>;
-                                                    })
-                                                }
+                <Modal.Body>
+                    <Form >
+                        {
+                            this.handlePrepareInputs(false)
+                        }
+                        {this.state.inputs.map((input: any, index: any) =>
+                            <div className="form-inline" key={index}>
+                                <FormGroup>
+                                    <Col sm={10}>
+                                        <FormControl
+                                            onChange={(evt: any) => this.handleChange(evt, index, 'name')}
+                                            type="string"
+                                            placeholder="Name of your new attribute"
 
-                                            </select>
-                                        </label>
-                                </div>
-                            )}
-                        </form>
+                                        />
+                                    </Col>
+                                </FormGroup>
 
-                    </Modal.Body>
+                                <label>
+                                    <select onClick={(evt) => this.handleChangeType(evt, index)}>
+                                        <option value="">Default Attribute</option>
+                                        {
+                                            this.state.types.map(function (type: any) {
+                                                return <option
+                                                    key={type.toString()}
+                                                    value={type.toString()}
+                                                >
+                                                    {type.toString()}
+                                                </option>;
+                                            })
+                                        }
 
-                    <Modal.Footer>
-                        <Button onClick={this.props.handleNewInput} bsSize="xsmall">Add new input</Button>
-                        <Route
-                            render={({history}) => {
-                                return (
-                                    <Button
-                                        className="closeMapAttrButton"
-                                        onClick={() => history.push('/')}
-                                    >
-                                        Close
-                                    </Button>
-                                );
-                            }}
-                        />
+                                    </select>
+                                </label>
+                            </div>
+                        )}
+                    </Form>
 
-                        <Button onClick={(evt) => this.props.handleSubmit(evt)} bsStyle="primary">Save changes</Button>
-                        <Button onClick={this.props.handleAddComplexAttr} bsStyle="primary">
-                            AddComplexAttr</Button>
-                    </Modal.Footer>
-                </Modal.Dialog>
-            </div>
-        );
+                </Modal.Body>
+
+                <Modal.Footer>
+                    <Button onClick={() => this.handlePrepareInputs(true)} bsSize="small">Add new input</Button>
+
+                    <Route
+                        render={({history}) => {
+                            return (
+                                <Button
+                                    className="closeMapAttrButton"
+                                    onClick={() => history.push('/')}
+                                >
+                                    Close
+                                </Button>
+                            );
+                        }}
+                    />
+                    <Button
+                        onClick={(evt) => this.props.handleSubmit(evt, this.state.inputs)}
+                        bsStyle="primary"
+                    >
+                        Save changes
+                    </Button>
+                    <Button onClick={this.props.handleAddComplexAttr} bsStyle="primary">
+                        AddComplexAttr</Button>
+                </Modal.Footer>
+            </Modal.Dialog>
+        </div>);
     }
+
 }
