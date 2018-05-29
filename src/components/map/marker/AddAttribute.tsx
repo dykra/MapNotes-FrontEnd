@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Button, Checkbox, Modal } from 'react-bootstrap';
 import { FormGroup, FormControl, Form, Col, ControlLabel,
-    MenuItem, DropdownButton, ButtonToolbar } from 'react-bootstrap/lib';
+    MenuItem, DropdownButton } from 'react-bootstrap/lib';
 
 interface AddAttributeState {
     types: String[];
@@ -56,23 +56,23 @@ class AddAttribute extends React.Component<any, AddAttributeState> {
                                 Type
                             </Col>
                             <Col sm={4}>
-                                <ButtonToolbar>
-                                    <DropdownButton
-                                        onSelect={this.handleTypeChange}
-                                        title={this.state.selected}
-                                        id="dropdown-size-medium"
-                                    >
-                                        {
-                                            this.state.types.map(function(type: any) {
-                                                return (
-                                                    <MenuItem key={type} eventKey={type.toString()}>
-                                                    {type.toString()}
-                                                </MenuItem>);
-                                            })
-                                        }
 
-                                    </DropdownButton>
-                                </ButtonToolbar>
+                                <DropdownButton
+                                    onSelect={this.handleTypeChange}
+                                    title={this.state.selected}
+                                    id="dropdown-size-medium"
+                                >
+                                    {
+                                        this.state.types.map(function(type: any) {
+                                            return (
+                                                <MenuItem key={type} eventKey={type.toString()}>
+                                                {type.toString()}
+                                            </MenuItem>);
+                                        })
+                                    }
+
+                                </DropdownButton>
+
                             </Col>
                         </FormGroup>
                         <FormGroup>

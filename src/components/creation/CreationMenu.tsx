@@ -12,7 +12,7 @@ interface CreationMenuState {
     isOpen: boolean;
     complexAttrBox: boolean;
     complexAttr: Array<ComplexAttribute>;
-    simpleAtr:  BasicAttr[];
+    simpleAttr:  BasicAttr[];
 }
 
 export class CreationMenu extends React.Component <any, CreationMenuState> {
@@ -24,15 +24,19 @@ export class CreationMenu extends React.Component <any, CreationMenuState> {
             isOpen : false,
             complexAttrBox: false,
             complexAttr: [],
-            simpleAtr:  []
+            simpleAttr:  []
         };
 
         this.handleSubmit = this.handleSubmit.bind(this);
         this.myCallback = this.myCallback.bind(this);
         this.renderComplexAttr = this.renderComplexAttr.bind(this);
+        this.renderMapAttribute = this.renderMapAttribute.bind(this);
         this.handleAddComplexAttr = this.handleAddComplexAttr.bind(this);
         this.handleBackToSimpleAttr = this.handleBackToSimpleAttr.bind(this);
         this.handleSaveComplexAttr = this.handleSaveComplexAttr.bind(this);
+        this.toggleModal = this.toggleModal.bind(this);
+        this.getSimpleAttr = this.getSimpleAttr.bind(this);
+        this.isArrayContains = this.isArrayContains.bind(this);
     }
 
     toggleModal() {
@@ -42,25 +46,17 @@ export class CreationMenu extends React.Component <any, CreationMenuState> {
         });
     }
 
-    handleSubmit(evt: any, basicAttr:  BasicAttr[]) {
+    handleSubmit(evt: any) {
         evt.preventDefault();
         const pin: PinData[] = [];
-        this.setState((prevState: any) => ({
-            simpleAtr: [...prevState.simpleAtr, basicAttr]
-        }));
-        // this.setState({simpleAtr: basicAttr});
-        this.forceUpdate();
-        console.log('basic', basicAttr);
 
         const map: MapData = {
-            data: {attributes: basicAttr},
+            data: {attributes: this.state.simpleAttr},
             id: 0,
             pins: pin
         };
         putMap(map, this.myCallback);
-        console.log('log state', this.state.simpleAtr.length);
 
-        this.toggleModal();
     }
 
     public myCallback(map: MapData): void {
@@ -71,15 +67,39 @@ export class CreationMenu extends React.Component <any, CreationMenuState> {
     renderMapAttribute() {
         return(
             <MapAttr
+                simpleAttr={this.state.simpleAttr}
                 handleSubmit={this.handleSubmit}
                 handleAddComplexAttr={this.handleAddComplexAttr}
+
             />
         );
     }
 
-    handleAddComplexAttr() {
+    isArrayContains(name: String) {
+        for ( let i = 0; i < this.state.simpleAttr.length; i++) {
+            if (this.state.simpleAttr[i].name === name) {
+                return true;
+            }
+                }
+                return false;
+    }
+
+    getSimpleAttr(simpleAttr: BasicAttr[]) {
+        let temp: BasicAttr[];
+        temp = [];
+        for (let i = 0; i < simpleAttr.length; i++) {
+            if (simpleAttr[i].name !== '' && !this.isArrayContains(simpleAttr[i].name) ) {
+                temp.push(simpleAttr[i]);
+            }
+        }
+        return temp;
+    }
+
+    handleAddComplexAttr(simpleAttr: BasicAttr[]) {
+
         this.toggleModal();
         this.setState({
+            simpleAttr: this.state.simpleAttr.concat(this.getSimpleAttr(simpleAttr)),
             complexAttrBox: true
         });
     }
@@ -102,7 +122,7 @@ export class CreationMenu extends React.Component <any, CreationMenuState> {
     renderComplexAttr() {
         return (
         <ComplexAttribute
-            simpleAttr={this.state.simpleAtr}
+            simpleAttr={this.state.simpleAttr}
             handleBackToSimpleAttr={this.handleBackToSimpleAttr}
             handleSaveComplexAttr={this.handleSaveComplexAttr}
         />
@@ -112,7 +132,6 @@ export class CreationMenu extends React.Component <any, CreationMenuState> {
     render() {
         let returnFunction;
         if (this.state.complexAttrBox) {
-            console.log('attr', this.state.simpleAtr);
             returnFunction = this.renderComplexAttr();
         } else {
             returnFunction = this.renderMapAttribute();

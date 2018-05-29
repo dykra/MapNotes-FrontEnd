@@ -7,7 +7,6 @@ import {  FormGroup, Form } from 'reactstrap';
 
 interface MapAttributeState {
     types: String[];
-    value: String;
     inputs: BasicAttr[];
 }
 
@@ -17,23 +16,17 @@ export default class MapAttribute extends React.Component<any, MapAttributeState
         super(props);
 
         this.state = {
-            inputs : [],
-            value: 'submit',
+            inputs : this.props.simpleAttr,
             types: [ 'm^2', 'pln', 'yes/no', 'text', 'number', 'other']
         };
-        this.handleChangeType = this.handleChangeType.bind(this);
         this.handlePrepareInputs = this.handlePrepareInputs.bind(this);
         this.handleChange = this.handleChange.bind(this);
     }
 
-    handleChangeType(event: any, index: any) {
-        this.setState({value: event.target.value});
-        this.handleChange(event, index, 'type');
-    }
-
     handlePrepareInputs(isNew: boolean) {
-        if (this.state.inputs.length === 0) {
-            for (let i = 0; i < 5; i++) {
+        let len = this.state.inputs.length;
+        if ( len === 0 || len < 5) {
+            for (let i = 0; i < (5 - len); i++) {
                 this.setState((prevState: any) => ({
                     inputs: [...prevState.inputs, {name: '', type: ''}]
                 }));
@@ -44,7 +37,6 @@ export default class MapAttribute extends React.Component<any, MapAttributeState
             }));
 
         }
-
     }
 
     handleChange (evt: any, index: any, fieldName: any) {
@@ -73,14 +65,15 @@ export default class MapAttribute extends React.Component<any, MapAttributeState
                                             onChange={(evt: any) => this.handleChange(evt, index, 'name')}
                                             type="string"
                                             placeholder="Name of your new attribute"
+                                            value={input.name}
 
                                         />
                                     </Col>
                                 </FormGroup>
 
                                 <label>
-                                    <select onClick={(evt) => this.handleChangeType(evt, index)}>
-                                        <option value="">Default Attribute</option>
+                                    <select onClick={(evt) => this.handleChange(evt, index, 'type')}>
+                                        <option title={input.type}>{input.type}</option>
                                         {
                                             this.state.types.map(function (type: any) {
                                                 return <option
@@ -121,7 +114,7 @@ export default class MapAttribute extends React.Component<any, MapAttributeState
                     >
                         Save changes
                     </Button>
-                    <Button onClick={this.props.handleAddComplexAttr} bsStyle="primary">
+                    <Button onClick={() => this.props.handleAddComplexAttr(this.state.inputs)} bsStyle="primary">
                         AddComplexAttr</Button>
                 </Modal.Footer>
             </Modal.Dialog>
