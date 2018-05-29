@@ -14,8 +14,8 @@ export interface TransportComponentProps {
 export interface TransportComponentState {
     travelMode: google.maps.TravelMode;
     directionsService: any;
-    startDestination: any;
-    endDestination: any;
+    startDestination?: any;
+    endDestination?: any;
 }
 
 export class TransportComponent extends React.Component<TransportComponentProps, TransportComponentState> {
@@ -23,18 +23,21 @@ export class TransportComponent extends React.Component<TransportComponentProps,
     constructor(props: TransportComponentProps) {
         super(props);
 
-        this.setState({
+        this.state = {
             directionsService: new google.maps.DirectionsService(),
-            travelMode: google.maps.TravelMode.DRIVING,
-        });
+            travelMode: google.maps.TravelMode.DRIVING
+        };
 
         this.searchForTransport = this.searchForTransport.bind(this);
         this.removeTransport = this.removeTransport.bind(this);
+        this.changeStartPoint = this.changeStartPoint.bind(this);
+        this.changeEndPoint = this.changeEndPoint.bind(this);
     }
 
     searchForTransport() {
-        const startPoint: any = this.state.startDestination.value;
-        const endPoint: any = this.state.endDestination.value;
+        const startPoint: any = this.state.startDestination;
+        const endPoint: any = this.state.endDestination;
+        console.log(startPoint);
 
         if (startPoint !== '' && endPoint !== '' && this.props.visiblePins.length > Math.max(endPoint, startPoint)) {
             this.state.directionsService.route({
@@ -53,6 +56,18 @@ export class TransportComponent extends React.Component<TransportComponentProps,
         }
     }
 
+    changeStartPoint(event: any) {
+        this.setState({
+            startDestination: event.target.value
+        });
+    }
+
+    changeEndPoint(event: any) {
+        this.setState({
+            endDestination: event.target.value
+        });
+    }
+
     removeTransport() {
         this.props.showRoadBetweenMarkers(null);
     }
@@ -64,13 +79,12 @@ export class TransportComponent extends React.Component<TransportComponentProps,
                     <Col componentClass={ControlLabel} sm={8}>Select Destiantion</Col>
                     <Col sm={8}>
                         <FormControl
-                            inputRef={(input) => this.setState({startDestination: input})}
-                            readOnly={true}
                             placeholder={'Right click on marker to start ...'}
+                            onChange={this.changeStartPoint}
                         />
                         <FormControl
-                            inputRef={(input) => this.setState({endDestination: input})}
                             placeholder="Enter index of final destination"
+                            onChange={this.changeEndPoint}
                         />
                     </Col>
 

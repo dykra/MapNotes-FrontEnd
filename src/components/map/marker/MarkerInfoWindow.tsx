@@ -2,6 +2,8 @@ import * as React from 'react';
 import { Marker, InfoWindow } from 'react-google-maps';
 import Note from './Note';
 import { Component } from 'react';
+import { PinData } from '../../../types/api/PinData';
+import { MapSettings } from '../../../types/map/MapSettings';
 
 // todo Generalnie tutaj trzeba dodać obsługe wyświetalania atrybutów jak i ich edycji
 // Sam komponent powinien używać klasy PinData i na podstawie jej się generować.
@@ -9,7 +11,16 @@ import { Component } from 'react';
 // Tylko gotowego PinData przesyłać wyżej aby tam było to dodane do mapy(ewentualnie wysłane
 // na serwer) i wtedy tamten komponent prze renderuje ten na nowo z nowymi propsami.
 
-interface MarkerInfoWindowState {
+export interface MarkerInfoWindowProps {
+    pin: PinData;
+    mapData: MapSettings;
+    index: any;
+    key: any;
+    closePin: (pin: PinData) => void;
+    showTransportComponent: (lat: any, lng: any, index: any) => void;
+}
+
+export interface MarkerInfoWindowState {
     isOpen: boolean;
     isNewMarker: boolean;
     isNoteAdded: boolean;
@@ -18,9 +29,9 @@ interface MarkerInfoWindowState {
     isSubmit: boolean;
     isDetailOpen: boolean;
     newAttributes: any;
-
 }
-export default class MarkerInfoWindow extends Component<any, MarkerInfoWindowState> {
+
+export class MarkerInfoWindow extends Component<MarkerInfoWindowProps, MarkerInfoWindowState> {
 
     constructor(props: any) {
         super(props);
@@ -65,7 +76,6 @@ export default class MarkerInfoWindow extends Component<any, MarkerInfoWindowSta
     }
 
     deleteAttribute(input: any, index: any) {
-
         while (this.state.newAttributes.indexOf(input) !== -1) {
             this.state.newAttributes.splice(this.state.newAttributes.indexOf(input), 1);
         }
@@ -74,12 +84,8 @@ export default class MarkerInfoWindow extends Component<any, MarkerInfoWindowSta
     }
 
     handleRightClick(id: any) {
-        // console.log('show route for ' + id);
-        // console.log(this.props.lat);
-        // console.log(this.props.lng);
-
-        this.props.showTransportComponent(this.props.lat, this.props.lng, this.props.index);
-
+        const position = this.props.pin.data.position;
+        this.props.showTransportComponent(position.lat, position.lng, this.props.index);
     }
 
     handleAddNote(markerState: any) {
@@ -138,8 +144,8 @@ export default class MarkerInfoWindow extends Component<any, MarkerInfoWindowSta
     }
 
     handleNewMarker() {
-        if (this.props.isNewMarker && !this.state.isNoteAdded ) {
-            this.handleAddNote(this.props.isNewMarker);
+        if (!this.state.isNoteAdded ) {
+            this.handleAddNote(false);
             this.handleNotes();
         } else {
             this.handleClicks(this.props.index);
@@ -165,15 +171,16 @@ export default class MarkerInfoWindow extends Component<any, MarkerInfoWindowSta
     }
 
     renderMap() {
+        const position = this.props.pin.data.position;
         var baseURL = 'http://maps.google.com/mapfiles/ms/icons/';
-        var newUrl = baseURL + this.props.groupName + '.png';
+        var newUrl = baseURL + this.props.pin.data.groupName + '.png';
         return(
             <Marker
                 key={this.props.index}
                 position={{
-                lat: this.props.lat,
-                lng: this.props.lng
-            }}
+                    lat: position.lat,
+                    lng: position.lng
+                }}
                 icon={newUrl}
                 label={this.props.index.toString()}
                 onClick={
@@ -213,7 +220,7 @@ export default class MarkerInfoWindow extends Component<any, MarkerInfoWindowSta
                 closeClick={() => {
                     this.handleNotes();
                     this.handleAddNote(false);
-                    this.props.closePin();
+                    this.props.closePin(this.props.pin);
                 }}
             />
     );
@@ -225,9 +232,7 @@ export default class MarkerInfoWindow extends Component<any, MarkerInfoWindowSta
             returnFun = this.renderModal();
 
         } else {
-
             returnFun = this.renderMap();
-
         }
         return returnFun;
 
