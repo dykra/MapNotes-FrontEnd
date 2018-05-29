@@ -77,7 +77,7 @@ export default class GroupsComponent extends React.Component<{mapId: any } , Gro
             position: new google.maps.LatLng(10.22, 60.44),
             isWindowOpened: false,
             groupName: color,
-            attributes: {},
+            attributes: [],
     };
 
         var pin1: PinData = {
