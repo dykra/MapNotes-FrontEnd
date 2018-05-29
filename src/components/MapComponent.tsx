@@ -99,7 +99,7 @@ export default class MapContainer extends React.Component<{mapId: any}, MapConta
         {leftBarComponent: null, map: null, searchBox: null, directionsService: null};
 
     componentDidMount() {
-        console.log('Mounted');
+        // console.log('Mounted');
     }
 
     constructor(props: {mapId: any}) {
@@ -143,7 +143,7 @@ export default class MapContainer extends React.Component<{mapId: any}, MapConta
         };
 
         addPin(this.state.mapId, pin1, function (pin: PinData) {
-            console.log(pin);
+            // console.log(pin);
         });
 
         this.setState((prevState: any) => ({
@@ -207,7 +207,7 @@ export default class MapContainer extends React.Component<{mapId: any}, MapConta
         }));
 
         const nextCenter = searchBoxMarkers.length > 0 ? searchBoxMarkers[0].position : this.state.center;
-        if (!this.state.markers.some(item => item.data.position.equals(searchBoxMarkers[0].position))) {
+        // if (!this.state.markers.some(item => item.data.position.equals(searchBoxMarkers[0].position))) {
             const newPin = {data:
                     {position: searchBoxMarkers[0].position, groupName: searchBoxMarkers[0].groupName,
                         isWindowOpened: false, attributes: {}}
@@ -216,7 +216,7 @@ export default class MapContainer extends React.Component<{mapId: any}, MapConta
                 center: nextCenter,
                 markers: [...prevState.markers, newPin]
             }));
-        }
+        // }
 
         this.references.map.fitBounds(bounds);
     }
@@ -233,7 +233,7 @@ export default class MapContainer extends React.Component<{mapId: any}, MapConta
     }
 
     filterMarkers(filter: Filter) {
-        console.log(filter);
+        // console.log(filter);
         this.setState({
             shownMarkers: this.state.markers.filter((marker) => filter.doFilter(marker)),
             isFilter: true
@@ -262,7 +262,7 @@ export default class MapContainer extends React.Component<{mapId: any}, MapConta
                 />)
             );
         } else {
-            console.log(this.state.markers);
+            // console.log(this.state.markers);
             return this.state.markers.map((marker: PinData, index: any) => (
                 <MarkerInfoWindow
                     lat={marker.data.position.lat}
