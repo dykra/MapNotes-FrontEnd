@@ -238,26 +238,8 @@ export default class MapContainer extends React.Component<{mapId: any}, MapConta
     }
 
     filterMarkers(filter: Filter) {
-        console.log(filter);
-
-        var marker: MarkerData = {
-            position: new google.maps.LatLng(77.99, 44.88),
-            isWindowOpened: false,
-            groupName: 'red',
-            attributes: '',
-        };
-
-        var pin1: PinData = {
-            data: marker,
-            id: this.props.mapId
-        };
-
-        console.log(pin1);
-
         this.setState({
-
-            shownMarkers: this.state.markers,
-            // shownMarkers: this.state.markers.filter((marker) => filter.doFilter(marker)),
+            shownMarkers: this.state.markers.filter((marker) => filter.doFilter(marker)),
             isFilter: true
         });
     }
