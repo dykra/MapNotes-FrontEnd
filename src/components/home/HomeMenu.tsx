@@ -1,5 +1,5 @@
 import * as React from 'react';
-import * as Button from 'react-bootstrap/lib/Button';
+import Button from 'react-bootstrap/lib/Button';
 import { MapData } from '../../types/api/MapData';
 import { getAllMaps } from '../../api/MapApi';
 import { Link } from 'react-router-dom';
