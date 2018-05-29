@@ -77,7 +77,11 @@ export default class TransportComponent extends React.Component<any, TransportSt
     }
 
     setCurrentDistance(distance: any) {
-        this.references.currentDistance.value = distance / 1000 + 'km';
+        this.references.currentDistance.value = this.getKilometersFromMeters(distance) + 'km';
+    }
+
+    getKilometersFromMeters(number: number){
+        return  number / 1000;
     }
 
     render() {
