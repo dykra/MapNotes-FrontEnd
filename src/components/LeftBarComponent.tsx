@@ -5,6 +5,7 @@ import GroupsComponent from './GroupsComponent';
 
 import FilterComponent from './FilterComponent';
 import { Filter } from '../types/filter/Filter';
+import { PinData } from '../types/PinData';
 
 interface LeftBarState {
     visibleLeftBar: boolean;
@@ -18,6 +19,7 @@ interface LeftBarComponentProps {
     showRoadBetweenMarkers: any;
     markers: any;
     mapId: any;
+    shownMarkers: PinData[];
 }
 
 export default class LeftBarComponent extends React.Component<LeftBarComponentProps, LeftBarState> {
@@ -71,7 +73,7 @@ export default class LeftBarComponent extends React.Component<LeftBarComponentPr
            leftBar = (
                <div className={'OpenedLeftBar'}>
                    <div>
-                       <GroupsComponent mapId={this.state.mapIdState}/>
+                       <GroupsComponent mapId={this.state.mapIdState} shownMarkers={this.props.shownMarkers}/>
                        <Button
                            className={'CloseLeftBarButton'}
                            onClick={this.hideLeftBar}

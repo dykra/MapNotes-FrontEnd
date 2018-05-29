@@ -7,24 +7,26 @@ import * as Col from 'react-bootstrap/lib/Col';
 
 interface TransportState {
     travelMode: google.maps.TravelMode;
+    currentDistance: any;
 }
 
 export default class TransportComponent extends React.Component<any, TransportState> {
 
-    references: {startDestination: any; endDestination: any; directionsService: any } =
-        {startDestination: null, endDestination: null, directionsService: null};
+    references: {startDestination: any; endDestination: any; directionsService: any, currentDistance: any} =
+        {startDestination: null, endDestination: null, directionsService: null, currentDistance: '0'};
 
     constructor(props: {}) {
         super(props);
+
+        this.setState({
+            travelMode: google.maps.TravelMode.DRIVING,
+            currentDistance: '0',
+        });
+
         this.searchForTransport = this.searchForTransport.bind(this);
         this.onChangeDestinationInput = this.onChangeDestinationInput.bind(this);
         this.onChangeDestinationInput = this.onChangeDestinationInput.bind(this);
         this.removeTransport = this.removeTransport.bind(this);
-
-        this.setState({
-            travelMode: google.maps.TravelMode.DRIVING,
-        });
-
     }
 
     componentDidMount() {
@@ -59,10 +61,27 @@ export default class TransportComponent extends React.Component<any, TransportSt
                     }
                 });
         }
+
+        const startDestination = new google.maps.LatLng(this.props.markers[startPoint].data.position.lat,
+            this.props.markers[startPoint].data.position.lng);
+        const endDestination =  new google.maps.LatLng(this.props.markers[endPoint].data.position.lat,
+            this.props.markers[endPoint].data.position.lng);
+        this.references.currentDistance.value =
+            google.maps.geometry.spherical.computeDistanceBetween(startDestination, endDestination);
+
     }
 
     removeTransport() {
         this.props.showRoadBetweenMarkers(null);
+        this.setCurrentDistance(0);
+    }
+
+    setCurrentDistance(distance: any) {
+        this.references.currentDistance.value = this.getKilometersFromMeters(distance) + 'km';
+    }
+
+    getKilometersFromMeters(valueInMeters: number) {
+        return  valueInMeters / 1000;
     }
 
     render() {
@@ -98,6 +117,14 @@ export default class TransportComponent extends React.Component<any, TransportSt
                     >REMOVE PATH
                     </Button>
                 </FormGroup>
+                <label>
+                    Distance:
+                <FormControl
+                    inputRef={(ref) => {this.references.currentDistance = ref; }}
+                    readOnly={true}
+                    onChange={this.setCurrentDistance}
+                />
+                </label>
             </div>
         );
     }
