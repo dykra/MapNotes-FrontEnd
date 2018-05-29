@@ -99,7 +99,7 @@ export default class MapContainer extends React.Component<{mapId: any}, MapConta
         {leftBarComponent: null, map: null, searchBox: null, directionsService: null};
 
     componentDidMount() {
-        console.log('Mounted');
+        // console.log('Mounted');
     }
 
     constructor(props: {mapId: any}) {
@@ -143,7 +143,7 @@ export default class MapContainer extends React.Component<{mapId: any}, MapConta
         };
 
         addPin(this.state.mapId, pin1, function (pin: PinData) {
-            console.log(pin);
+            // console.log(pin);
         });
 
         this.setState((prevState: any) => ({
@@ -217,11 +217,11 @@ export default class MapContainer extends React.Component<{mapId: any}, MapConta
                 center: nextCenter,
                 markers: [...prevState.markers, newPin]
             }));
+
             addPin(this.props.mapId, newPin, function () {
                 console.log('wants to add pin');
                 console.log(newPin);
             });
-        // }
 
         this.references.map.fitBounds(bounds);
     }
@@ -266,7 +266,7 @@ export default class MapContainer extends React.Component<{mapId: any}, MapConta
                 />)
             );
         } else {
-            console.log(this.state.markers);
+            // console.log(this.state.markers);
             return this.state.markers.map((marker: PinData, index: any) => (
                 <MarkerInfoWindow
                     lat={marker.data.position.lat}
