@@ -6,7 +6,7 @@ import { GoogleMap, withGoogleMap, withScriptjs, DirectionsRenderer } from 'reac
 import { MarkerInfoWindow } from './marker/MarkerInfoWindow';
 import { WithScriptjsProps } from 'react-google-maps/lib/withScriptjs';
 import { WithGoogleMapProps } from 'react-google-maps/lib/withGoogleMap';
-import { GOOGLE_MAP_URL } from '../../constants/index';
+import { GOOGLE_MAP_URL } from '../../constants';
 import SearchBox from 'react-google-maps/lib/components/places/SearchBox';
 import { MapData } from '../../types/api/MapData';
 import { PinData } from '../../types/api/PinData';
@@ -62,6 +62,7 @@ export interface MapContainerProps {
     visiblePins: PinData[];
     addPin: (pin: PinData) => void;
     changePins: (pins: PinData[]) => void;
+    deletePin: (pin: PinData) => void;
     directions: any;
 }
 
