@@ -1,3 +1,4 @@
+import MapMenu from './MapMenu';
 import * as React from 'react';
 import '../styles/App.css';
 import 'bootstrap/dist/css/bootstrap.css';
