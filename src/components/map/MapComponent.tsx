@@ -140,7 +140,7 @@ export default class MapContainer extends React.Component<any, MapContainerState
             position: new google.maps.LatLng(event.latLng.lat(), event.latLng.lng()),
             isWindowOpened: false,
             groupName: 'red',
-            attributes: {},
+            attributes: [],
         };
 
         let pin1: PinData = {
@@ -216,7 +216,7 @@ export default class MapContainer extends React.Component<any, MapContainerState
         if (!this.state.markers.some(item => item.data.position.equals(searchBoxMarkers[0].position))) {
             const newPin = {data:
                     {position: searchBoxMarkers[0].position, groupName: searchBoxMarkers[0].groupName,
-                        isWindowOpened: false, attributes: {}}
+                        isWindowOpened: false, attributes: []}
             };
             this.setState(prevState => ({
                 center: nextCenter,

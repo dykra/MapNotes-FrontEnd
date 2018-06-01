@@ -45,10 +45,6 @@ export default class Note extends React.Component<any, NoteState> {
     }
 
     handleAddingNewAttribute(name: String, type: String, isDefault: boolean) {
-        console.log('saving');
-        console.log(name.toString());
-        console.log(type.toString());
-        console.log(isDefault);
         this.props.saveAttribute(name, type, isDefault);
         this.closeAddingAttribute();
 
@@ -75,7 +71,6 @@ export default class Note extends React.Component<any, NoteState> {
                         <FormGroup
                             onSubmit={(evt) => this.props.handleSubmit(evt)}
                             controlId="NewNote"
-                            // validationState={this.getValidationStateName()}
                         >
 
                         {this.props.inputs.map((input: any, index: any) => (
@@ -100,7 +95,6 @@ export default class Note extends React.Component<any, NoteState> {
                                     <div key={index}>
                                         <FormGroup
                                             controlId="NewNote"
-                                            // validationState={this.getValidationStateName()}
                                         >
                                         <Col sm={4}>
                                             {input.name}
@@ -147,13 +141,4 @@ export default class Note extends React.Component<any, NoteState> {
         this.props.deleteAttribute(input, index);
     }
 
-    // getValidationStateName() {
-    //     const length = this.state.name.length;
-    //     if (length > 2) {
-    //         return 'success';
-    //     } else if (length < 1) {
-    //         return 'error';
-    //     }
-    //     return null;
-    // }
 }

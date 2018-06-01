@@ -1,3 +1,5 @@
+import { BasicAttr } from '../creation/BasicAttr';
+
 export interface MapSettings {
-    attributes: any;
+    attributes: BasicAttr[];
 }
