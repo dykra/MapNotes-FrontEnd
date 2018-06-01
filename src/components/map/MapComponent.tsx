@@ -3,7 +3,7 @@ import '../../styles/Map.css';
 import * as React from 'react';
 import { compose } from 'recompose';
 import { GoogleMap, withGoogleMap, withScriptjs, DirectionsRenderer } from 'react-google-maps';
-import { MarkerInfoWindow } from './marker/MarkerInfoWindow';
+import { MarkerComponent } from './marker/MarkerComponent';
 import { WithScriptjsProps } from 'react-google-maps/lib/withScriptjs';
 import { WithGoogleMapProps } from 'react-google-maps/lib/withGoogleMap';
 import { GOOGLE_MAP_URL } from '../../constants';
@@ -92,8 +92,6 @@ export class MapContainer extends React.Component<MapContainerProps, MapContaine
         this.onBoundsChanged = this.onBoundsChanged.bind(this);
         this.onPlacesChanged = this.onPlacesChanged.bind(this);
         this.showTransportComponent = this.showTransportComponent.bind(this);
-        this.saveNewPin = this.saveNewPin.bind(this);
-        this.updatePin = this.updatePin.bind(this);
     }
 
     handleMapClick(event: google.maps.MouseEvent) {
@@ -105,18 +103,7 @@ export class MapContainer extends React.Component<MapContainerProps, MapContaine
                 attributes: {},
             },
         };
-        console.log(newPin);
         this.setState({newPin});
-    }
-
-    saveNewPin() {
-        if (this.state.newPin) {
-            this.props.addPin(this.state.newPin);
-        }
-    }
-
-    updatePin(pin: PinData) {
-        this.props.changePins([pin]);
     }
 
     handleSearchBoxMounted(searchBox: any) {
@@ -159,7 +146,8 @@ export class MapContainer extends React.Component<MapContainerProps, MapContaine
         this.references.map.fitBounds(bounds);
     }
 
-    showTransportComponent(lat: any, lng: any, index: any) {
+    showTransportComponent(index: any) {
+        // todo nie dziala bo nie ma referencji
         this.references.leftBarComponent.showLeftBar();
         this.references.leftBarComponent.updateTransportComponentWithStartDestionation(index);
     }
@@ -168,12 +156,13 @@ export class MapContainer extends React.Component<MapContainerProps, MapContaine
         const pin = this.state.newPin;
         if (pin) {
             return (
-                <MarkerInfoWindow
+                <MarkerComponent
                     pin={pin}
                     mapData={this.props.map.data}
                     index={-1}
                     key={-1}
-                    closePin={this.saveNewPin}
+                    savePin={this.props.addPin}
+                    deletePin={() => this.setState({newPin: undefined})}
                     showTransportComponent={this.showTransportComponent}
                 />);
         }
@@ -183,14 +172,15 @@ export class MapContainer extends React.Component<MapContainerProps, MapContaine
     renderMarkers() {
         const mapMarkers = this.props.visiblePins.map((pin: PinData, index: any) => {
             return (
-                    <MarkerInfoWindow
-                        pin={pin}
-                        mapData={this.props.map.data}
-                        index={index}
-                        key={index}
-                        closePin={this.updatePin}
-                        showTransportComponent={this.showTransportComponent}
-                    />);
+                <MarkerComponent
+                    pin={pin}
+                    mapData={this.props.map.data}
+                    index={index}
+                    key={index}
+                    savePin={(savePin) => this.props.changePins([savePin])}
+                    deletePin={this.props.deletePin}
+                    showTransportComponent={this.showTransportComponent}
+                />);
             }
         );
         return(
