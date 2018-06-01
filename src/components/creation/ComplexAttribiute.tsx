@@ -23,7 +23,7 @@ export default class ComplexAttribute extends React.Component<any, ComplexAttrib
         console.log('gettng simple attr names');
         let a: Array<string> = [];
         for (let i  = 0; i < simpleAttr.length; i++) {
-            if (simpleAttr[i].type === 'pln' || simpleAttr[i].type === 'm^2') {
+            if (simpleAttr[i].type === 'pln' || simpleAttr[i].type === 'm^2' || simpleAttr[i] === 'number') {
                 console.log('adding');
                 a = a.concat(simpleAttr[i].name);
             }
