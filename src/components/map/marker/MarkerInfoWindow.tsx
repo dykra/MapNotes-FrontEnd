@@ -3,6 +3,12 @@ import { Marker, InfoWindow } from 'react-google-maps';
 import Note from './Note';
 import { Component } from 'react';
 
+// todo Generalnie tutaj trzeba dodać obsługe wyświetalania atrybutów jak i ich edycji
+// Sam komponent powinien używać klasy PinData i na podstawie jej się generować.
+// W przypadku edycji powinien nie zapisywać zmiany w swoim stanie
+// Tylko gotowego PinData przesyłać wyżej aby tam było to dodane do mapy(ewentualnie wysłane
+// na serwer) i wtedy tamten komponent prze renderuje ten na nowo z nowymi propsami.
+
 interface MarkerInfoWindowState {
     isOpen: boolean;
     isNewMarker: boolean;
@@ -18,7 +24,7 @@ export default class MarkerInfoWindow extends Component<any, MarkerInfoWindowSta
 
     constructor(props: any) {
         super(props);
-        const json = require('./data.json');
+        const json = require('../../../constants/data.json');
         this.state = {
             isOpen: false,
             isNewMarker: false,
@@ -68,10 +74,6 @@ export default class MarkerInfoWindow extends Component<any, MarkerInfoWindowSta
     }
 
     handleRightClick(id: any) {
-        // console.log('show route for ' + id);
-        // console.log(this.props.lat);
-        // console.log(this.props.lng);
-
         this.props.showTransportComponent(this.props.lat, this.props.lng, this.props.index);
 
     }

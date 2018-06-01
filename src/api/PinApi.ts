@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { BASE_URL } from '../constants';
-import { PinData } from '../types/PinData';
+import { PinData } from '../types/api/PinData';
 
 const PIN_URL: string = BASE_URL + '/pin';
 

@@ -2,19 +2,23 @@
 import * as React from 'react';
 import { compose } from 'recompose';
 import { GoogleMap, withGoogleMap, withScriptjs, DirectionsRenderer } from 'react-google-maps';
-import MarkerInfoWindow from './MarkerInfoWindow';
+import MarkerInfoWindow from './marker/MarkerInfoWindow';
 import { WithScriptjsProps } from 'react-google-maps/lib/withScriptjs';
 import { WithGoogleMapProps } from 'react-google-maps/lib/withGoogleMap';
-import { GOOGLE_MAP_URL } from '../constants';
-import LeftBarComponent from './LeftBarComponent';
+import { GOOGLE_MAP_URL } from '../../constants/index';
+import LeftBarComponent from './sidebar/LeftBarComponent';
 import SearchBox from 'react-google-maps/lib/components/places/SearchBox';
 import { ReactElement } from 'react';
-import { addPin, getMapById } from '../api/MapApi';
-import { MapData } from '../types/MapData';
-import { PinData } from '../types/PinData';
-import { Filter } from '../types/filter/Filter';
-import { MarkerData } from '../types/MarkerData';
+import { addPin, getMapById } from '../../api/MapApi';
+import { MapData } from '../../types/api/MapData';
+import { PinData } from '../../types/api/PinData';
+import { Filter } from '../../types/filter/Filter';
+import { MarkerData } from '../../types/map/MarkerData';
 
+// todo Generalnie wydaje mi sie że ten plik jest duży, bo ma dużą role, przeniósłbym
+// cześć logiki z stąd do MapMenu, aby tutaj było tylko wyświetlanie mapy
+
+// todo to spokojnie możę pójść do css
 export const INPUT_STYLE: React.CSSProperties = {
     boxSizing: `border-box`,
     border: `1px solid transparent`,
@@ -29,6 +33,7 @@ export const INPUT_STYLE: React.CSSProperties = {
     textOverflow: `ellipses`,
 };
 
+// todo wydaje mi się że tutaj jest za dużo
 interface MapProps {
     googleMapURL: String;
     markers: ReactElement<any>[];
@@ -92,7 +97,7 @@ interface MapContainerState {
     directions: any;
 }
 
-export default class MapContainer extends React.Component<{mapId: any}, MapContainerState> {
+export default class MapContainer extends React.Component<any, MapContainerState> {
 
     references: {leftBarComponent: any;
         map: any; searchBox: any; directionsService: any; } =
@@ -102,7 +107,7 @@ export default class MapContainer extends React.Component<{mapId: any}, MapConta
         // console.log('Mounted');
     }
 
-    constructor(props: {mapId: any}) {
+    constructor(props: any) {
         super(props);
         this.handleMapClick = this.handleMapClick.bind(this);
         this.handleMapMounted = this.handleMapMounted.bind(this);
@@ -124,7 +129,7 @@ export default class MapContainer extends React.Component<{mapId: any}, MapConta
             bounds: null,
             center: null,
             isNewMarker: false,
-            mapId: this.props.mapId,
+            mapId: this.props.match.params.id,
             isFilter: false,
             directions : null
         };
@@ -135,10 +140,10 @@ export default class MapContainer extends React.Component<{mapId: any}, MapConta
             position: new google.maps.LatLng(event.latLng.lat(), event.latLng.lng()),
             isWindowOpened: false,
             groupName: 'red',
-            attributes: '{garden: yes}, {door: black}',
+            attributes: [],
         };
 
-        var pin1: PinData = {
+        let pin1: PinData = {
             data: marker,
         };
 
@@ -152,6 +157,7 @@ export default class MapContainer extends React.Component<{mapId: any}, MapConta
                         groupName: 'red', attributes: '{garden: yes}, {door: black}' , isWindowOpened: false }}]
         }));
         this.setState({isNewMarker : true});
+
     }
 
     handleSearchBoxMounted(searchBox: any) {
@@ -209,9 +215,8 @@ export default class MapContainer extends React.Component<{mapId: any}, MapConta
         const nextCenter = searchBoxMarkers.length > 0 ? searchBoxMarkers[0].position : this.state.center;
         // if (!this.state.markers.some(item => item.data.position.equals(searchBoxMarkers[0].position))) {
             const newPin = {data:
-                    {position: searchBoxMarkers[0].position,
-                        groupName: 'red',
-                        isWindowOpened: false, attributes: {}}
+                    {position: searchBoxMarkers[0].position, groupName: searchBoxMarkers[0].groupName,
+                        isWindowOpened: false, attributes: []}
             };
             this.setState(prevState => ({
                 center: nextCenter,

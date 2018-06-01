@@ -3,7 +3,7 @@ import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 import { BootstrapTable, DeleteButton, TableHeaderColumn } from 'react-bootstrap-table';
 import * as Button from 'react-bootstrap/lib/Button';
 import * as Modal from 'react-bootstrap/lib/Modal';
-import { ComplexAttrType } from '../types/ComplexAttrType';
+import { ComplexAttrType } from '../../types/creation/ComplexAttrType';
 import _ from 'lodash';
 import * as ModalBody from 'react-bootstrap/lib/ModalBody';
 import NewComplexAttribute from './NewComplexAttribute';

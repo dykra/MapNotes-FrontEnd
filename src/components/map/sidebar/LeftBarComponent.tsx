@@ -4,8 +4,8 @@ import TransportComponent from './TransportComponent';
 import GroupsComponent from './GroupsComponent';
 
 import FilterComponent from './FilterComponent';
-import { Filter } from '../types/filter/Filter';
 import { PinData } from '../types/PinData';
+import { Filter } from '../../../types/filter/Filter';
 
 interface LeftBarState {
     visibleLeftBar: boolean;

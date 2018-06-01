@@ -1,11 +1,11 @@
 import React from 'react';
 import { Button } from 'react-bootstrap';
 import * as ButtonToolbar from 'react-bootstrap/lib/ButtonToolbar';
-import { PinData } from '../types/PinData';
-import { addPin } from '../api/MapApi';
-import { MarkerData } from '../types/MarkerData';
-import '../styles/GroupsStyle.css';
-import MapContainer from './MapComponent';
+import { PinData } from '../../../types/api/PinData';
+import { addPin } from '../../../api/MapApi';
+import { MarkerData } from '../../../types/map/MarkerData';
+import '../../../styles/GroupsStyle.css';
+import MapContainer from '../MapComponent';
 import ReactDOM from 'react-dom';
 
 interface GroupsComponentProps {
@@ -76,7 +76,6 @@ export default class GroupsComponent extends React.Component<GroupsComponentProp
     }
 
     handleColor(color: string) {
-
         for (let gotPin of this.props.shownMarkers) {
             var marker: MarkerData = {
                 position: gotPin.data.position,

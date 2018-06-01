@@ -1,7 +1,7 @@
 import axios from 'axios';
-import { MapData } from '../types/MapData';
+import { MapData } from '../types/api/MapData';
 import { BASE_URL } from '../constants';
-import { PinData } from '../types/PinData';
+import { PinData } from '../types/api/PinData';
 
 const MAP_URL = BASE_URL + '/map';
 
