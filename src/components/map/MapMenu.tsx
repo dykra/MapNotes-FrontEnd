@@ -45,7 +45,6 @@ export class MapMenu extends React.Component<RouteComponentProps<MapMenuProps>, 
     }
 
     filter(filter: Filter) {
-        console.log(filter);
         if (this.state.map) {
             this.setState({
                 filterPin: this.state.map.pins.filter((marker) => filter.doFilter(marker))
