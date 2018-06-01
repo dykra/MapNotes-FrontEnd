@@ -5,13 +5,12 @@ import 'bootstrap/dist/css/bootstrap-theme.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { RouteComponentProps } from 'react-router';
 import { MapData } from '../../types/api/MapData';
-import { getMapById } from '../../api/MapApi';
+import { addPin, deleteMapById, getMapById, putMap } from '../../api/MapApi';
 import { LeftBarComponent } from './leftbar/LeftBarComponent';
 import { MapContainer } from './MapComponent';
 import { PinData } from '../../types/api/PinData';
 import { Filter } from '../../types/filter/Filter';
-
-// todo przenieść cześc logiki z MapComponentu
+import { deletePin } from '../../api/PinApi';
 
 export interface MapMenuProps {
     id: number;
@@ -33,9 +32,12 @@ export class MapMenu extends React.Component<RouteComponentProps<MapMenuProps>, 
         };
 
         this.filter = this.filter.bind(this);
-        this.changePins = this.changePins.bind(this);
         this.showRoadBetweenMarkers = this.showRoadBetweenMarkers.bind(this);
         this.removeFilter = this.removeFilter.bind(this);
+        this.changePins = this.changePins.bind(this);
+        this.deletePin = this.deletePin.bind(this);
+        this.addPin = this.addPin.bind(this);
+        this.deleteMap = this.deleteMap.bind(this);
     }
 
     componentWillMount() {
@@ -43,7 +45,6 @@ export class MapMenu extends React.Component<RouteComponentProps<MapMenuProps>, 
     }
 
     filter(filter: Filter) {
-        console.log(filter);
         if (this.state.map) {
             this.setState({
                 filterPin: this.state.map.pins.filter((marker) => filter.doFilter(marker))
@@ -52,11 +53,53 @@ export class MapMenu extends React.Component<RouteComponentProps<MapMenuProps>, 
     }
 
     changePins(pins: PinData[]) {
-        // todo
+        const map = this.state.map;
+        if (map && map.id) {
+            pins.forEach(pin => {
+               map.pins.forEach((mapPin, index, mapPins) => {
+                   if (mapPin.id && mapPin.id === pin.id) {
+                       mapPins[index] = pin;
+                   }
+               });
+            });
+            putMap(map, newMap => this.setState({map: newMap}));
+        }
     }
 
-    addPin() {
-        // todo
+    deletePin(pin: PinData) {
+        if (pin.id) {
+            deletePin(pin.id, () => {
+                const map = this.state.map;
+                if (map) {
+                    map.pins = map.pins.filter(mapPin => mapPin.id && pin.id !== mapPin.id);
+                    this.setState({
+                        map
+                    });
+                }
+            });
+        }
+    }
+
+    addPin(pin: PinData) {
+        if (this.state.map && this.state.map.id) {
+            addPin(this.state.map.id, pin, newPin => {
+                const map = this.state.map;
+                if (map) {
+                    map.pins.push(newPin);
+                    this.setState({
+                        map
+                    });
+                }
+            });
+        }
+    }
+
+    deleteMap() {
+        if (this.state.map && this.state.map.id) {
+            deleteMapById(this.state.map.id, () => {
+                this.props.history.push('/');
+            });
+        }
     }
 
     showRoadBetweenMarkers(result: any) {
@@ -70,7 +113,6 @@ export class MapMenu extends React.Component<RouteComponentProps<MapMenuProps>, 
     }
 
     render() {
-
         if (this.state.map) {
             const visiblePins = this.state.filterPin || this.state.map.pins;
             return (
@@ -81,12 +123,14 @@ export class MapMenu extends React.Component<RouteComponentProps<MapMenuProps>, 
                         showRoadBetweenMarkers={this.showRoadBetweenMarkers}
                         visiblePins={visiblePins}
                         changePins={this.changePins}
+                        deleteMap={this.deleteMap}
                     />
                     <MapContainer
                         map={this.state.map}
                         visiblePins={visiblePins}
                         addPin={this.addPin}
                         changePins={this.changePins}
+                        deletePin={this.deletePin}
                         directions={this.state.directions}
                     />
                 </div>

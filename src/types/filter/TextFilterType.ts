@@ -14,11 +14,10 @@ export class TextFilterType {
 
     checkValue(value: any): boolean {
         switch (this.mode) {
-            // todo all value types
             case TextCheckMode.Exactly:
                 return value === this.value;
             default:
-                return false;
+                return value.includes(this.value);
         }
     }
 }

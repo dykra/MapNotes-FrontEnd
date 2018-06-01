@@ -6,6 +6,7 @@ import { GroupsComponent } from './GroupsComponent';
 import FilterComponent from './FilterComponent';
 import { Filter } from '../../../types/filter/Filter';
 import { PinData } from '../../../types/api/PinData';
+import { Link } from 'react-router-dom';
 
 export interface LeftBarComponentProps {
     filter: (filter: Filter) => void;
@@ -13,6 +14,7 @@ export interface LeftBarComponentProps {
     showRoadBetweenMarkers: (result: any) => void;
     visiblePins: PinData[];
     changePins: (pins: PinData[]) => void;
+    deleteMap: () => void;
 }
 
 export interface LeftBarState {
@@ -46,15 +48,30 @@ export class LeftBarComponent extends React.Component<LeftBarComponentProps, Lef
     render() {
        if (this.state.visibleLeftBar) {
            return (
-               <div className={'OpenedLeftBar'}>
+               <div className="OpenedLeftBar">
                    <div>
                        <Button
-                           className={'CloseLeftBarButton'}
+                           className="CloseLeftBarButton"
                            onClick={this.hideLeftBar}
                        >
                            hide BAR
                        </Button>
                    </div>
+                   <div>
+                       <Button
+                           className="DeleteMapButton"
+                           onClick={this.props.deleteMap}
+                       >
+                           Delete Map
+                       </Button>
+                   </div>
+                   <Link to="/">
+                       <Button
+                           className="HomeButton"
+                       >
+                           Home
+                       </Button>
+                   </Link>
                    <TransportComponent
                        showRoadBetweenMarkers={this.props.showRoadBetweenMarkers}
                        visiblePins={this.props.visiblePins}
