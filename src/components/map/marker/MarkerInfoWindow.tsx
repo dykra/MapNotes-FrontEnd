@@ -76,6 +76,7 @@ export class MarkerInfoWindow extends Component<MarkerInfoWindowProps, MarkerInf
     }
 
     deleteAttribute(input: any, index: any) {
+
         while (this.state.newAttributes.indexOf(input) !== -1) {
             this.state.newAttributes.splice(this.state.newAttributes.indexOf(input), 1);
         }

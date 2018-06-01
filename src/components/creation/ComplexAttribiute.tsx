@@ -85,11 +85,12 @@ export default class ComplexAttribute extends React.Component<any, ComplexAttrib
 
     createCustomDeleteButton() {
         return (
-            <DeleteButton
-                btnText="Delete"
-                className="DeleteComplexAttrButton"
-                onClick={this.handleDeleteRow}
-            />
+            <div className={'deleteComplexAttrButton'}>
+                <DeleteButton
+                    btnText="Delete"
+                    onClick={this.handleDeleteRow}
+                />
+            </div>
         );
     }
 
@@ -139,9 +140,9 @@ export default class ComplexAttribute extends React.Component<any, ComplexAttrib
             default:
                 complexAttTable = (
                     <div>
-                        <div>
+                        <div className={'newButton'}>
                             <Button
-                                className={'NewComplexAttrButton'}
+                                className={'newComplexAttrButton'}
                                 bsSize="small"
                                 bsStyle="success"
                                 active={true}
@@ -178,20 +179,20 @@ export default class ComplexAttribute extends React.Component<any, ComplexAttrib
                         <Modal.Title> Hello in MapNotes </Modal.Title>
                     </Modal.Header>
 
-                    <div className={'ComplexAttributes'}>
+                    <div className={'complexAttributes'}>
                         <ModalBody>
-                            <div className={'AttrTable'}> {simpleAttrTable} </div>
-                            <div className={'AttrTable'}> {complexAttTable} </div>
+                            <div className={'attrTable'}> {simpleAttrTable} </div>
+                            <div className={'attrTable'}> {complexAttTable} </div>
                             <div>{newComplexAttrModal} </div>
                         </ModalBody>
                         <Modal.Footer>
                             <Button
-                                bsSize="medium"
+                                bsSize="small"
                                 onClick={this.props.handleBackToSimpleAttr}
                             >Back to simple attributes
                             </Button>
                             <Button
-                                bsSize="medium"
+                                bsSize="small"
                                 onClick={this.handleClickOnSaveAllComplexAttrButton}
                                 bsStyle="primary"
                             >Save complex attributes
