@@ -228,7 +228,7 @@ export default class NewComplexAttribute extends React.Component<any, NewComplex
                     </Modal.Header>
 
                     <Modal.Body>
-                        <div className={'InfoComplexAttr'}>
+                        <div>
                             Complex Attributes should have the following pattern:
                             [basic-attr]/[number] operator [basic-attr]/[number]
                         </div>
