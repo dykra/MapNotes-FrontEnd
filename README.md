@@ -22,7 +22,12 @@ Information about backend part of project can be found [here](https://github.com
 
 ### Getting Started
 
-Informations about how to start are [here](README-starter.md)
+Information about how to start are [here](README-starter.md)
+
+### GOOGLE API
+
+We use google maps API on our app.
+One need to set environment variable REACT_APP_GOOGLE_MAP_KEY with proper key to make app works.
 
 ### CI
 
