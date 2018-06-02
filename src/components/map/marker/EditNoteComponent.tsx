@@ -12,7 +12,6 @@ export interface EditNoteComponentProps {
     pin: PinData;
     mapData: MapSettings;
     savePin: (pin: PinData) => void;
-    deletePin: (pin: PinData) => void;
     close: () => void;
 }
 
@@ -110,9 +109,6 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
                         </Button>
                         <Button className="btn btn-secondary" onClick={this.props.close}>
                             Close
-                        </Button>
-                        <Button className="btn btn-danger" onClick={() => this.props.deletePin(this.props.pin)}>
-                            Delete
                         </Button>
                         <Button className="btn btn-primary" onClick={() => this.props.savePin(this.state.pin)}>
                             Save

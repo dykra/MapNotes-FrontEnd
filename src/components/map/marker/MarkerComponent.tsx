@@ -31,9 +31,7 @@ export class MarkerComponent extends React.Component<MarkerComponentProps, Marke
             isEditMode: false,
             isDetailOpen: false,
         };
-
         this.savePin = this.savePin.bind(this);
-        this.deletePin = this.deletePin.bind(this);
     }
 
     savePin(pin: PinData) {
@@ -43,20 +41,12 @@ export class MarkerComponent extends React.Component<MarkerComponentProps, Marke
         );
     }
 
-    deletePin(pin: PinData) {
-        this.setState(
-            {isEditMode: false},
-            () => this.props.deletePin(pin)
-        );
-    }
-
     renderEditNote() {
         return (
             <EditNoteComponent
                 pin={this.props.pin}
                 mapData={this.props.mapData}
                 savePin={this.savePin}
-                deletePin={this.deletePin}
                 close={() => this.setState({isEditMode: false})}
             />
         );
@@ -78,10 +68,13 @@ export class MarkerComponent extends React.Component<MarkerComponentProps, Marke
                 <div>
                     {this.renderPinAttributes()}
                     <Button
-                        className="EditPinButton"
+                        className="btn btn-primary"
                         onClick={() => this.setState({isEditMode: true})}
                     >
                         Edit
+                    </Button>
+                    <Button className="btn btn-danger" onClick={() => this.props.deletePin(this.props.pin)}>
+                        Delete
                     </Button>
                 </div>
             </InfoWindow>
