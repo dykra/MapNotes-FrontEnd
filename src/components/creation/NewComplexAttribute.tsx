@@ -30,7 +30,8 @@ export default class NewComplexAttribute extends React.Component<any, NewComplex
         this.onChangeAttributeNameInput = this.onChangeAttributeNameInput.bind(this);
         this.onChangeAttributeValueInput = this.onChangeAttributeValueInput.bind(this);
         this.onChangeAttributeValueInputForButtons = this.onChangeAttributeValueInputForButtons.bind(this);
-        this.onChangeAttributeValueInputOperatorsForButtons = this.onChangeAttributeValueInputOperatorsForButtons.bind(this);
+        this.onChangeAttributeValueInputOperatorsForButtons =
+            this.onChangeAttributeValueInputOperatorsForButtons.bind(this);
         this.handleClose = this.handleClose.bind(this);
         this.handleSave = this.handleSave.bind(this);
         this.isProperValueInput = this.isProperValueInput.bind(this);
@@ -41,10 +42,12 @@ export default class NewComplexAttribute extends React.Component<any, NewComplex
     }
 
     deleteWhiteSigns() {
-        let value: string = _.filter(this.state.newComplexAttrValue, i => i !== ' ').join('');
+        let value: string = this.state.newComplexAttrValue.split(' ').join('');
         this.setState({
             newComplexAttrValue: value
-        })
+        });
+        console.log('without spaces');
+        console.log(this.state.newComplexAttrValue);
     }
 
     isProperValueInput() {
@@ -57,6 +60,7 @@ export default class NewComplexAttribute extends React.Component<any, NewComplex
 
         for (let i = 0; i < this.state.newComplexAttrValue.length - 1; i++ ) {
 
+            console.log(this.state.newComplexAttrValue[i]);
             if (this.state.newComplexAttrValue[i] === '[' && !operatorPlace) {
                 let newAttr = '';
                 i++;
@@ -76,13 +80,20 @@ export default class NewComplexAttribute extends React.Component<any, NewComplex
                     return false;
                 }
 
+                console.log(newAttr);
                 operatorPlace = true;
-                if (!this.checkIfAttributeType(newAttr)) {
+                if (!this.checkIfAttributeType(newAttr.split(' ').join(''))) {
+                    console.log('false');
                     return false;
                 }
-            } else if(operatorPlace) {
+            } else if (operatorPlace) {
                 operatorPlace = false;
+                while (this.state.newComplexAttrValue[i] === ' ') {
+                    i++;
+                }
+
                 if (!this.checkIfOperator(this.state.newComplexAttrValue[i])) {
+                    console.log('false');
                     return false;
                 }
                 i++;
@@ -217,7 +228,7 @@ export default class NewComplexAttribute extends React.Component<any, NewComplex
                     </Modal.Header>
 
                     <Modal.Body>
-                        <div>
+                        <div className={'InfoComplexAttr'}>
                             Complex Attributes should have the following pattern:
                             [basic-attr]/[number] operator [basic-attr]/[number]
                         </div>

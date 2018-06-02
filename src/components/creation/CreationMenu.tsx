@@ -123,6 +123,7 @@ export class CreationMenu extends React.Component <any, CreationMenuState> {
         return (
         <ComplexAttribute
             simpleAttr={this.state.simpleAttr}
+            complexAttr={this.state.complexAttr}
             handleBackToSimpleAttr={this.handleBackToSimpleAttr}
             handleSaveComplexAttr={this.handleSaveComplexAttr}
         />
