@@ -2,7 +2,7 @@ import React from 'react';
 import { Button } from 'react-bootstrap';
 import * as ButtonToolbar from 'react-bootstrap/lib/ButtonToolbar';
 import { PinData } from '../../../types/api/PinData';
-import '../../../styles/GroupsStyle.css';
+import '../../../styles/map/GroupsStyle.css';
 
 export interface GroupsComponentProps {
     visiblePins: PinData[];
