@@ -1,8 +1,8 @@
-.complexAttributes {
+.ComplexAttributes {
     margin: 3%;
 }
 
-.attrTable {
+.AttrTable {
     margin-top: 4%;
     margin-bottom:4%;
 }
@@ -42,10 +42,17 @@
     margin-top: 2%;
     margin-left: 2%;
 }
-.newButton {
+.NewButton {
     float: left;
+    margin-top: 2%;
 }
 
 .deleteComplexAttrButton{
     float: left;
+}
+
+.InfoComplexAttr {
+    margin-left: 4%;
+    margin-right: 4%;
+    text-align: center;
 }
