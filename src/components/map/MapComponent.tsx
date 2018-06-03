@@ -64,6 +64,7 @@ export interface MapContainerProps {
     changePins: (pins: PinData[]) => void;
     deletePin: (pin: PinData) => void;
     directions: any;
+    leftBar: any;
 }
 
 export interface MapContainerState {
@@ -74,9 +75,9 @@ export interface MapContainerState {
 
 export class MapContainer extends React.Component<MapContainerProps, MapContainerState> {
 
-    references: {leftBarComponent: any;
-        map: any; searchBox: any; directionsService: any; } =
-        {leftBarComponent: null, map: null, searchBox: null, directionsService: null};
+    references: { map: any; searchBox: any; directionsService: any; } =
+        {map: null, searchBox: null, directionsService: null};
+        // {map: null, searchBox: null, directionsService: null};
 
     constructor(props: MapContainerProps) {
         super(props);
@@ -148,8 +149,9 @@ export class MapContainer extends React.Component<MapContainerProps, MapContaine
 
     showTransportComponent(index: any) {
         // todo nie dziala bo nie ma referencji
-        this.references.leftBarComponent.showLeftBar();
-        this.references.leftBarComponent.updateTransportComponentWithStartDestionation(index);
+        // this.references.leftBarComponent.updateTransportComponentWithStartDestionation(index);
+        this.props.leftBar.showLeftBar();
+        // this.props.leftBar.updateTransportComponentWithStartDestionation(index);
     }
 
     renderNewPin() {

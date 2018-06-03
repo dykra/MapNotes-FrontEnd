@@ -15,6 +15,7 @@ export interface LeftBarComponentProps {
     visiblePins: PinData[];
     changePins: (pins: PinData[]) => void;
     deleteMap: () => void;
+    callbackOnRef: any;
 }
 
 export interface LeftBarState {
@@ -30,6 +31,14 @@ export class LeftBarComponent extends React.Component<LeftBarComponentProps, Lef
         };
         this.showLeftBar = this.showLeftBar.bind(this);
         this.hideLeftBar = this.hideLeftBar.bind(this);
+    }
+
+    componentDidMount() {
+        this.props.callbackOnRef(this);
+    }
+
+    componentWillUnmount() {
+        this.props.callbackOnRef(null);
     }
 
     showLeftBar() {
