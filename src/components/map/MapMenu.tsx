@@ -20,6 +20,7 @@ export interface MapMenuState {
     map?: MapData;
     filterPin?: PinData[];
     directions: any;
+    leftBar: any;
 }
 
 export class MapMenu extends React.Component<RouteComponentProps<MapMenuProps>, MapMenuState> {
@@ -28,7 +29,8 @@ export class MapMenu extends React.Component<RouteComponentProps<MapMenuProps>, 
         super(props);
 
         this.state = {
-            directions : null
+            directions : null,
+            leftBar: null,
         };
 
         this.filter = this.filter.bind(this);
@@ -124,6 +126,7 @@ export class MapMenu extends React.Component<RouteComponentProps<MapMenuProps>, 
                         visiblePins={visiblePins}
                         changePins={this.changePins}
                         deleteMap={this.deleteMap}
+                        callbackOnRef={(ref: any) => (this.setState({ leftBar: ref}))}
                     />
                     <MapContainer
                         map={this.state.map}
@@ -132,6 +135,7 @@ export class MapMenu extends React.Component<RouteComponentProps<MapMenuProps>, 
                         changePins={this.changePins}
                         deletePin={this.deletePin}
                         directions={this.state.directions}
+                        leftBar={this.state.leftBar}
                     />
                 </div>
             );
