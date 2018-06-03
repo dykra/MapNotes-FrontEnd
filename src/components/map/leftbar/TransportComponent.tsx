@@ -9,6 +9,7 @@ import { PinData } from '../../../types/api/PinData';
 export interface TransportComponentProps {
     visiblePins: PinData[];
     showRoadBetweenMarkers: (result: any) => void;
+    onRef: any;
 }
 
 export interface TransportComponentState {
@@ -32,6 +33,14 @@ export class TransportComponent extends React.Component<TransportComponentProps,
         this.removeTransport = this.removeTransport.bind(this);
         this.changeStartPoint = this.changeStartPoint.bind(this);
         this.changeEndPoint = this.changeEndPoint.bind(this);
+    }
+
+    componentDidMount() {
+        this.props.onRef(this);
+    }
+
+    componentWillUnmount() {
+        this.props.onRef(null);
     }
 
     searchForTransport() {
@@ -96,11 +105,11 @@ export class TransportComponent extends React.Component<TransportComponentProps,
                     <Col componentClass={ControlLabel} sm={8}>Select Destiantion</Col>
                     <Col sm={8}>
                         <FormControl
-                            placeholder={'Right click on marker to start ...'}
+                            placeholder={'Start destination index'}
                             onChange={this.changeStartPoint}
                         />
                         <FormControl
-                            placeholder="Enter index of final destination"
+                            placeholder={'End destination index'}
                             onChange={this.changeEndPoint}
                         />
                     </Col>

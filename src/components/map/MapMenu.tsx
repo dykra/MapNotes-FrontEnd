@@ -25,9 +25,6 @@ export interface MapMenuState {
 
 export class MapMenu extends React.Component<RouteComponentProps<MapMenuProps>, MapMenuState> {
 
-    references: {LeftBarComponent: any; } =
-        {LeftBarComponent: null};
-
     constructor(props: RouteComponentProps<MapMenuProps>) {
         super(props);
 

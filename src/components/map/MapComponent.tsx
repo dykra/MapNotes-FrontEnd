@@ -147,11 +147,8 @@ export class MapContainer extends React.Component<MapContainerProps, MapContaine
         this.references.map.fitBounds(bounds);
     }
 
-    showTransportComponent(index: any) {
-        // todo nie dziala bo nie ma referencji
-        // this.references.leftBarComponent.updateTransportComponentWithStartDestionation(index);
+    showTransportComponent() {
         this.props.leftBar.showLeftBar();
-        // this.props.leftBar.updateTransportComponentWithStartDestionation(index);
     }
 
     renderNewPin() {
