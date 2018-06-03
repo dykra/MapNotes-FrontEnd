@@ -1,5 +1,5 @@
 /* global google */
-import '../../styles/Map.css';
+import '../../styles/map/Map.css';
 import * as React from 'react';
 import { compose } from 'recompose';
 import { GoogleMap, withGoogleMap, withScriptjs, DirectionsRenderer } from 'react-google-maps';
