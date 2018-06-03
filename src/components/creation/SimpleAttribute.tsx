@@ -2,10 +2,10 @@ import * as React from 'react';
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import * as Button from 'react-bootstrap/lib/Button';
-import { SimpleAttrType } from '../types/SimpleAttrType';
+import { SimpleAttrType } from '../../types/SimpleAttrType';
 import * as Modal from 'react-bootstrap/lib/Modal';
 import _ from 'lodash';
-import { ComplexAttrType } from '../types/ComplexAttrType';
+import { ComplexAttrType } from '../../types/creation/ComplexAttrType';
 
 interface SimpleAttributeState {
     simpleAttributes: Array<SimpleAttrType>;
@@ -16,24 +16,6 @@ interface SimpleAttributeState {
 export default class SimpleAttribute extends React.Component<any, SimpleAttributeState> {
 
     counter = 0;
-
-    constructor(props: any) {
-        super(props);
-
-        this.state = {
-            types: [ 'm^2', 'pln', 'yes', 'no' ],
-            simpleAttributes: [{'id': 0, 'name': 'asdsa', 'type': 'sdada'}],
-            complexAttributes: [{'name': 'gg', 'value': 'qq'}]
-        };
-        this.handleDeleteRow = this.handleDeleteRow.bind(this);
-        this.handleClickAddNewSimpleAttr = this.handleClickAddNewSimpleAttr.bind(this);
-        this.handleClickCloseSimpleAttr = this.handleClickCloseSimpleAttr.bind(this);
-        this.handleClickSaveSimpleAttr = this.handleClickSaveSimpleAttr.bind(this);
-        this.handleAddComplexAttr = this.handleAddComplexAttr.bind(this);
-        this.onBeforeSaveCell = this.onBeforeSaveCell.bind(this);
-        this.createSelectItems = this.createSelectItems.bind(this);
-    }
-
     getSimpleAttr(simpleAttr: Array<BasicAtrrType>) {
         let simpleAttrWithIndex: Array<SimpleAttrType> = [];
         if (simpleAttr.length > 0 ) {
@@ -46,20 +28,42 @@ export default class SimpleAttribute extends React.Component<any, SimpleAttribut
                 };
             });
         } else {
-            // TODO: ADD 4 EMPTY ROWS
+            simpleAttrWithIndex = _.map( [1, 2, 3, 4], i => {
+                this.counter++;
+                return {
+                    'id': this.counter,
+                    'name': '',
+                    'type': ''
+                };
+            });
         }
+    return simpleAttrWithIndex;
+    }
 
-        this.setState({
-            simpleAttributes: simpleAttrWithIndex
-        });
-        console.log(this.state.simpleAttributes);
+    constructor(props: any) {
+        super(props);
+
+        this.state = {
+            types: [ 'm^2', 'pln', 'yes', 'no' ],
+            simpleAttributes: this.getSimpleAttr(this.props.simpleAttr),
+            complexAttributes: this.props.complexAttr
+        };
+        this.handleDeleteRow = this.handleDeleteRow.bind(this);
+        this.handleClickAddNewSimpleAttr = this.handleClickAddNewSimpleAttr.bind(this);
+        this.handleClickCloseSimpleAttr = this.handleClickCloseSimpleAttr.bind(this);
+        this.handleClickSaveSimpleAttr = this.handleClickSaveSimpleAttr.bind(this);
+        this.handleAddComplexAttr = this.handleAddComplexAttr.bind(this);
+        this.onBeforeSaveCell = this.onBeforeSaveCell.bind(this);
+        this.createSelectItems = this.createSelectItems.bind(this);
+        this.prepareBasicAttr  = this.prepareBasicAttr.bind(this);
     }
 
     handleClickCloseSimpleAttr () {
         console.log('close simple attr back to main component');
+        this.props.closeSimpleAttr();
     }
 
-    handleClickSaveSimpleAttr() {
+    prepareBasicAttr() {
         let simpleAttr: Array<SimpleAttrType> = _.filter(this.state.simpleAttributes, (attr) => attr.name !== '');
         let basicAttr: Array<BasicAtrrType>  = _.map(simpleAttr, (attr) => {
             return {
@@ -67,12 +71,17 @@ export default class SimpleAttribute extends React.Component<any, SimpleAttribut
                 'type': attr.type
             };
         });
-        console.log(basicAttr);
+        return basicAttr;
+    }
+
+    handleClickSaveSimpleAttr() {
+        this.props.saveSimpleAttr(this.prepareBasicAttr());
         console.log('save simple attr, back to main component');
     }
 
     handleAddComplexAttr() {
         console.log('save simple attr, go to complex attr');
+        this.props.handleAddComplexAttr(this.prepareBasicAttr());
     }
 
     handleDeleteRow(row: any) {
@@ -187,10 +196,10 @@ export default class SimpleAttribute extends React.Component<any, SimpleAttribut
             <div className="static-modal">
                 <Modal.Dialog>
                     <Modal.Header>
-                        <Modal.Title> Hello in MapNotes </Modal.Title>
+                        <Modal.Title> Create attibutes to map </Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        <div>Simple Attributes</div>
+                        <div className={'AttributeTitle'}>Simple Attributes</div>
                         <div>
                             {simpleAttr}
                         </div>

@@ -2,13 +2,10 @@ import * as React from 'react';
 import MapAttr from './MapAttribute';
 import { MapData } from '../../types/api/MapData';
 import { PinData } from '../../types/api/PinData';
+import { putMap } from '../../api/MapApi';
 import ComplexAttribute from './ComplexAttribiute';
 import { BasicAttr } from '../../types/creation/BasicAttr';
 import { ComplexAttrType } from '../../types/creation/ComplexAttrType';
-import { FormulaLists } from '../../types/creation/FormulaLists';
-import _ from 'lodash';
-import { OPERATORS } from '../../constants/index';
-import { putMap } from '../../api/MapApi';
 
 interface CreationMenuState {
 
@@ -39,8 +36,8 @@ export class CreationMenu extends React.Component <any, CreationMenuState> {
         this.handleBackToSimpleAttr = this.handleBackToSimpleAttr.bind(this);
         this.handleSaveComplexAttr = this.handleSaveComplexAttr.bind(this);
         this.toggleModal = this.toggleModal.bind(this);
-        this.getSimpleAttr = this.getSimpleAttr.bind(this);
-        this.isArrayContains = this.isArrayContains.bind(this);
+        this.closeSimpleAttr = this.closeSimpleAttr.bind(this);
+        this.handleSaveSimpleAttr = this.handleSaveSimpleAttr.bind(this);
     }
 
     toggleModal() {
@@ -49,15 +46,19 @@ export class CreationMenu extends React.Component <any, CreationMenuState> {
             isNewMapClicked: !this.state.isNewMapClicked
         });
     }
-    deleteEmptyInputs(inputs: BasicAttr[]) {
-        return inputs.filter((elem) => {
-            if (elem.name !== '' && elem.type !== '') {
-                return elem;
-            }
-            return;
-        });
+
+    closeSimpleAttr() {
+        this.toggleModal();
     }
 
+    handleSaveSimpleAttr(basicAttributes: Array<BasicAttr>) {
+        this.setState({
+            simpleAttr: basicAttributes
+        });
+        this.toggleModal();
+    }
+
+    handleSubmit(evt: any) {
     getAttrList(value: string) {
         value = value.split(' ').join('');
         const args = value.split(/\[|\]/ );
@@ -96,6 +97,7 @@ export class CreationMenu extends React.Component <any, CreationMenuState> {
             pins: pin
         };
         putMap(map, this.myCallback);
+
     }
 
     public myCallback(map: MapData): void {
@@ -103,42 +105,10 @@ export class CreationMenu extends React.Component <any, CreationMenuState> {
         return this.props.history.push(path);
     }
 
-    renderMapAttribute() {
-        return(
-            <MapAttr
-                simpleAttr={this.state.simpleAttr}
-                handleSubmit={this.handleSubmit}
-                handleAddComplexAttr={this.handleAddComplexAttr}
-
-            />
-        );
-    }
-
-    isArrayContains(name: String) {
-        for ( let i = 0; i < this.state.simpleAttr.length; i++) {
-            if (this.state.simpleAttr[i].name === name) {
-                return true;
-            }
-                }
-                return false;
-    }
-
-    getSimpleAttr(simpleAttr: BasicAttr[]) {
-        let temp: BasicAttr[];
-        temp = [];
-        for (let i = 0; i < simpleAttr.length; i++) {
-            if (simpleAttr[i].name !== '' && !this.isArrayContains(simpleAttr[i].name) ) {
-                temp.push(simpleAttr[i]);
-            }
-        }
-        return temp;
-    }
-
-    handleAddComplexAttr(simpleAttr: BasicAttr[]) {
-
+    handleAddComplexAttr(simpleAttr: Array<BasicAttr>) {
         this.toggleModal();
         this.setState({
-            simpleAttr: this.state.simpleAttr.concat(this.getSimpleAttr(simpleAttr)),
+            simpleAttr: simpleAttr,
             complexAttrBox: true
         });
     }
@@ -165,6 +135,20 @@ export class CreationMenu extends React.Component <any, CreationMenuState> {
             handleBackToSimpleAttr={this.handleBackToSimpleAttr}
             handleSaveComplexAttr={this.handleSaveComplexAttr}
         />
+        );
+    }
+
+    renderMapAttribute() {
+        return(
+            <SimpleAttribute
+                simpleAttr={this.state.simpleAttr}
+                complexAttr={this.state.complexAttr}
+                handleSubmit={this.handleSubmit}
+                handleAddComplexAttr={this.handleAddComplexAttr}
+                closeSimpleAttr={this.closeSimpleAttr}
+                saveSimpleAttr={this.handleSaveSimpleAttr}
+
+            />
         );
     }
 
