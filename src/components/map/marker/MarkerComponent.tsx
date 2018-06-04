@@ -1,10 +1,9 @@
 import * as React from 'react';
 import { Marker, InfoWindow } from 'react-google-maps';
-import { EditNoteComponent } from './EditNoteComponent';
 import { PinData } from '../../../types/api/PinData';
 import { MapSettings } from '../../../types/map/MapSettings';
 import { BASE_ICON_URL } from '../../../constants';
-import * as Button from 'react-bootstrap/lib/Button';
+import { ExtendNoteComponent } from './ExtendNoteCoponent';
 
 export interface MarkerComponentProps {
     pin: PinData;
@@ -19,7 +18,6 @@ export interface MarkerComponentProps {
 
 export interface MarkerComponentState {
     isMouseOver: boolean;
-    isEditMode: boolean;
     isDetailOpen: boolean;
 }
 
@@ -29,7 +27,6 @@ export class MarkerComponent extends React.Component<MarkerComponentProps, Marke
         super(props);
         this.state = {
             isMouseOver: false,
-            isEditMode: false,
             isDetailOpen: false,
         };
         this.savePin = this.savePin.bind(this);
@@ -38,20 +35,7 @@ export class MarkerComponent extends React.Component<MarkerComponentProps, Marke
     savePin(pin: PinData) {
 
         this.setState(
-            {isEditMode: false},
             () => this.props.savePin(pin)
-        );
-    }
-
-    renderEditNote() {
-        return (
-            <EditNoteComponent
-                pin={this.props.pin}
-                mapData={this.props.mapData}
-                savePin={this.savePin}
-                updateMapSettings={this.props.updateMapSettings}
-                close={() => this.setState({isEditMode: false})}
-            />
         );
     }
     
@@ -77,26 +61,13 @@ export class MarkerComponent extends React.Component<MarkerComponentProps, Marke
 
     renderExtendNote() {
         return(
-            <InfoWindow onCloseClick={() => this.setState({isDetailOpen: false})}>
-                <div>
-                    {this.renderPinAttributes()}
-                    <Button
-                        className="btn btn-primary"
-                        onClick={() => this.setState({isEditMode: true})}
-                    >
-                        Edit
-                    </Button>
-                    <Button
-                        className="btn btn-primary Save"
-                        onClick={() => this.props.savePin(this.props.pin)}
-                    >
-                        Save
-                    </Button>
-                    <Button className="btn btn-danger" onClick={() => this.props.deletePin(this.props.pin)}>
-                        Delete
-                    </Button>
-                </div>
-            </InfoWindow>
+            <ExtendNoteComponent
+                pin={this.props.pin}
+                mapData={this.props.mapData}
+                savePin={this.savePin}
+                updateMapSettings={this.props.updateMapSettings}
+                close={() => this.setState({isDetailOpen: false})}
+            />
         );
     }
 
@@ -114,10 +85,6 @@ export class MarkerComponent extends React.Component<MarkerComponentProps, Marke
     }
 
     renderNote() {
-
-        if (this.state.isEditMode) {
-            return this.renderEditNote();
-        }
         if (this.state.isDetailOpen) {
             return this.renderExtendNote();
         }
