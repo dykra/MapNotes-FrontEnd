@@ -11,7 +11,6 @@ export interface GroupsComponentProps {
 
 export interface GroupsComponentState {
     visibleColors: boolean;
-    visibleNewGroup: boolean;
 }
 
 export class GroupsComponent extends React.Component<GroupsComponentProps , GroupsComponentState> {
@@ -20,7 +19,6 @@ export class GroupsComponent extends React.Component<GroupsComponentProps , Grou
 
         this.state = {
             visibleColors: false,
-            visibleNewGroup: true,
         };
 
         this.showColors = this.showColors.bind(this);
@@ -28,14 +26,9 @@ export class GroupsComponent extends React.Component<GroupsComponentProps , Grou
         this.handleColor = this.handleColor.bind(this);
     }
 
-    componentDidMount() {
-        this.setState({visibleNewGroup: true});
-    }
-
     showColors() {
             this.setState({
                 visibleColors: true,
-                visibleNewGroup: false,
             });
 
     }
@@ -43,7 +36,6 @@ export class GroupsComponent extends React.Component<GroupsComponentProps , Grou
     hideColors() {
         this.setState({
             visibleColors: false,
-            visibleNewGroup: true,
         });
     }
 
@@ -70,7 +62,7 @@ export class GroupsComponent extends React.Component<GroupsComponentProps , Grou
     }
 
     render() {
-        if (this.state.visibleNewGroup) {
+        if (!this.state.visibleColors) {
             return (
                 <div className="groups">
                     <Button onClick={this.showColors}>New group</Button>
