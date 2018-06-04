@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button } from 'react-bootstrap';
+import { Button, Checkbox, Modal } from 'react-bootstrap';
 import { FormGroup, FormControl, Form, Col, ControlLabel,
     MenuItem, DropdownButton } from 'react-bootstrap/lib';
 import { TYPES } from '../../../constants';
@@ -10,7 +10,7 @@ export interface AddAttributeComponentProps {
 }
 
 export interface AddAttributeComponentState {
-    selected: String;
+    selected: string;
     isDefault: boolean;
     name: string;
 }

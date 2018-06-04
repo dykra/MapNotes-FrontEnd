@@ -17,6 +17,7 @@ export interface EditNoteComponentProps {
 
 export interface EditNoteComponentState {
     pin: PinData;
+    mapAttr: MapSettings;
     input: any;
     isAddNewAttrClick: boolean;
 }
@@ -27,6 +28,7 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
         super(props);
         this.state = {
             pin: this.props.pin,
+            mapAttr: this.props.mapData,
             input: '',
             isAddNewAttrClick: false
         };
@@ -62,7 +64,13 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
 
     renderModalBody() {
         const attributes = this.state.pin.data.attributes;
+        console.log(attributes);
+        // const defaultAttrs = this.state.mapAttr.attributes;
+        // const keys = Object.keys(defaultAttrs);
+        // keys.concat(Object.keys(attributes));
+        // console.log(keys);
         const keys = Object.keys(attributes);
+        console.log(keys);
         return(
             <Modal.Body>
                 <Form >
