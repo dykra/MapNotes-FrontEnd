@@ -202,7 +202,7 @@ export class MapContainer extends React.Component<MapContainerProps, MapContaine
             <Map
                 googleMapURL={GOOGLE_MAP_URL}
                 loadingElement={<div style={{height: `100%`}}/>}
-                containerElement={<div style={{ height: '100vh' }} />}
+                containerElement={<div style={{ height: '100vh'}} />}
                 mapElement={<div style={{height: `100%`}}/>}
                 onMapClick={this.handleMapClick}
                 markers={markers}

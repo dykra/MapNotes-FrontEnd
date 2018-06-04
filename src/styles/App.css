@@ -1,30 +1,30 @@
 .App {
-  text-align: center;
+    text-align: center;
 }
 
 .App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 80px;
+    animation: App-logo-spin infinite 20s linear;
+    height: 80px;
 }
 
 .App-header {
-  background: rgba(89, 97, 106, 0.24) image("../images/1013.jpg");
-  height: 150px;
-  padding: 20px;
-  color: #000000;
+    background: rgba(89, 97, 106, 0.24) image("../images/1013.jpg");
+    height: 150px;
+    padding: 20px;
+    color: #000000;
 }
 
 .App-title {
-  font-size: 1.5em;
+    font-size: 1.5em;
 }
 
 .App-intro {
-  font-size: large;
+    font-size: large;
 }
 
 
 .google-map {
-  width: 95%;
+  width: 100%;
   height: 100%;
 }
 
@@ -37,93 +37,105 @@
 }
 
 .OpenedLeftBar {
-  margin-top: 0.5%;
-  margin-bottom: 0.5%;
-  width: 25%;
-  height: 96%;
-  float: left;
+    margin-top: 0.5%;
+    margin-bottom: 0.5%;
+    width: 25%;
+    height: 96%;
+    float: left;
 }
 
 .CloseLeftBarButton {
-  float: right;
+    float: right;
+    background: #4285f4 !important;
+    color: white !important;
 }
 
 .OpenLeftBarButton {
     float: right;
+    background: #4285f4;
+    color: white;
 }
 
 .TransportBar {
-  display: block;
-  margin: 20% 2.5% 10%;
-}
-
-.TransportBar > label{
-  margin-left: 10%;
+    display: block;
+    margin: 20% 2.5% 10%;
 }
 
 .PinBar{
-  margin-top: 20%;
-  margin-bottom: 20%;
+    margin-top: 20%;
+    margin-bottom: 20%;
+}
+
+.TransportComponent{
+    /*background: linear-gradient(#d4d4d4, #ddffff);*/
+    background-color: #ffffff;
+    /*border-style: solid;*/
+    /*border-color: #2196F3 !important;*/
+    border-left: 6px solid #4285f4 !important;
+}
+
+.TransportBar > label{
+    margin-left: 10%;
 }
 
 .SearchTransportButton {
-  margin-top: 5%;
-  margin-bottom:5%;
-  margin-right: 2.5%;
-  float: right;
+    margin-top: 5%;
+    margin-bottom:5%;
+    margin-right: 2.5%;
+    float: right;
 }
 
 .RemoveTransport{
-  padding-left: 1%;
-  margin-left: 60%;
-  margin-top: 5%;
+    padding-left: 1%;
+    margin-left: 60%;
+    margin-top: 5%;
 }
 
 .deleteNewAttrNote {
-  float: right;
+    float: right;
 }
 
 .ComplexAttributes {
-  margin: 3%;
+    margin: 3%;
 }
 
 .AttrTable {
-  margin-top: 4%;
-  margin-bottom:4%;
+    margin-top: 4%;
+    margin-bottom:4%;
 }
 
 .ComplexAttrButtons {
-  margin-top: 2%;
-  float: right;
-  margin-bottom: 2%;
-  margin-left: 2%;
+    margin-top: 2%;
+    float: right;
+    margin-bottom: 2%;
+    margin-left: 2%;
 }
 
 .NewComplexAttrButton {
-  margin-left: 0px;
-  float: left;
+    margin-left: 0;
+    float: left;
 }
 
 .simpleAttrButton {
-  margin-right: 2%;
-  margin-left: 2%;
+    margin-right: 2%;
+    margin-left: 2%;
 }
 
 .complexAttributeModalBody {
-  text-align: center;
-  margin-top: 2%;
+    text-align: center;
+    margin-top: 2%;
 }
 
 .operatorButtonList {
-  text-align: center;
-  display: inline-block;
-  margin-top: 2%;
-  margin-left: 2%;
+    text-align: center;
+    display: inline-block;
+    margin-top: 2%;
+    margin-left: 2%;
 }
 
 .simpleAttrButtonList {
-  text-align: center;
-  display: inline-block;
-  margin-top: 2%;
-  margin-left: 2%;
+    text-align: center;
+    display: inline-block;
+    margin-top: 2%;
+    margin-left: 2%;
 }

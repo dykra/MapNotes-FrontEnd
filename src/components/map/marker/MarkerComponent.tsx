@@ -54,15 +54,25 @@ export class MarkerComponent extends React.Component<MarkerComponentProps, Marke
             />
         );
     }
-
+    
     renderPinAttributes() {
+
+        const defaults = this.props.mapData.attributes.map(e => e.name);
+        console.log('Map data attributes', this.props.mapData.attributes);
         const attributes = this.props.pin.data.attributes;
-        const keys = Object.keys(attributes);
-        return keys.map(key => (
-            <div>
-                {attributes[key].name} : {attributes[key].value}
+        console.log('Props attributes', attributes);
+        const res = attributes.filter(e => defaults.find(a => a === e.name) !== undefined);
+        console.log(res);
+
+        return res.map(e =>
+            (
+            <div key={e.name}>
+                <b>
+                    {e.name}
+                </b> {e.value}
             </div>
-        ));
+            )
+        );
     }
 
     renderExtendNote() {
@@ -76,6 +86,12 @@ export class MarkerComponent extends React.Component<MarkerComponentProps, Marke
                     >
                         Edit
                     </Button>
+                    <Button
+                        className="btn btn-primary Save"
+                        onClick={() => this.props.savePin(this.props.pin)}
+                    >
+                        Save
+                    </Button>
                     <Button className="btn btn-danger" onClick={() => this.props.deletePin(this.props.pin)}>
                         Delete
                     </Button>
@@ -88,6 +104,9 @@ export class MarkerComponent extends React.Component<MarkerComponentProps, Marke
         return(
             <InfoWindow >
                 <div>
+                    <b>
+                        Pin note
+                    </b>
                     {this.renderPinAttributes()}
                 </div>
             </InfoWindow>
