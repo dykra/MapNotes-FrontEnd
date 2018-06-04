@@ -10,6 +10,7 @@ import { GOOGLE_MAP_URL } from '../../constants';
 import SearchBox from 'react-google-maps/lib/components/places/SearchBox';
 import { MapData } from '../../types/api/MapData';
 import { PinData } from '../../types/api/PinData';
+import { MapSettings } from '../../types/map/MapSettings';
 
 export interface MapProps {
     markers: any;
@@ -62,6 +63,7 @@ export interface MapContainerProps {
     visiblePins: PinData[];
     addPin: (pin: PinData) => void;
     changePins: (pins: PinData[]) => void;
+    updateMapSettings: (mapSettings: MapSettings) => void;
     deletePin: (pin: PinData) => void;
     directions: any;
     leftBar: any;
@@ -101,7 +103,7 @@ export class MapContainer extends React.Component<MapContainerProps, MapContaine
                 position: event.latLng.toJSON(),
                 isWindowOpened: false,
                 groupName: 'red',
-                attributes: {},
+                attributes: [],
             },
         };
         this.setState({newPin});
@@ -140,7 +142,7 @@ export class MapContainer extends React.Component<MapContainerProps, MapContaine
 
         const newPin = {data:
                 {position: searchBoxMarkers[0].position.toJSON(), groupName: searchBoxMarkers[0].groupName,
-                    isWindowOpened: false, attributes: {}}
+                    isWindowOpened: false, attributes: []}
         };
         this.setState({ newPin });
 
@@ -162,6 +164,7 @@ export class MapContainer extends React.Component<MapContainerProps, MapContaine
                     key={-1}
                     savePin={this.props.addPin}
                     deletePin={() => this.setState({newPin: undefined})}
+                    updateMapSettings={(mapSetting) => this.props.updateMapSettings(mapSetting)}
                     showTransportComponent={this.showTransportComponent}
                 />);
         }
@@ -176,7 +179,10 @@ export class MapContainer extends React.Component<MapContainerProps, MapContaine
                     mapData={this.props.map.data}
                     index={index}
                     key={index}
-                    savePin={(savePin) => this.props.changePins([savePin])}
+                    savePin={(savePin) => {
+                        this.props.changePins([savePin]);
+                    }}
+                    updateMapSettings={(mapSetting) => this.props.updateMapSettings(mapSetting)}
                     deletePin={this.props.deletePin}
                     showTransportComponent={this.showTransportComponent}
                 />);
@@ -196,7 +202,7 @@ export class MapContainer extends React.Component<MapContainerProps, MapContaine
             <Map
                 googleMapURL={GOOGLE_MAP_URL}
                 loadingElement={<div style={{height: `100%`}}/>}
-                containerElement={<div style={{ height: '100vh' }} />}
+                containerElement={<div style={{ height: '100vh'}} />}
                 mapElement={<div style={{height: `100%`}}/>}
                 onMapClick={this.handleMapClick}
                 markers={markers}

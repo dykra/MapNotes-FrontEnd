@@ -12,6 +12,7 @@ export interface MarkerComponentProps {
     index: any;
     key: any;
     savePin: (pin: PinData) => void;
+    updateMapSettings: (mapSettings: MapSettings) => void;
     deletePin: (pin: PinData) => void;
     showTransportComponent: (index: any) => void;
 }
@@ -35,6 +36,7 @@ export class MarkerComponent extends React.Component<MarkerComponentProps, Marke
     }
 
     savePin(pin: PinData) {
+
         this.setState(
             {isEditMode: false},
             () => this.props.savePin(pin)
@@ -47,6 +49,7 @@ export class MarkerComponent extends React.Component<MarkerComponentProps, Marke
                 pin={this.props.pin}
                 mapData={this.props.mapData}
                 savePin={this.savePin}
+                updateMapSettings={this.props.updateMapSettings}
                 close={() => this.setState({isEditMode: false})}
             />
         );
@@ -76,18 +79,16 @@ export class MarkerComponent extends React.Component<MarkerComponentProps, Marke
     renderPinAttributes() {
 
         var names = this.getNames();
-        console.log('MAP ATTRIBUTES', names);
         const attributes = this.props.pin.data.attributes;
         const keys = Object.keys(attributes);
-        console.log('PROPS ATTRIBUTES', keys);
         var results = this.intersect(keys, names);
         console.log(results);
 
         return results.map(key => (
             <div>
                 <b>
-                {key}
-                </b> {attributes[key]}
+                {attributes[key].name}
+                </b> {attributes[key].value}
             </div>
         ));
     }
@@ -102,6 +103,12 @@ export class MarkerComponent extends React.Component<MarkerComponentProps, Marke
                         onClick={() => this.setState({isEditMode: true})}
                     >
                         Edit
+                    </Button>
+                    <Button
+                        className="btn btn-primary Save"
+                        onClick={() => this.props.savePin(this.props.pin)}
+                    >
+                        Save
                     </Button>
                     <Button className="btn btn-danger" onClick={() => this.props.deletePin(this.props.pin)}>
                         Delete
@@ -125,13 +132,14 @@ export class MarkerComponent extends React.Component<MarkerComponentProps, Marke
     }
 
     renderNote() {
+
         if (this.state.isEditMode) {
             return this.renderEditNote();
         }
         if (this.state.isDetailOpen) {
             return this.renderExtendNote();
         }
-        if (this.state.isMouseOver) {
+        if (this.state.isMouseOver && !this.state.isDetailOpen) {
             return this.renderSmallNote();
         }
         return null;

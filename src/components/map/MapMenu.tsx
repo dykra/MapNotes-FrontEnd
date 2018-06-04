@@ -11,6 +11,7 @@ import { MapContainer } from './MapComponent';
 import { PinData } from '../../types/api/PinData';
 import { Filter } from '../../types/filter/Filter';
 import { deletePin } from '../../api/PinApi';
+import { MapSettings } from '../../types/map/MapSettings';
 
 export interface MapMenuProps {
     id: number;
@@ -40,6 +41,7 @@ export class MapMenu extends React.Component<RouteComponentProps<MapMenuProps>, 
         this.deletePin = this.deletePin.bind(this);
         this.addPin = this.addPin.bind(this);
         this.deleteMap = this.deleteMap.bind(this);
+        this.updateMapSettings = this.updateMapSettings.bind(this);
     }
 
     componentWillMount() {
@@ -65,6 +67,17 @@ export class MapMenu extends React.Component<RouteComponentProps<MapMenuProps>, 
                });
             });
             putMap(map, newMap => this.setState({map: newMap}));
+        }
+    }
+
+    updateMapSettings(mapSettings: MapSettings) {
+        const map = this.state.map;
+        if (map && map.id) {
+            map.data = mapSettings;
+            putMap(map, newMap => {
+                this.setState({map: newMap});
+            });
+
         }
     }
 
@@ -136,6 +149,7 @@ export class MapMenu extends React.Component<RouteComponentProps<MapMenuProps>, 
                         deletePin={this.deletePin}
                         directions={this.state.directions}
                         leftBar={this.state.leftBar}
+                        updateMapSettings={this.updateMapSettings}
                     />
                 </div>
             );
