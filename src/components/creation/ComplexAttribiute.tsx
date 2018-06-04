@@ -59,12 +59,11 @@ export default class ComplexAttribute extends React.Component<any, ComplexAttrib
 
     handleDeleteRow(rows: any) {
         alert('The rows are deleted:\n');
-        let newComplesAttributes: Array<ComplexAttrType> =
+        let newComplexAttributes: Array<ComplexAttrType> =
             _.filter(this.state.complexAttributes, (attr) => !_.includes(rows,  attr.name));
         this.setState({
-            complexAttributes: newComplesAttributes
+            complexAttributes: newComplexAttributes
         });
-        this.props.handleDeleteComplexAttr(newComplesAttributes);
     }
 
     handleClickSaveOnComplexAttrButton(complexAttr: ComplexAttrType) {

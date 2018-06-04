@@ -35,7 +35,6 @@ export class CreationMenu extends React.Component <any, CreationMenuState> {
         this.handleAddComplexAttr = this.handleAddComplexAttr.bind(this);
         this.handleBackToSimpleAttr = this.handleBackToSimpleAttr.bind(this);
         this.handleSaveComplexAttr = this.handleSaveComplexAttr.bind(this);
-        this.handleDeleteComplexAttr = this.handleDeleteComplexAttr.bind(this);
         this.toggleModal = this.toggleModal.bind(this);
         this.getSimpleAttr = this.getSimpleAttr.bind(this);
         this.isArrayContains = this.isArrayContains.bind(this);
@@ -53,7 +52,7 @@ export class CreationMenu extends React.Component <any, CreationMenuState> {
         const pin: PinData[] = [];
 
         const map: MapData = {
-            data: {attributes: this.state.simpleAttr, complexAttr: this.state.complexAttr},
+            data: {attributes: this.state.simpleAttr, complexAttributes: this.state.complexAttr},
             id: 0,
             pins: pin
         };
@@ -106,15 +105,10 @@ export class CreationMenu extends React.Component <any, CreationMenuState> {
         });
     }
 
-    handleSaveComplexAttr(complexAt: Array<ComplexAttrType>) {
+    handleSaveComplexAttr(attr: Array<ComplexAttrType>) {
         this.setState({
-            complexAttr: complexAt,
+            complexAttr: attr,
             complexAttrBox: false
-        });
-    }
-    handleDeleteComplexAttr(complexAt: Array<ComplexAttrType>) {
-        this.setState({
-            complexAttr: complexAt
         });
     }
 
@@ -132,7 +126,6 @@ export class CreationMenu extends React.Component <any, CreationMenuState> {
             complexAttr={this.state.complexAttr}
             handleBackToSimpleAttr={this.handleBackToSimpleAttr}
             handleSaveComplexAttr={this.handleSaveComplexAttr}
-            handleDeleteComplexAttr={this.handleDeleteComplexAttr}
         />
         );
     }
