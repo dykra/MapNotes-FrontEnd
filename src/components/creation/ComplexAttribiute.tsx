@@ -130,7 +130,7 @@ export default class ComplexAttribute extends React.Component<any, ComplexAttrib
                     <div className={'ComplexAttrTable'}>
                         <div className={'NewButton'}>
                             <Button
-                                className={'newComplexAttrButton'}
+                                className={'NewComplexAttrButton'}
                                 bsSize="small"
                                 bsStyle="success"
                                 active={true}

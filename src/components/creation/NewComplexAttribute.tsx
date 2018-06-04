@@ -50,7 +50,6 @@ export default class NewComplexAttribute extends React.Component<any, NewComplex
 
         for (let i = 0; i < inputString.length - 1; i++ ) {
 
-            console.log(inputString[i]);
             if (inputString[i] === '[' && !operatorPlace) {
                 let newAttr = '';
                 i++;
@@ -61,43 +60,31 @@ export default class NewComplexAttribute extends React.Component<any, NewComplex
 
                 while (inputString[i] !== ']' && i <= inputString.length) {
                     newAttr = newAttr + inputString[i];
-                    console.log(newAttr);
                     i++;
                 }
 
                 if (inputString[i] !== ']' && inputString.length === i) {
-                    console.log('last value is not ]');
                     return false;
                 }
 
-                console.log('whole attr');
-                console.log(newAttr);
                 operatorPlace = true;
                 if (!this.checkIfAttributeType(newAttr.split(' ').join(''))) {
-                    console.log('symbol is not attr type');
                     return false;
                 }
             } else if (operatorPlace) {
-                console.log('operator place');
                 operatorPlace = false;
-                while (inputString[i] === ' ') {
-                    i++;
-                }
 
                 if (!this.checkIfOperator(inputString[i])) {
-                    console.log('symbol is not operator' + inputString[i]);
                     return false;
                 }
             } else {
                 return false;
             }
             if (inputString[inputString.length - 1] !== ']') {
-                console.log('not finishing on ]');
                 return false;
             }
         }
         if (!operatorPlace) {
-            console.log('last symbol operator');
             return false;
         }
         return true;
@@ -214,7 +201,7 @@ export default class NewComplexAttribute extends React.Component<any, NewComplex
                     </Modal.Header>
 
                     <Modal.Body>
-                        <div className={'InfoBoxAddNewAttr'}>
+                        <div className={'infoBoxAddNewAttr'}>
                             Complex Attributes should have the following pattern:
                             <p>[basic-attr]/[number] operator [basic-attr]/[number]</p>
                         </div>
