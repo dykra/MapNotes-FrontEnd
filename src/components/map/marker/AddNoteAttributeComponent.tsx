@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { Button, Checkbox } from 'react-bootstrap';
-import { FormGroup, FormControl, Form, Col, ControlLabel,
-    MenuItem, DropdownButton } from 'react-bootstrap/lib';
+import { FormGroup, FormControl, Form, Col, ControlLabel} from 'react-bootstrap/lib';
 import { TYPES } from '../../../constants';
 
 export interface AddAttributeComponentProps {
@@ -30,8 +29,8 @@ export class AddNoteAttributeComponent extends React.Component<AddAttributeCompo
         this.handleSave = this.handleSave.bind(this);
     }
 
-    handleTypeChange(event: any) {
-        this.setState({selected: event.toString()});
+    handleTypeChange(type: string) {
+        this.setState({selected: type.toString()});
     }
 
     handleCheckbox(event: any) {
@@ -101,20 +100,20 @@ export class AddNoteAttributeComponent extends React.Component<AddAttributeCompo
                             Type
                         </Col>
                         <Col sm={4}>
-                            <DropdownButton
-                                onSelect={this.handleTypeChange}
-                                title={this.state.selected}
-                                id="dropdown-size-medium"
-                            >
-                                {
-                                    TYPES.map(function(type: any) {
-                                        return (
-                                            <MenuItem key={type} eventKey={type.toString()}>
-                                                {type.toString()}
-                                            </MenuItem>);
-                                    })
-                                }
-                            </DropdownButton>
+
+                            {/*<DropdownButton*/}
+                                {/*onSelect={this.handleTypeChange}*/}
+                                {/*title={this.state.selected}*/}
+                                {/*id="dropdown-size-medium"*/}
+                            {/*>*/}
+                                {/*onClick={this.onChangeAttributeValueInputForButtons}*/}
+                                {/*> {this.props.simpleAttr[i].name}*/}
+                                {/*<MenuItem key={type} eventKey={type.toString()}>*/}
+                                    {/*{type.toString()}*/}
+                                {/*</MenuItem>);*/}
+                             {/*</DropdownButton>*/}
+                            {this.createButtonTypes()}
+
                         </Col>
                     </FormGroup>
                     <FormGroup>
@@ -132,5 +131,22 @@ export class AddNoteAttributeComponent extends React.Component<AddAttributeCompo
                 </Button>
             </div>
         );
+    }
+
+    createButtonTypes() {
+        let typesButton: JSX.Element[] = [];
+        TYPES.map(function(type: any) {
+            typesButton.push(
+                <Button
+                    className={'simpleAttrButton'}
+                    id={type}
+                    value={type}
+
+                > {type.toString()}
+                </Button>
+            )
+        })
+        return typesButton;
+
     }
 }

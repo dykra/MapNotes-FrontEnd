@@ -130,6 +130,26 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
         );
     }
 
+    cancelNewInputs() {
+        const pinAttr = this.state.pin.data.attributes;
+        const pin = this.state.pin;
+        let loop = pinAttr.length;
+        for (let i = 0; i < loop; i++) {
+            if (pinAttr[i].value === '') {
+                pinAttr.slice(i, 1);
+                loop--;
+                i--;
+
+            }
+        }
+        pin.data.attributes = pinAttr;
+        this.setState({
+            pin,
+            isAddNewAttrClick: false
+        });
+
+    }
+
     render() {
         return(
             <div className="static-modal">
@@ -147,7 +167,13 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
                         >
                             Add new attribute
                         </Button>
-                        <Button className="btn btn-secondary" onClick={this.props.close}>
+                        <Button
+                            className="btn btn-secondary"
+                            onClick={() => {
+                                this.cancelNewInputs();
+                                this.props.close();
+                            }}
+                        >
                             Close
                         </Button>
                         <Button
