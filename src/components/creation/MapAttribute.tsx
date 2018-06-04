@@ -40,6 +40,7 @@ export default class MapAttribute extends React.Component<any, MapAttributeState
             }));
 
         }
+
     }
 
     handleChange (evt: any, index: any, fieldName: any) {

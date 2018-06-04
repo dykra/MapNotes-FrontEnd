@@ -11,6 +11,7 @@ import { MapContainer } from './MapComponent';
 import { PinData } from '../../types/api/PinData';
 import { Filter } from '../../types/filter/Filter';
 import { deletePin } from '../../api/PinApi';
+import { MapSettings } from '../../types/map/MapSettings';
 
 export interface MapMenuProps {
     id: number;
@@ -20,6 +21,7 @@ export interface MapMenuState {
     map?: MapData;
     filterPin?: PinData[];
     directions: any;
+    leftBar: any;
 }
 
 export class MapMenu extends React.Component<RouteComponentProps<MapMenuProps>, MapMenuState> {
@@ -28,7 +30,8 @@ export class MapMenu extends React.Component<RouteComponentProps<MapMenuProps>, 
         super(props);
 
         this.state = {
-            directions : null
+            directions : null,
+            leftBar: null,
         };
 
         this.filter = this.filter.bind(this);
@@ -38,6 +41,7 @@ export class MapMenu extends React.Component<RouteComponentProps<MapMenuProps>, 
         this.deletePin = this.deletePin.bind(this);
         this.addPin = this.addPin.bind(this);
         this.deleteMap = this.deleteMap.bind(this);
+        this.updateMapSettings = this.updateMapSettings.bind(this);
     }
 
     componentWillMount() {
@@ -63,6 +67,17 @@ export class MapMenu extends React.Component<RouteComponentProps<MapMenuProps>, 
                });
             });
             putMap(map, newMap => this.setState({map: newMap}));
+        }
+    }
+
+    updateMapSettings(mapSettings: MapSettings) {
+        const map = this.state.map;
+        if (map && map.id) {
+            map.data = mapSettings;
+            putMap(map, newMap => {
+                this.setState({map: newMap});
+            });
+
         }
     }
 
@@ -124,6 +139,7 @@ export class MapMenu extends React.Component<RouteComponentProps<MapMenuProps>, 
                         visiblePins={visiblePins}
                         changePins={this.changePins}
                         deleteMap={this.deleteMap}
+                        callbackOnRef={(ref: any) => (this.setState({ leftBar: ref}))}
                     />
                     <MapContainer
                         map={this.state.map}
@@ -132,6 +148,8 @@ export class MapMenu extends React.Component<RouteComponentProps<MapMenuProps>, 
                         changePins={this.changePins}
                         deletePin={this.deletePin}
                         directions={this.state.directions}
+                        leftBar={this.state.leftBar}
+                        updateMapSettings={this.updateMapSettings}
                     />
                 </div>
             );
