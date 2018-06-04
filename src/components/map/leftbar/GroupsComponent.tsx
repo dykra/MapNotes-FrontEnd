@@ -45,7 +45,6 @@ export class GroupsComponent extends React.Component<GroupsComponentProps , Grou
     }
 
     renderColorButtons() {
-        if (this.state.visibleColors) {
             return (
                 <div className="OpenedColors">
                     <Button onClick={this.hideColors}>Hide</Button>
@@ -57,15 +56,21 @@ export class GroupsComponent extends React.Component<GroupsComponentProps , Grou
                     </ButtonToolbar>
                 </div>
             );
-        }
-        return null;
+    }
+
+    renderNewGroupButton() {
+        return(
+            <div className="groups">
+                <Button onClick={this.showColors}>New group</Button>
+            </div>
+        );
     }
 
     render() {
         if (!this.state.visibleColors) {
             return (
-                <div className="groups">
-                    <Button onClick={this.showColors}>New group</Button>
+                <div>
+                    {this.renderNewGroupButton()}
                 </div>
             );
         }
