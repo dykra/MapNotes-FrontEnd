@@ -11,7 +11,7 @@ import { PinData } from '../../../types/api/PinData';
 export interface EditNoteComponentProps {
     pin: PinData;
     mapData: MapSettings;
-    savePin: (pin: PinData) => void;
+    savePin: (pin: PinData, mapSettings: MapSettings) => void;
     close: () => void;
 }
 
@@ -53,7 +53,23 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
         return pin;
 
     }
-
+    // handleSubmit(evt: any, inputs: BasicAttr[]) {
+    //     evt.preventDefault();
+    //     const pin: PinData[] = [];
+    //     console.log('AFTER SUBMIT', inputs);
+    //     const map: MapData = {
+    //         data: {attributes: inputs},
+    //         id: 0,
+    //         pins: pin
+    //     };
+    //     putMap(map, this.myCallback);
+    //
+    // }
+    //
+    // public myCallback(map: MapData): void {
+    //     let path = '/map/' + map.id;
+    //     return this.props.history.push(path);
+    // }
     handleAddingNewAttribute(nameAttr: string, typeAttr: string, isDefault: boolean) {
         const pin = this.state.pin;
         if (isDefault) {
@@ -138,7 +154,10 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
                         <Button className="btn btn-secondary" onClick={this.props.close}>
                             Close
                         </Button>
-                        <Button className="btn btn-primary" onClick={() => this.props.savePin(this.state.pin)}>
+                        <Button
+                            className="btn btn-primary"
+                            onClick={() => this.props.savePin(this.state.pin, this.state.mapData)}
+                        >
                             Save
                         </Button>
                     </Modal.Footer>

@@ -11,7 +11,8 @@ export interface MarkerComponentProps {
     mapData: MapSettings;
     index: any;
     key: any;
-    savePin: (pin: PinData) => void;
+    savePin: (pin: PinData, mapSettings: MapSettings) => void;
+    // updateMapSettings: (mapSettings: MapSettings) => void;
     deletePin: (pin: PinData) => void;
     showTransportComponent: (index: any) => void;
 }
@@ -34,14 +35,11 @@ export class MarkerComponent extends React.Component<MarkerComponentProps, Marke
         this.savePin = this.savePin.bind(this);
     }
 
-    savePin(pin: PinData) {
+    savePin(pin: PinData, mapSettings: MapSettings) {
 
-        console.log('MARKER1' + pin.data.attributes);
-        console.log('MARKER21' + pin.data);
-        console.log('MARKER' + pin.data.attributes[1]);
         this.setState(
             {isEditMode: false},
-            () => this.props.savePin(pin)
+            () => this.props.savePin(pin, mapSettings)
         );
     }
 

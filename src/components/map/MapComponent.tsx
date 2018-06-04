@@ -10,6 +10,7 @@ import { GOOGLE_MAP_URL } from '../../constants';
 import SearchBox from 'react-google-maps/lib/components/places/SearchBox';
 import { MapData } from '../../types/api/MapData';
 import { PinData } from '../../types/api/PinData';
+import { MapSettings } from '../../types/map/MapSettings';
 
 export interface MapProps {
     markers: any;
@@ -62,6 +63,7 @@ export interface MapContainerProps {
     visiblePins: PinData[];
     addPin: (pin: PinData) => void;
     changePins: (pins: PinData[]) => void;
+    updateMapSettings: (mapSettings: MapSettings) => void;
     deletePin: (pin: PinData) => void;
     directions: any;
     leftBar: any;
@@ -176,7 +178,11 @@ export class MapContainer extends React.Component<MapContainerProps, MapContaine
                     mapData={this.props.map.data}
                     index={index}
                     key={index}
-                    savePin={(savePin) => this.props.changePins([savePin])}
+                    savePin={(savePin, mapSettings) => {
+                        this.props.changePins([savePin]);
+                        this.props.updateMapSettings(mapSettings);
+                    }}
+                    // updateMapSettings={(mapSetting) => this.props.updateMapSettings(mapSetting)}
                     deletePin={this.props.deletePin}
                     showTransportComponent={this.showTransportComponent}
                 />);
