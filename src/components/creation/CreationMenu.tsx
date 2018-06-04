@@ -52,7 +52,7 @@ export class CreationMenu extends React.Component <any, CreationMenuState> {
         const pin: PinData[] = [];
 
         const map: MapData = {
-            data: {attributes: this.state.simpleAttr, complexAttr: this.state.complexAttr},
+            data: {attributes: this.state.simpleAttr, complexAttributes: this.state.complexAttr},
             id: 0,
             pins: pin
         };
