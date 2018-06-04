@@ -17,7 +17,7 @@ export interface EditNoteComponentProps {
 
 export interface EditNoteComponentState {
     pin: PinData;
-    mapAttr: MapSettings;
+    mapData: MapSettings;
     input: any;
     isAddNewAttrClick: boolean;
 }
@@ -27,17 +27,41 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
     constructor(props: any) {
         super(props);
         this.state = {
-            pin: this.props.pin,
-            mapAttr: this.props.mapData,
+            // pin: this.props.pin,
+            mapData: this.props.mapData,
+            pin: this.handlePin(),
             input: '',
             isAddNewAttrClick: false
         };
         this.handleAddingNewAttribute = this.handleAddingNewAttribute.bind(this);
+        this.handlePin = this.handlePin.bind(this);
+
+    }
+    handlePin() {
+
+        const pin = this.props.pin;
+        console.log('debug');
+        console.log(this.props.mapData);
+        const defaultAttr = this.props.mapData.attributes;
+
+        if (pin.data.attributes.length === 0 ) {
+            for (let i = 0; i < defaultAttr.length; i++) {
+                pin.data.attributes.push({name: defaultAttr[i].name, type: defaultAttr[i].type, value: ''});
+            }
+        }
+        console.log('pin' + pin);
+        return pin;
+
     }
 
-    handleAddingNewAttribute(name: string) {
+    handleAddingNewAttribute(nameAttr: string, typeAttr: string, isDefault: boolean) {
         const pin = this.state.pin;
-        pin.data.attributes[name] = undefined;
+        if (isDefault) {
+            const mapAttr = this.state.mapData;
+            mapAttr.attributes.push({name: nameAttr, type: typeAttr});
+
+        }
+        pin.data.attributes.push({name: nameAttr, type: typeAttr, value: ''});
         this.setState({
             pin,
             isAddNewAttrClick: false
@@ -77,16 +101,16 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
                     <FormGroup
                         controlId="NewNote"
                     >
-                        {keys.map(key => (
-                            <div key={key}>
+                        {attributes.map((name: any, type: any, value: any) => (
+                            <div key={name}>
                                 <Col sm={4}>
-                                    {key}
+                                    {name}
                                 </Col>
                                 <Col sm={8}>
                                     <FormControl
-                                        onChange={(event) => this.handleChange(key, event)}
+                                        onChange={(event) => this.handleChange(name, event)}
                                         placeholder="Enter a value"
-                                        value={attributes[key]}
+                                        value={value}
                                     />
                                 </Col>
                             </div>

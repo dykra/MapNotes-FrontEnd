@@ -93,13 +93,14 @@ export class MarkerComponent extends React.Component<MarkerComponentProps, Marke
     }
 
     renderNote() {
+
         if (this.state.isEditMode) {
             return this.renderEditNote();
         }
         if (this.state.isDetailOpen) {
             return this.renderExtendNote();
         }
-        if (this.state.isMouseOver) {
+        if (this.state.isMouseOver && !this.state.isDetailOpen) {
             return this.renderSmallNote();
         }
         return null;
