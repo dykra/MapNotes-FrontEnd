@@ -44,8 +44,15 @@
 }
 .newButton {
     float: left;
+    margin-top: 2%;
 }
 
 .deleteComplexAttrButton{
     float: left;
+}
+
+.infoBoxAddNewAttr {
+    text-align: center;
+    margin-top: 2%;
+    margin-bottom: 4%;
 }

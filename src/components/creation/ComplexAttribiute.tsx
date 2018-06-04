@@ -1,6 +1,6 @@
 import * as React from 'react';
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
-import { BootstrapTable, DeleteButton, TableHeaderColumn } from 'react-bootstrap-table';
+import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import * as Button from 'react-bootstrap/lib/Button';
 import * as Modal from 'react-bootstrap/lib/Modal';
 import { ComplexAttrType } from '../../types/creation/ComplexAttrType';
@@ -20,11 +20,9 @@ interface ComplexAttributeState {
 export default class ComplexAttribute extends React.Component<any, ComplexAttributeState> {
 
     private static getSimpleAttributesAvailableNames(simpleAttr: Array<any>) {
-        console.log('gettng simple attr names');
         let a: Array<string> = [];
         for (let i  = 0; i < simpleAttr.length; i++) {
-            if (simpleAttr[i].type === 'pln' || simpleAttr[i].type === 'm^2') {
-                console.log('adding');
+            if (simpleAttr[i].type === 'pln' || simpleAttr[i].type === 'm^2' || simpleAttr[i] === 'number') {
                 a = a.concat(simpleAttr[i].name);
             }
         }
@@ -34,7 +32,7 @@ export default class ComplexAttribute extends React.Component<any, ComplexAttrib
     constructor(props: any) {
         super(props);
         this.state = {
-            complexAttributes: [],
+            complexAttributes: this.props.complexAttr,
             showAddNewComplexAttr: false,
             newComplexAttrName: '',
             newComplexAttrValue: '',
@@ -44,14 +42,14 @@ export default class ComplexAttribute extends React.Component<any, ComplexAttrib
         this.handleClickAddNewComplexAttr = this.handleClickAddNewComplexAttr.bind(this);
         this.handleDeleteRow = this.handleDeleteRow.bind(this);
         this.handleClickOnSaveAllComplexAttrButton = this.handleClickOnSaveAllComplexAttrButton.bind(this);
-        this.createCustomDeleteButton = this.createCustomDeleteButton.bind(this);
         this.handleClickSaveOnComplexAttrButton = this.handleClickSaveOnComplexAttrButton.bind(this);
         this.handleCloseAddNewAttrBox = this.handleCloseAddNewAttrBox.bind(this);
     }
 
     handleClickAddNewComplexAttr() {
         if (this.state.simpleAttrAvailableNames.length === 0) {
-            alert('there is no simple attributes from which you can make complex attributes!');
+            alert('There is no basic attributes from which you can make complex attributes!' +
+                'Try to create basic attr with type pln, m^2 or number. ');
         } else {
             this.setState({
                 showAddNewComplexAttr: true
@@ -59,21 +57,22 @@ export default class ComplexAttribute extends React.Component<any, ComplexAttrib
         }
     }
 
-    handleDeleteRow(row: any) {
-        alert('The row is deleted:\n');
-        let newComplesAttributes = _.filter(this.state.complexAttributes, (attr) => attr.name !== row[0]);
+    handleDeleteRow(rows: any) {
+        alert('The rows are deleted:\n');
+        let newComplexAttributes: Array<ComplexAttrType> =
+            _.filter(this.state.complexAttributes, (attr) => !_.includes(rows,  attr.name));
         this.setState({
-            complexAttributes: newComplesAttributes
+            complexAttributes: newComplexAttributes
         });
     }
 
     handleClickSaveOnComplexAttrButton(complexAttr: ComplexAttrType) {
         this.setState({
             complexAttributes: this.state.complexAttributes.concat(complexAttr)
-        });    }
+        });
+    }
 
     handleClickOnSaveAllComplexAttrButton() {
-        console.log('saving complex attr');
         this.props.handleSaveComplexAttr(this.state.complexAttributes);
     }
 
@@ -83,21 +82,9 @@ export default class ComplexAttribute extends React.Component<any, ComplexAttrib
         });
     }
 
-    createCustomDeleteButton() {
-        return (
-            <div className={'deleteComplexAttrButton'}>
-                <DeleteButton
-                    btnText="Delete"
-                    onClick={this.handleDeleteRow}
-                />
-            </div>
-        );
-    }
-
     render() {
         const options = {
-            onDeleteRow: this.handleDeleteRow,
-            deleteBtn: this.createCustomDeleteButton
+            onDeleteRow: this.handleDeleteRow
         };
 
         let simpleAttrTable = (
@@ -139,10 +126,10 @@ export default class ComplexAttribute extends React.Component<any, ComplexAttrib
                 break;
             default:
                 complexAttTable = (
-                    <div>
-                        <div className={'newButton'}>
+                    <div className={'ComplexAttrTable'}>
+                        <div className={'NewButton'}>
                             <Button
-                                className={'newComplexAttrButton'}
+                                className={'NewComplexAttrButton'}
                                 bsSize="small"
                                 bsStyle="success"
                                 active={true}
@@ -152,7 +139,7 @@ export default class ComplexAttribute extends React.Component<any, ComplexAttrib
                         </div>
                         <BootstrapTable
                             deleteRow={true}
-                            selectRow={{mode: 'radio'}}
+                            selectRow={{mode: 'checkbox'}}
                             data={this.state.complexAttributes}
                             options={options}
                         >
@@ -179,10 +166,10 @@ export default class ComplexAttribute extends React.Component<any, ComplexAttrib
                         <Modal.Title> Hello in MapNotes </Modal.Title>
                     </Modal.Header>
 
-                    <div className={'complexAttributes'}>
+                    <div className={'ComplexAttributes'}>
                         <ModalBody>
-                            <div className={'attrTable'}> {simpleAttrTable} </div>
-                            <div className={'attrTable'}> {complexAttTable} </div>
+                            <div className={'AttrTable'}> {simpleAttrTable} </div>
+                            <div className={'AttrTable'}> {complexAttTable} </div>
                             <div>{newComplexAttrModal} </div>
                         </ModalBody>
                         <Modal.Footer>
