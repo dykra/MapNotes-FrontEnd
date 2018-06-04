@@ -74,6 +74,12 @@ export class MarkerComponent extends React.Component<MarkerComponentProps, Marke
                     >
                         Edit
                     </Button>
+                    <Button
+                        className="btn btn-primary Save"
+                        onClick={() => this.props.savePin(this.props.pin)}
+                    >
+                        Save
+                    </Button>
                     <Button className="btn btn-danger" onClick={() => this.props.deletePin(this.props.pin)}>
                         Delete
                     </Button>
