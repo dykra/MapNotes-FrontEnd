@@ -53,6 +53,7 @@ export class MarkerComponent extends React.Component<MarkerComponentProps, Marke
     }
 
     renderPinAttributes() {
+        console.log('PROPS MAPDATA', this.props.mapData);
         const attributes = this.props.pin.data.attributes;
         const keys = Object.keys(attributes);
         return keys.map(key => (
