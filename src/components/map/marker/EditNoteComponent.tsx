@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Button, Modal } from 'react-bootstrap';
-import { AddAttributeComponent } from './AddAttributeComponent';
+import { AddNoteAttributeComponent } from './AddNoteAttributeComponent';
 import Form from 'reactstrap/lib/Form';
 import * as FormGroup from 'react-bootstrap/lib/FormGroup';
 import Col from 'reactstrap/lib/Col';
@@ -85,7 +85,7 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
     renderAddAtributeNote() {
         if (this.state.isAddNewAttrClick) {
             return (
-                <AddAttributeComponent
+                <AddNoteAttributeComponent
                     cancel={() => this.setState({isAddNewAttrClick: false})}
                     save={this.handleAddingNewAttribute}
                 />

@@ -15,7 +15,7 @@ export interface AddAttributeComponentState {
     name: string;
 }
 
-export class AddAttributeComponent extends React.Component<AddAttributeComponentProps, AddAttributeComponentState> {
+export class AddNoteAttributeComponent extends React.Component<AddAttributeComponentProps, AddAttributeComponentState> {
 
     constructor(props: any) {
         super(props);
