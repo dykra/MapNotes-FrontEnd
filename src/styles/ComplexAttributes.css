@@ -51,8 +51,8 @@
     float: left;
 }
 
-.InfoComplexAttr {
-    margin-left: 4%;
-    margin-right: 4%;
+.InfoBoxAddNewAttr {
     text-align: center;
+    margin-top: 2%;
+    margin-bottom: 4%;
 }
