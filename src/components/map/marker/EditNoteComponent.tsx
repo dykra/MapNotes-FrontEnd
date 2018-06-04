@@ -39,9 +39,9 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
     }
 
     checkIfAttributeAdded(name: string, pins: PinData) {
-        const attrs = pins.data.attributes;
-        for ( let i = 0; i < attrs.length; i++) {
-            if (attrs[i].name === name) {
+        const pinAttrs = pins.data.attributes;
+        for (let i = 0; i < pinAttrs.length; i++) {
+            if (pinAttrs[i].name === name) {
                 return true;
             }
         }
