@@ -38,84 +38,76 @@ export default class NewComplexAttribute extends React.Component<any, NewComplex
         this.checkIfAttributeType = this.checkIfAttributeType.bind(this);
         this.checkIfOperator = this.checkIfOperator.bind(this);
         this.isNewAttrNameUsed = this.isNewAttrNameUsed.bind(this);
-        this.deleteWhiteSigns = this.deleteWhiteSigns.bind(this);
-    }
-
-    deleteWhiteSigns() {
-        let value: string = this.state.newComplexAttrValue.split(' ').join('');
-        this.setState({
-            newComplexAttrValue: value
-        });
-        console.log('without spaces');
-        console.log(this.state.newComplexAttrValue);
     }
 
     isProperValueInput() {
         let operatorPlace: boolean = false;
-        this.deleteWhiteSigns();
+        let inputString: string = this.state.newComplexAttrValue.split(' ').join('');
 
-        if (this.state.newComplexAttrValue.length === 0 ) {
+        if (inputString.length === 0 ) {
             return false;
         }
 
-        for (let i = 0; i < this.state.newComplexAttrValue.length - 1; i++ ) {
+        for (let i = 0; i < inputString.length - 1; i++ ) {
 
-            console.log(this.state.newComplexAttrValue[i]);
-            if (this.state.newComplexAttrValue[i] === '[' && !operatorPlace) {
+            console.log(inputString[i]);
+            if (inputString[i] === '[' && !operatorPlace) {
                 let newAttr = '';
                 i++;
 
-                if (this.state.newComplexAttrValue[i] === ']') {
+                if (inputString[i] === ']') {
                     return false;
                 }
 
-                while (this.state.newComplexAttrValue[i] !== ']'
-                && i <= this.state.newComplexAttrValue.length) {
-                    newAttr = newAttr + this.state.newComplexAttrValue[i];
+                while (inputString[i] !== ']' && i <= inputString.length) {
+                    newAttr = newAttr + inputString[i];
                     console.log(newAttr);
                     i++;
                 }
 
-                if (this.state.newComplexAttrValue[i] !== ']' && this.state.newComplexAttrValue.length === i) {
+                if (inputString[i] !== ']' && inputString.length === i) {
+                    console.log('last value is not ]');
                     return false;
                 }
 
+                console.log('whole attr');
                 console.log(newAttr);
                 operatorPlace = true;
                 if (!this.checkIfAttributeType(newAttr.split(' ').join(''))) {
-                    console.log('false');
+                    console.log('symbol is not attr type');
                     return false;
                 }
             } else if (operatorPlace) {
+                console.log('operator place');
                 operatorPlace = false;
-                while (this.state.newComplexAttrValue[i] === ' ') {
+                while (inputString[i] === ' ') {
                     i++;
                 }
 
-                if (!this.checkIfOperator(this.state.newComplexAttrValue[i])) {
-                    console.log('false');
+                if (!this.checkIfOperator(inputString[i])) {
+                    console.log('symbol is not operator' + inputString[i]);
                     return false;
                 }
-                i++;
             } else {
+                return false;
+            }
+            if (inputString[inputString.length - 1] !== ']') {
+                console.log('not finishing on ]');
                 return false;
             }
         }
         if (!operatorPlace) {
+            console.log('last symbol operator');
             return false;
         }
         return true;
     }
 
     checkIfAttributeType(newAttr: string) {
-        console.log('checking if attr type');
-        console.log(newAttr);
         return (_.includes(this.state.simpleAttrAvailableNames, newAttr) || !isNaN(Number(newAttr)));
     }
 
     checkIfOperator(newAttr: string) {
-        console.log('checking if operator');
-        console.log(newAttr);
         return _.includes(this.state.operators, newAttr);
     }
 
@@ -126,23 +118,17 @@ export default class NewComplexAttribute extends React.Component<any, NewComplex
     }
 
     onChangeAttributeValueInput(event: any) {
-        console.log('on change value input sb types');
-        console.log(event.target.value);
         this.setState({
             newComplexAttrValue: event.target.value
         });
     }
 
     onChangeAttributeValueInputForButtons(event: any) {
-        console.log('on change value input');
-        console.log(event.target.value);
         this.setState({
             newComplexAttrValue: this.state.newComplexAttrValue + '[ ' + event.target.value + ' ]'
         });
     }
     onChangeAttributeValueInputOperatorsForButtons(event: any) {
-        console.log('on change value input');
-        console.log(event.target.value);
         this.setState({
             newComplexAttrValue: this.state.newComplexAttrValue + ' ' + event.target.value + ' '
         });
@@ -151,7 +137,8 @@ export default class NewComplexAttribute extends React.Component<any, NewComplex
     createListOfButtonsWithSimpleAttr() {
         let simpleAttButtons = [];
         for (let i = 0; i < this.props.simpleAttr.length; i++) {
-            if (this.props.simpleAttr[i].type === 'pln' || this.props.simpleAttr[i].type === 'm^2') {
+            if (this.props.simpleAttr[i].type === 'pln' || this.props.simpleAttr[i].type === 'm^2'
+                || this.props.simpleAttr[i].type === 'number') {
                 simpleAttButtons.push((
                     <Button
                         className={'simpleAttrButton'}
@@ -208,7 +195,6 @@ export default class NewComplexAttribute extends React.Component<any, NewComplex
         } else if (!this.isProperValueInput()) {
             alert('incorresct input !');
         } else {
-
             let complexAttr: ComplexAttrType = {
                 'name': this.state.newComplexAttrName,
                 'value': this.state.newComplexAttrValue
@@ -228,9 +214,9 @@ export default class NewComplexAttribute extends React.Component<any, NewComplex
                     </Modal.Header>
 
                     <Modal.Body>
-                        <div>
+                        <div className={'InfoBoxAddNewAttr'}>
                             Complex Attributes should have the following pattern:
-                            [basic-attr]/[number] operator [basic-attr]/[number]
+                            <p>[basic-attr]/[number] operator [basic-attr]/[number]</p>
                         </div>
                         <FormGroup className={'complexAttributeModalBody'}>
                             <Col sm={10}> Attribute name
@@ -241,6 +227,7 @@ export default class NewComplexAttribute extends React.Component<any, NewComplex
                             </Col>
                             <Col sm={10}> Attribute value
                                 <FormControl
+                                    placeholder="[basic-attr]/[number] operator [basic-attr]/[number]"
                                     value={this.state.newComplexAttrValue}
                                     onChange={this.onChangeAttributeValueInput}
                                 />

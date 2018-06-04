@@ -20,11 +20,9 @@ interface ComplexAttributeState {
 export default class ComplexAttribute extends React.Component<any, ComplexAttributeState> {
 
     private static getSimpleAttributesAvailableNames(simpleAttr: Array<any>) {
-        console.log('gettng simple attr names');
         let a: Array<string> = [];
         for (let i  = 0; i < simpleAttr.length; i++) {
             if (simpleAttr[i].type === 'pln' || simpleAttr[i].type === 'm^2' || simpleAttr[i] === 'number') {
-                console.log('adding');
                 a = a.concat(simpleAttr[i].name);
             }
         }
@@ -50,7 +48,8 @@ export default class ComplexAttribute extends React.Component<any, ComplexAttrib
 
     handleClickAddNewComplexAttr() {
         if (this.state.simpleAttrAvailableNames.length === 0) {
-            alert('there is no simple attributes from which you can make complex attributes!');
+            alert('There is no basic attributes from which you can make complex attributes!' +
+                'Try to create basic attr with type pln, m^2 or number. ');
         } else {
             this.setState({
                 showAddNewComplexAttr: true
@@ -60,23 +59,21 @@ export default class ComplexAttribute extends React.Component<any, ComplexAttrib
 
     handleDeleteRow(rows: any) {
         alert('The rows are deleted:\n');
-        for (let i = 0; i < rows.size; i++) {
-            let newComplesAttributes: Array<ComplexAttrType> = _.filter(this.state.complexAttributes,
-                (attr) => attr.name !== rows[i]);
-            this.setState({
-                complexAttributes: newComplesAttributes
-            });
-        }
-        this.props.handleSaveComplexAttr(this.state.complexAttributes);
+        let newComplesAttributes: Array<ComplexAttrType> =
+            _.filter(this.state.complexAttributes, (attr) => !_.includes(rows,  attr.name));
+        this.setState({
+            complexAttributes: newComplesAttributes
+        });
+        this.props.handleDeleteComplexAttr(newComplesAttributes);
     }
 
     handleClickSaveOnComplexAttrButton(complexAttr: ComplexAttrType) {
         this.setState({
             complexAttributes: this.state.complexAttributes.concat(complexAttr)
-        });    }
+        });
+    }
 
     handleClickOnSaveAllComplexAttrButton() {
-        console.log('saving complex attr');
         this.props.handleSaveComplexAttr(this.state.complexAttributes);
     }
 
@@ -172,8 +169,8 @@ export default class ComplexAttribute extends React.Component<any, ComplexAttrib
 
                     <div className={'ComplexAttributes'}>
                         <ModalBody>
-                            <div className={'CttrTable'}> {simpleAttrTable} </div>
-                            <div className={'CttrTable'}> {complexAttTable} </div>
+                            <div className={'AttrTable'}> {simpleAttrTable} </div>
+                            <div className={'AttrTable'}> {complexAttTable} </div>
                             <div>{newComplexAttrModal} </div>
                         </ModalBody>
                         <Modal.Footer>
