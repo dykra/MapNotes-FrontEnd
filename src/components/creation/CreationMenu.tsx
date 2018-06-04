@@ -46,12 +46,30 @@ export class CreationMenu extends React.Component <any, CreationMenuState> {
         });
     }
 
+    deleteEmptyInputs(inputs: BasicAttr[]) {
+        console.log(inputs);
+        let temp: BasicAttr[];
+        temp = [];
+        for ( let i = 0; i < inputs.length; i++) {
+            console.log('ENTER' + inputs[i].name + inputs[i].type + i);
+            if (inputs[i].name === '' || inputs[i].type === '') {
+                console.log('eloeoel');
+                inputs.splice(i, 1);
+
+            } else {
+                console.log('input' + i + inputs[i].name + inputs[i].type);
+                temp.push(inputs[i]);
+            }
+        }
+        return temp;
+    }
+
     handleSubmit(evt: any, inputs: BasicAttr[]) {
         evt.preventDefault();
         const pin: PinData[] = [];
         console.log('AFTER SUBMIT', inputs);
         const map: MapData = {
-            data: {attributes: inputs},
+            data: {attributes: this.deleteEmptyInputs(inputs)},
             id: 0,
             pins: pin
         };
