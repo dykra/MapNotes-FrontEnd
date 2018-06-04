@@ -84,11 +84,13 @@ export class LeftBarComponent extends React.Component<LeftBarComponentProps, Lef
                            Home
                        </Button>
                    </Link>
+                   <div className={'TransportComponent'}>
                    <TransportComponent
                        onRef={(ref: any) => (this.references.transportComponent = ref)}
                        showRoadBetweenMarkers={this.props.showRoadBetweenMarkers}
                        visiblePins={this.props.visiblePins}
                    />
+                   </div>
                    <FilterComponent
                        filter={this.props.filter}
                        removeFilter={this.props.removeFilter}
