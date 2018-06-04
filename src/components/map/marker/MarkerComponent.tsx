@@ -54,43 +54,25 @@ export class MarkerComponent extends React.Component<MarkerComponentProps, Marke
             />
         );
     }
-
-    getNames() {
-        var names = [];
-        for ( var i = 0; i < this.props.mapData.attributes.length ; i++) {
-            console.log(this.props.mapData.attributes[i].name);
-            names.push(this.props.mapData.attributes[i].name);
-        }
-        return names;
-    }
-
-    intersect (keys: any, names: any) {
-        var results = [];
-
-        for (var i = 0; i < names.length; i++) {
-            if (keys.indexOf(names[i]) !== -1) {
-                results.push(names[i]);
-            }
-        }
-
-        return results;
-    }
-
+    
     renderPinAttributes() {
 
-        var names = this.getNames();
+        const defaults = this.props.mapData.attributes.map(e => e.name);
+        console.log('Map data attributes', this.props.mapData.attributes);
         const attributes = this.props.pin.data.attributes;
-        const keys = Object.keys(attributes);
-        var results = this.intersect(keys, names);
-        console.log(results);
+        console.log('Props attributes', attributes);
+        const res = attributes.filter(e => defaults.find(a => a === e.name) !== undefined);
+        console.log(res);
 
-        return results.map(key => (
-            <div>
+        return res.map(e =>
+            (
+            <div key={e.name}>
                 <b>
-                {attributes[key].name}
-                </b> {attributes[key].value}
+                    {e.name}
+                </b> {e.value}
             </div>
-        ));
+            )
+        );
     }
 
     renderExtendNote() {
