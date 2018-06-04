@@ -82,35 +82,31 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
 
     handleChange (key: any, event: any) {
         const pin = this.state.pin;
-        pin.data.attributes[key] = event.target.value;
+        pin.data.attributes[key].value = event.target.value;
+        console.log('pin' + pin.data);
         this.setState({pin});
     }
 
     renderModalBody() {
         const attributes = this.state.pin.data.attributes;
         console.log(attributes);
-        // const defaultAttrs = this.state.mapAttr.attributes;
-        // const keys = Object.keys(defaultAttrs);
-        // keys.concat(Object.keys(attributes));
-        // console.log(keys);
         const keys = Object.keys(attributes);
-        console.log(keys);
         return(
             <Modal.Body>
                 <Form >
                     <FormGroup
                         controlId="NewNote"
                     >
-                        {attributes.map((name: any, type: any, value: any) => (
-                            <div key={name}>
+                        {keys.map(key => (
+                            <div key={key}>
                                 <Col sm={4}>
-                                    {name}
+                                    {attributes[key].name}
                                 </Col>
                                 <Col sm={8}>
                                     <FormControl
-                                        onChange={(event) => this.handleChange(name, event)}
+                                        onChange={(event) => this.handleChange(key, event)}
                                         placeholder="Enter a value"
-                                        value={value}
+                                        value={attributes[key].value}
                                     />
                                 </Col>
                             </div>

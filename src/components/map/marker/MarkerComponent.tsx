@@ -35,6 +35,10 @@ export class MarkerComponent extends React.Component<MarkerComponentProps, Marke
     }
 
     savePin(pin: PinData) {
+
+        console.log('MARKER1' + pin.data.attributes);
+        console.log('MARKER21' + pin.data);
+        console.log('MARKER' + pin.data.attributes[1]);
         this.setState(
             {isEditMode: false},
             () => this.props.savePin(pin)
@@ -58,7 +62,7 @@ export class MarkerComponent extends React.Component<MarkerComponentProps, Marke
         const keys = Object.keys(attributes);
         return keys.map(key => (
             <div>
-                {key} : {attributes[key]}
+                {attributes[key].name} : {attributes[key].value}
             </div>
         ));
     }
