@@ -70,7 +70,6 @@ export class MarkerComponent extends React.Component<MarkerComponentProps, Marke
             }
         }
 
-        console.log(results);
         return results;
     }
 
@@ -81,9 +80,8 @@ export class MarkerComponent extends React.Component<MarkerComponentProps, Marke
         const attributes = this.props.pin.data.attributes;
         const keys = Object.keys(attributes);
         console.log('PROPS ATTRIBUTES', keys);
-        this.intersect(keys, names);
-
         var results = this.intersect(keys, names);
+        console.log(results);
 
         return results.map(key => (
             <div>
