@@ -11,7 +11,8 @@ import { PinData } from '../../../types/api/PinData';
 export interface EditNoteComponentProps {
     pin: PinData;
     mapData: MapSettings;
-    savePin: (pin: PinData, mapSettings: MapSettings) => void;
+    savePin: (pin: PinData) => void;
+    updateMapSettings: (mapSettings: MapSettings) => void;
     close: () => void;
 }
 
@@ -27,7 +28,6 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
     constructor(props: any) {
         super(props);
         this.state = {
-            // pin: this.props.pin,
             mapData: this.props.mapData,
             pin: this.handlePin(),
             input: '',
@@ -37,44 +37,42 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
         this.handlePin = this.handlePin.bind(this);
 
     }
+
+    checkIfAttributeAdded(name: string, pins: PinData) {
+        const attrs = pins.data.attributes;
+        for ( let i = 0; i < attrs.length; i++) {
+            if (attrs[i].name === name) {
+                return true;
+            }
+        }
+        return false;
+    }
     handlePin() {
 
         const pin = this.props.pin;
-        console.log('debug');
-        console.log(this.props.mapData);
         const defaultAttr = this.props.mapData.attributes;
 
         if (pin.data.attributes.length === 0 ) {
             for (let i = 0; i < defaultAttr.length; i++) {
                 pin.data.attributes.push({name: defaultAttr[i].name, type: defaultAttr[i].type, value: ''});
             }
+        } else {
+            let i = defaultAttr.length - 1;
+            while (!this.checkIfAttributeAdded(defaultAttr[i].name, pin)) {
+                pin.data.attributes.push({name: defaultAttr[i].name, type: defaultAttr[i].type, value: ''});
+                i--;
+            }
         }
-        console.log('pin' + pin);
         return pin;
 
     }
-    // handleSubmit(evt: any, inputs: BasicAttr[]) {
-    //     evt.preventDefault();
-    //     const pin: PinData[] = [];
-    //     console.log('AFTER SUBMIT', inputs);
-    //     const map: MapData = {
-    //         data: {attributes: inputs},
-    //         id: 0,
-    //         pins: pin
-    //     };
-    //     putMap(map, this.myCallback);
-    //
-    // }
-    //
-    // public myCallback(map: MapData): void {
-    //     let path = '/map/' + map.id;
-    //     return this.props.history.push(path);
-    // }
+
     handleAddingNewAttribute(nameAttr: string, typeAttr: string, isDefault: boolean) {
         const pin = this.state.pin;
         if (isDefault) {
             const mapAttr = this.state.mapData;
             mapAttr.attributes.push({name: nameAttr, type: typeAttr});
+            this.props.updateMapSettings(mapAttr);
 
         }
         pin.data.attributes.push({name: nameAttr, type: typeAttr, value: ''});
@@ -99,13 +97,11 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
     handleChange (key: any, event: any) {
         const pin = this.state.pin;
         pin.data.attributes[key].value = event.target.value;
-        console.log('pin' + pin.data);
         this.setState({pin});
     }
 
     renderModalBody() {
         const attributes = this.state.pin.data.attributes;
-        console.log(attributes);
         const keys = Object.keys(attributes);
         return(
             <Modal.Body>
@@ -156,7 +152,7 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
                         </Button>
                         <Button
                             className="btn btn-primary"
-                            onClick={() => this.props.savePin(this.state.pin, this.state.mapData)}
+                            onClick={() => this.props.savePin(this.state.pin)}
                         >
                             Save
                         </Button>

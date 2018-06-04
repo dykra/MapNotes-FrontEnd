@@ -72,13 +72,10 @@ export class MapMenu extends React.Component<RouteComponentProps<MapMenuProps>, 
 
     updateMapSettings(mapSettings: MapSettings) {
         const map = this.state.map;
-        console.log('UPDate settings');
         if (map && map.id) {
             map.data = mapSettings;
             putMap(map, newMap => {
                 this.setState({map: newMap});
-                console.log('JESTEM');
-                console.log(newMap.data.attributes);
             });
 
         }
