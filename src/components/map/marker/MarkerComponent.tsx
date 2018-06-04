@@ -55,12 +55,40 @@ export class MarkerComponent extends React.Component<MarkerComponentProps, Marke
         );
     }
 
+    getNames() {
+        var names = [];
+        for ( var i = 0; i < this.props.mapData.attributes.length ; i++) {
+            console.log(this.props.mapData.attributes[i].name);
+            names.push(this.props.mapData.attributes[i].name);
+        }
+        return names;
+    }
+
+    intersect (keys: any, names: any) {
+        var results = [];
+
+        for (var i = 0; i < names.length; i++) {
+            if (keys.indexOf(names[i]) !== -1) {
+                results.push(names[i]);
+            }
+        }
+
+        return results;
+    }
+
     renderPinAttributes() {
+
+        var names = this.getNames();
         const attributes = this.props.pin.data.attributes;
         const keys = Object.keys(attributes);
-        return keys.map(key => (
+        var results = this.intersect(keys, names);
+        console.log(results);
+
+        return results.map(key => (
             <div>
-                {attributes[key].name} : {attributes[key].value}
+                <b>
+                {attributes[key].name}
+                </b> {attributes[key].value}
             </div>
         ));
     }
@@ -94,6 +122,9 @@ export class MarkerComponent extends React.Component<MarkerComponentProps, Marke
         return(
             <InfoWindow >
                 <div>
+                    <b>
+                        Pin note
+                    </b>
                     {this.renderPinAttributes()}
                 </div>
             </InfoWindow>
