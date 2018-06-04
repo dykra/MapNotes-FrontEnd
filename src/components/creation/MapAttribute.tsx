@@ -41,7 +41,6 @@ export default class MapAttribute extends React.Component<any, MapAttributeState
 
         }
 
-        console.log('PRINTING INPUTS', this.state.inputs);
     }
 
     handleChange (evt: any, index: any, fieldName: any) {

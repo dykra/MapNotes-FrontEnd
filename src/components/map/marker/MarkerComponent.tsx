@@ -12,6 +12,7 @@ export interface MarkerComponentProps {
     index: any;
     key: any;
     savePin: (pin: PinData) => void;
+    updateMapSettings: (mapSettings: MapSettings) => void;
     deletePin: (pin: PinData) => void;
     showTransportComponent: (index: any) => void;
 }
@@ -35,6 +36,7 @@ export class MarkerComponent extends React.Component<MarkerComponentProps, Marke
     }
 
     savePin(pin: PinData) {
+
         this.setState(
             {isEditMode: false},
             () => this.props.savePin(pin)
@@ -47,18 +49,18 @@ export class MarkerComponent extends React.Component<MarkerComponentProps, Marke
                 pin={this.props.pin}
                 mapData={this.props.mapData}
                 savePin={this.savePin}
+                updateMapSettings={this.props.updateMapSettings}
                 close={() => this.setState({isEditMode: false})}
             />
         );
     }
 
     renderPinAttributes() {
-        console.log('PROPS MAPDATA', this.props.mapData);
         const attributes = this.props.pin.data.attributes;
         const keys = Object.keys(attributes);
         return keys.map(key => (
             <div>
-                {key} : {attributes[key]}
+                {attributes[key].name} : {attributes[key].value}
             </div>
         ));
     }
@@ -99,13 +101,14 @@ export class MarkerComponent extends React.Component<MarkerComponentProps, Marke
     }
 
     renderNote() {
+
         if (this.state.isEditMode) {
             return this.renderEditNote();
         }
         if (this.state.isDetailOpen) {
             return this.renderExtendNote();
         }
-        if (this.state.isMouseOver) {
+        if (this.state.isMouseOver && !this.state.isDetailOpen) {
             return this.renderSmallNote();
         }
         return null;
