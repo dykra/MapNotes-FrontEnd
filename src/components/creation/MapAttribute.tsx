@@ -1,11 +1,12 @@
 import * as React from 'react';
 import { Button, Modal, Col, FormControl } from 'react-bootstrap';
 import { Route } from 'react-router-dom';
-import { TYPES } from '../../constants';
+
 import { BasicAttr } from '../../types/creation/BasicAttr';
 import {  FormGroup, Form } from 'reactstrap';
 
 interface MapAttributeState {
+    types: String[];
     inputs: BasicAttr[];
 }
 
@@ -16,6 +17,7 @@ export default class MapAttribute extends React.Component<any, MapAttributeState
 
         this.state = {
             inputs : this.props.simpleAttr,
+            types: [ 'm^2', 'pln', 'yes/no', 'text', 'number', 'other']
         };
         this.handlePrepareInputs = this.handlePrepareInputs.bind(this);
         this.handleChange = this.handleChange.bind(this);
@@ -38,7 +40,6 @@ export default class MapAttribute extends React.Component<any, MapAttributeState
             }));
 
         }
-
     }
 
     handleChange (evt: any, index: any, fieldName: any) {
@@ -77,7 +78,7 @@ export default class MapAttribute extends React.Component<any, MapAttributeState
                                     <select onClick={(evt) => this.handleChange(evt, index, 'type')}>
                                         <option title={input.type}>{input.type}</option>
                                         {
-                                            TYPES.map(function (type: any) {
+                                            this.state.types.map(function (type: any) {
                                                 return <option
                                                     key={type.toString()}
                                                     value={type.toString()}

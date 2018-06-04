@@ -1,5 +1,4 @@
 import * as React from 'react';
-import MapAttr from './MapAttribute';
 import { MapData } from '../../types/api/MapData';
 import { PinData } from '../../types/api/PinData';
 import { putMap } from '../../api/MapApi';
@@ -49,15 +48,18 @@ export class CreationMenu extends React.Component <any, CreationMenuState> {
 
     closeSimpleAttr() {
         this.toggleModal();
+        return this.props.history.push('/');
     }
 
     handleSaveSimpleAttr(basicAttributes: Array<BasicAttr>) {
         this.setState({
             simpleAttr: basicAttributes
         });
+        this.handleSubmit();
         this.toggleModal();
     }
 
+    handleSubmit() {
     handleSubmit(evt: any) {
     getAttrList(value: string) {
         value = value.split(' ').join('');
@@ -97,7 +99,6 @@ export class CreationMenu extends React.Component <any, CreationMenuState> {
             pins: pin
         };
         putMap(map, this.myCallback);
-
     }
 
     public myCallback(map: MapData): void {
@@ -147,7 +148,6 @@ export class CreationMenu extends React.Component <any, CreationMenuState> {
                 handleAddComplexAttr={this.handleAddComplexAttr}
                 closeSimpleAttr={this.closeSimpleAttr}
                 saveSimpleAttr={this.handleSaveSimpleAttr}
-
             />
         );
     }

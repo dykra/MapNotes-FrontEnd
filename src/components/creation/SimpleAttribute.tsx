@@ -54,7 +54,6 @@ export default class SimpleAttribute extends React.Component<any, SimpleAttribut
         this.handleClickSaveSimpleAttr = this.handleClickSaveSimpleAttr.bind(this);
         this.handleAddComplexAttr = this.handleAddComplexAttr.bind(this);
         this.onBeforeSaveCell = this.onBeforeSaveCell.bind(this);
-        this.createSelectItems = this.createSelectItems.bind(this);
         this.prepareBasicAttr  = this.prepareBasicAttr.bind(this);
     }
 
@@ -64,7 +63,8 @@ export default class SimpleAttribute extends React.Component<any, SimpleAttribut
     }
 
     prepareBasicAttr() {
-        let simpleAttr: Array<SimpleAttrType> = _.filter(this.state.simpleAttributes, (attr) => attr.name !== '');
+        let simpleAttr: Array<SimpleAttrType> = _.filter(this.state.simpleAttributes,
+            (attr) => attr.name !== '' && attr.type !== '');
         let basicAttr: Array<BasicAtrrType>  = _.map(simpleAttr, (attr) => {
             return {
                 'name': attr.name,
@@ -107,18 +107,6 @@ export default class SimpleAttribute extends React.Component<any, SimpleAttribut
 
         return (_.includes(simpleNames, newName) ||
             _.includes(complexNames, newName));
-    }
-
-    createSelectItems() {
-        let items = [];
-        if (this.state.types !== []) {
-            for (let i = 0; i < this.state.types.length; i++) {
-                items.push(
-                    <option key={this.state.types[i]} value={this.state.types[i]}>
-                    {this.state.types[i]}</option>);
-            }
-        }
-        return items;
     }
 
     onBeforeSaveCell(row: any, cellName: any, cellValue: any) {
@@ -199,7 +187,7 @@ export default class SimpleAttribute extends React.Component<any, SimpleAttribut
                         <Modal.Title> Create attibutes to map </Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        <div className={'AttributeTitle'}>Simple Attributes</div>
+                        {/*<div className={'AttributeTitle'}>Simple Attributes</div>*/}
                         <div>
                             {simpleAttr}
                         </div>
