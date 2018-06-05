@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Button, Checkbox } from 'react-bootstrap';
-import { FormGroup, FormControl, Form, Col, ControlLabel} from 'react-bootstrap/lib';
+import { FormGroup, FormControl, Form, Col, ControlLabel } from 'react-bootstrap/lib';
 import { TYPES } from '../../../constants';
 
 export interface AddAttributeComponentProps {
@@ -99,7 +99,6 @@ export class AddNoteAttributeComponent extends React.Component<AddAttributeCompo
                         <Col componentClass={ControlLabel} sm={2}>
                             Type
                         </Col>
-                        <Col sm={4}>
 
                             {/*<DropdownButton*/}
                                 {/*onSelect={this.handleTypeChange}*/}
@@ -114,7 +113,6 @@ export class AddNoteAttributeComponent extends React.Component<AddAttributeCompo
                              {/*</DropdownButton>*/}
                             {this.createButtonTypes()}
 
-                        </Col>
                     </FormGroup>
                     <FormGroup>
                         <Col smOffset={2} sm={4}>
@@ -134,19 +132,14 @@ export class AddNoteAttributeComponent extends React.Component<AddAttributeCompo
     }
 
     createButtonTypes() {
-        let typesButton: JSX.Element[] = [];
-        TYPES.map(function(type: any) {
-            typesButton.push(
-                <Button
+        return TYPES.map(type =>
+                <button
                     className={'simpleAttrButton'}
                     id={type}
                     value={type}
-
+                    onClick={() => this.handleTypeChange(type)}
                 > {type.toString()}
-                </Button>
-            )
-        })
-        return typesButton;
-
+                </button>
+        );
     }
 }
