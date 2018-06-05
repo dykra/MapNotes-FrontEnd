@@ -23,12 +23,13 @@ export class HomeMenu extends React.Component<{}, HomeMenuState> {
         getAllMaps(maps => this.setState( { maps }));
     }
 
+    // TODO zawsze zapetla sie otweiranie mapy
     getLastMapUsed() {
         let mapId = localStorage.getItem(localStorageInfo);
-        console.log(mapId);
         if (mapId) {
-            if (this.isMapInCurrentState(mapId)) {
-                return mapId;
+            let parserMapID = JSON.parse(mapId);
+            if (this.isMapInCurrentState(parserMapID)) {
+                return parserMapID;
             }
         }
         return null;
@@ -39,9 +40,7 @@ export class HomeMenu extends React.Component<{}, HomeMenuState> {
     }
 
     renderMapsLinks() {
-        //TODO null is returned
         let lastMapID = this.getLastMapUsed();
-        console.log(lastMapID);
         if (lastMapID) {
             return(
                 <Redirect to={'/map/' + lastMapID}/>
