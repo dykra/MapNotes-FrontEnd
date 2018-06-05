@@ -14,6 +14,7 @@ export interface MarkerComponentProps {
     updateMapSettings: (mapSettings: MapSettings) => void;
     deletePin: (pin: PinData) => void;
     showTransportComponent: (index: any) => void;
+    showInLeftBar: (component: any) => void;
 }
 
 export interface MarkerComponentState {
@@ -59,6 +60,12 @@ export class MarkerComponent extends React.Component<MarkerComponentProps, Marke
         );
     }
 
+    handleMouseClick() {
+        this.setState({ isDetailOpen: true },
+            () => this.props.showInLeftBar(this.renderExtendNote())
+        );
+    }
+
     renderExtendNote() {
         return(
             <ExtendNoteComponent
@@ -66,7 +73,7 @@ export class MarkerComponent extends React.Component<MarkerComponentProps, Marke
                 mapData={this.props.mapData}
                 savePin={this.savePin}
                 updateMapSettings={this.props.updateMapSettings}
-                close={() => this.setState({isDetailOpen: false})}
+                showInLeftBar={this.props.showInLeftBar}
             />
         );
     }
@@ -86,7 +93,7 @@ export class MarkerComponent extends React.Component<MarkerComponentProps, Marke
 
     renderNote() {
         if (this.state.isDetailOpen) {
-            return this.renderExtendNote();
+            return this.renderSmallNote();
         }
         if (this.state.isMouseOver && !this.state.isDetailOpen) {
             return this.renderSmallNote();
@@ -103,7 +110,7 @@ export class MarkerComponent extends React.Component<MarkerComponentProps, Marke
                 position={position}
                 icon={iconURL}
                 label={this.props.index.toString()}
-                onClick={() => this.setState({isDetailOpen: true})}
+                onClick={() => this.handleMouseClick()}
                 onMouseOver={() => this.setState({isMouseOver: true})}
                 onMouseOut={() => this.setState({isMouseOver: false})}
                 onRightClick={() => this.props.showTransportComponent(this.props.index)}

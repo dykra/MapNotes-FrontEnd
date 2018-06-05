@@ -67,6 +67,7 @@ export interface MapContainerProps {
     deletePin: (pin: PinData) => void;
     directions: any;
     leftBar: any;
+    showInLeftBar: (component: any) => void;
 }
 
 export interface MapContainerState {
@@ -166,6 +167,7 @@ export class MapContainer extends React.Component<MapContainerProps, MapContaine
                     deletePin={() => this.setState({newPin: undefined})}
                     updateMapSettings={(mapSetting) => this.props.updateMapSettings(mapSetting)}
                     showTransportComponent={this.showTransportComponent}
+                    showInLeftBar={this.props.showInLeftBar}
                 />);
         }
         return null;
@@ -185,6 +187,7 @@ export class MapContainer extends React.Component<MapContainerProps, MapContaine
                     updateMapSettings={(mapSetting) => this.props.updateMapSettings(mapSetting)}
                     deletePin={this.props.deletePin}
                     showTransportComponent={this.showTransportComponent}
+                    showInLeftBar={this.props.showInLeftBar}
                 />);
             }
         );

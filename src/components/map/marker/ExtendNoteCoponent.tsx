@@ -9,7 +9,7 @@ export interface ExtendNoteComponentProps {
     mapData: MapSettings;
     savePin: (pin: PinData) => void;
     updateMapSettings: (mapSettings: MapSettings) => void;
-    close: () => void;
+    showInLeftBar: (component: any) => void;
 }
 
 export interface ExtendNoteState {
@@ -89,11 +89,11 @@ export class ExtendNoteComponent extends React.Component<ExtendNoteComponentProp
             return this.renderEditNote();
         }
         return (
-            <div className="OpenedLeftBar">
+            <div>
                 <div>
                     <Button
                         className="CloseLeftBarButton"
-                        onClick={this.props.close}
+                        onClick={() => this.props.showInLeftBar(undefined)}
                     >
                         Close
                     </Button>

@@ -22,6 +22,7 @@ export interface MapMenuState {
     filterPin?: PinData[];
     directions: any;
     leftBar: any;
+    leftBarComponentChild?: any;
 }
 
 export class MapMenu extends React.Component<RouteComponentProps<MapMenuProps>, MapMenuState> {
@@ -42,10 +43,17 @@ export class MapMenu extends React.Component<RouteComponentProps<MapMenuProps>, 
         this.addPin = this.addPin.bind(this);
         this.deleteMap = this.deleteMap.bind(this);
         this.updateMapSettings = this.updateMapSettings.bind(this);
+        this.showInLeftBar = this.showInLeftBar.bind(this);
     }
 
     componentWillMount() {
         getMapById(this.props.match.params.id, map => this.setState({ map }));
+    }
+
+    showInLeftBar(leftBarComponentChild: any) {
+        this.setState({
+            leftBarComponentChild
+        });
     }
 
     filter(filter: Filter) {
@@ -140,6 +148,8 @@ export class MapMenu extends React.Component<RouteComponentProps<MapMenuProps>, 
                         changePins={this.changePins}
                         deleteMap={this.deleteMap}
                         callbackOnRef={(ref: any) => (this.setState({ leftBar: ref}))}
+                        leftBarComponentChild={this.state.leftBarComponentChild}
+                        showInLeftBar={this.showInLeftBar}
                     />
                     <MapContainer
                         map={this.state.map}
@@ -150,6 +160,7 @@ export class MapMenu extends React.Component<RouteComponentProps<MapMenuProps>, 
                         directions={this.state.directions}
                         leftBar={this.state.leftBar}
                         updateMapSettings={this.updateMapSettings}
+                        showInLeftBar={this.showInLeftBar}
                     />
                 </div>
             );
