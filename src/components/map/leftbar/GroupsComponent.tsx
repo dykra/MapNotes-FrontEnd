@@ -27,15 +27,16 @@ export class GroupsComponent extends React.Component<GroupsComponentProps , Grou
     }
 
     showColors() {
-        this.setState({
+            this.setState({
                 visibleColors: true,
             });
+
     }
 
     hideColors() {
         this.setState({
-                visibleColors: false,
-            });
+            visibleColors: false,
+        });
     }
 
     handleColor(color: string) {
@@ -44,12 +45,10 @@ export class GroupsComponent extends React.Component<GroupsComponentProps , Grou
     }
 
     renderColorButtons() {
-        if (this.state.visibleColors) {
             return (
                 <div className="OpenedColors">
                     <Button onClick={this.hideColors}>Hide</Button>
                     <ButtonToolbar>
-                        <Button bsClass="redButton" onClick={() => this.handleColor('red')}>Red</Button>
                         <Button bsClass="pinkButton" onClick={() => this.handleColor('pink')}>Pink</Button>
                         <Button bsClass="greenButton" onClick={() => this.handleColor('green')}>Green</Button>
                         <Button bsClass="yellowButton" onClick={() => this.handleColor('yellow')}>Yellow</Button>
@@ -57,15 +56,29 @@ export class GroupsComponent extends React.Component<GroupsComponentProps , Grou
                     </ButtonToolbar>
                 </div>
             );
-        }
-        return null;
+    }
+
+    renderNewGroupButton() {
+        return(
+            <div className="groups">
+                <Button onClick={this.showColors}>New group</Button>
+            </div>
+        );
     }
 
     render() {
-        return (
-            <div className="groups">
+        if (!this.state.visibleColors) {
+            return (
+                <div>
+                    {this.renderNewGroupButton()}
+                </div>
+            );
+        }
+        return(
+            <div>
                 {this.renderColorButtons()}
-                <Button onClick={this.showColors}>New group</Button>
-            </div>);
+            </div>
+        );
+
     }
 }
