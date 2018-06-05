@@ -133,32 +133,27 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
     render() {
         return(
             <div>
-                "bla"
-                <Modal.Dialog>
-                    <Modal.Header>
-                        <Modal.Title>Edit note</Modal.Title>
-                    </Modal.Header>
+                <Modal.Title>Edit note</Modal.Title>
 
-                    {this.renderModalBody()}
+                {this.renderModalBody()}
 
-                    <Modal.Footer>
-                        <Button
-                            className="btn btn-secondary"
-                            onClick={() => this.setState({isAddNewAttrClick: true})}
-                        >
-                            Add new attribute
-                        </Button>
-                        <Button className="btn btn-secondary" onClick={this.props.close}>
-                            Close
-                        </Button>
-                        <Button
-                            className="btn btn-primary"
-                            onClick={() => this.props.savePin(this.state.pin)}
-                        >
-                            Save
-                        </Button>
-                    </Modal.Footer>
-                </Modal.Dialog>
+                <Modal.Footer>
+                    <Button
+                        className="btn btn-secondary"
+                        onClick={() => this.setState({isAddNewAttrClick: true})}
+                    >
+                        Add new attribute
+                    </Button>
+                    <Button className="btn btn-secondary" onClick={this.props.close}>
+                        Close
+                    </Button>
+                    <Button
+                        className="btn btn-primary"
+                        onClick={() => this.props.savePin(this.state.pin)}
+                    >
+                        Save
+                    </Button>
+                </Modal.Footer>
             </div>
         );
     }
