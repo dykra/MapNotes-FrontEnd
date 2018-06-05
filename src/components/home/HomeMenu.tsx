@@ -3,6 +3,8 @@ import Button from 'react-bootstrap/lib/Button';
 import { MapData } from '../../types/api/MapData';
 import { getAllMaps } from '../../api/MapApi';
 import { Link } from 'react-router-dom';
+import { Redirect } from 'react-router';
+import { localStorageInfo } from '../../constants';
 
 export interface HomeMenuState {
     maps: MapData[];
@@ -21,22 +23,46 @@ export class HomeMenu extends React.Component<{}, HomeMenuState> {
         getAllMaps(maps => this.setState( { maps }));
     }
 
+    getLastMapUsed() {
+        let mapId = localStorage.getItem(localStorageInfo);
+        console.log(mapId);
+        if (mapId) {
+            if (this.isMapInCurrentState(mapId)) {
+                return mapId;
+            }
+        }
+        return null;
+    }
+
+    isMapInCurrentState(mapID: any) {
+        return mapID in this.state.maps;
+    }
+
     renderMapsLinks() {
-        return(
-            <ul>
-                {this.state.maps.map(map => {
-                    const id = map.id;
-                    const link = `/map/${map.id}`;
-                    return (
-                        <li key={id}>
-                            <Link to={link}>
-                                {id}
-                            </Link>
-                        </li>);
-                    }
-                )}
-            </ul>
-        );
+        //TODO null is returned
+        let lastMapID = this.getLastMapUsed();
+        console.log(lastMapID);
+        if (lastMapID) {
+            return(
+                <Redirect to={'/map/' + lastMapID}/>
+            );
+        } else {
+            return(
+                <ul>
+                    {this.state.maps.map(map => {
+                        const id = map.id;
+                        const link = `/map/${map.id}`;
+                        return (
+                            <li key={id}>
+                                <Link to={link}>
+                                    {id}
+                                </Link>
+                            </li>);
+                        }
+                    )}
+                </ul>
+            );
+        }
     }
 
     render() {

@@ -12,6 +12,7 @@ import { PinData } from '../../types/api/PinData';
 import { Filter } from '../../types/filter/Filter';
 import { deletePin } from '../../api/PinApi';
 import { MapSettings } from '../../types/map/MapSettings';
+import { localStorageInfo } from '../../constants';
 
 export interface MapMenuProps {
     id: number;
@@ -44,6 +45,13 @@ export class MapMenu extends React.Component<RouteComponentProps<MapMenuProps>, 
         this.deleteMap = this.deleteMap.bind(this);
         this.updateMapSettings = this.updateMapSettings.bind(this);
         this.showInLeftBar = this.showInLeftBar.bind(this);
+
+        this.saveMapIdInLocalStorage();
+    }
+
+    saveMapIdInLocalStorage() {
+        localStorage.setItem(localStorageInfo, JSON.stringify(this.props.match.params.id));
+        console.log(JSON.stringify(this.props.match.params.id));
     }
 
     componentWillMount() {
