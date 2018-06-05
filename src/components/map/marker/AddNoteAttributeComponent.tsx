@@ -30,10 +30,10 @@ export class AddNoteAttributeComponent extends React.Component<AddAttributeCompo
     }
 
     handleTypeChange(type: string) {
-        this.setState({selected: type.toString()});
+        this.setState({selected: type});
     }
 
-    handleCheckbox(event: any) {
+    handleCheckbox() {
         this.setState({
             isDefault: !this.state.isDefault
         });
@@ -99,18 +99,6 @@ export class AddNoteAttributeComponent extends React.Component<AddAttributeCompo
                         <Col componentClass={ControlLabel} sm={2}>
                             Type
                         </Col>
-
-                            {/*<DropdownButton*/}
-                                {/*onSelect={this.handleTypeChange}*/}
-                                {/*title={this.state.selected}*/}
-                                {/*id="dropdown-size-medium"*/}
-                            {/*>*/}
-                                {/*onClick={this.onChangeAttributeValueInputForButtons}*/}
-                                {/*> {this.props.simpleAttr[i].name}*/}
-                                {/*<MenuItem key={type} eventKey={type.toString()}>*/}
-                                    {/*{type.toString()}*/}
-                                {/*</MenuItem>);*/}
-                             {/*</DropdownButton>*/}
                             {this.createButtonTypes()}
 
                     </FormGroup>
@@ -130,20 +118,30 @@ export class AddNoteAttributeComponent extends React.Component<AddAttributeCompo
             </div>
         );
     }
+    handleDisplayButton(type: string) {
+        return this.state.selected === type;
+    }
 
     createButtonTypes() {
-        return TYPES.map(type =>
-            (
-                <button
-                    className={'simpleAttrButton'}
-                    id={type}
-                    key={type}
-                    value={type}
-                    onClick={() => this.handleTypeChange(type)}
-                > {type.toString()}
-                </button>
-            )
+        let buttonTypes: JSX.Element[];
+        buttonTypes = [];
+
+        TYPES.map(type => {
+               buttonTypes.push(
+                    <Button
+                        className={'typeButton'}
+                        id={type}
+                        key={type}
+                        value={type}
+                        onClick={() => this.handleTypeChange(type)}
+                        active={this.handleDisplayButton(type)}
+
+                    > {type.toString()}
+                    </Button>
+                );
+            }
 
         );
+        return buttonTypes;
     }
 }
