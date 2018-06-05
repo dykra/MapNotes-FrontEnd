@@ -47,12 +47,12 @@ export class CreationMenu extends React.Component <any, CreationMenuState> {
         });
     }
 
-    handleSubmit(evt: any) {
+    handleSubmit(evt: any, inputs: BasicAttr[]) {
         evt.preventDefault();
         const pin: PinData[] = [];
 
         const map: MapData = {
-            data: {attributes: this.state.simpleAttr, complexAttributes: this.state.complexAttr},
+            data: {attributes: inputs, complexAttributes: this.state.complexAttr},
             id: 0,
             pins: pin
         };
