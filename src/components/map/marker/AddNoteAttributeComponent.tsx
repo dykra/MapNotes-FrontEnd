@@ -133,13 +133,17 @@ export class AddNoteAttributeComponent extends React.Component<AddAttributeCompo
 
     createButtonTypes() {
         return TYPES.map(type =>
+            (
                 <button
                     className={'simpleAttrButton'}
                     id={type}
+                    key={type}
                     value={type}
                     onClick={() => this.handleTypeChange(type)}
                 > {type.toString()}
                 </button>
+            )
+
         );
     }
 }
