@@ -138,6 +138,6 @@ export class AddNoteAttributeComponent extends React.Component<AddAttributeCompo
             }
 
         );
-        // return buttonTypes;
+        return buttonTypes;
     }
 }
