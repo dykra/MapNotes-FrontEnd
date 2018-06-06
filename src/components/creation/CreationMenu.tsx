@@ -5,13 +5,14 @@ import { PinData } from '../../types/api/PinData';
 import { putMap } from '../../api/MapApi';
 import ComplexAttribute from './ComplexAttribiute';
 import { BasicAttr } from '../../types/creation/BasicAttr';
+import { ComplexAttrType } from '../../types/creation/ComplexAttrType';
 
 interface CreationMenuState {
 
     isNewMapClicked: boolean;
     isOpen: boolean;
     complexAttrBox: boolean;
-    complexAttr: Array<ComplexAttribute>;
+    complexAttr: Array<ComplexAttrType>;
     simpleAttr:  BasicAttr[];
 }
 
@@ -46,12 +47,12 @@ export class CreationMenu extends React.Component <any, CreationMenuState> {
         });
     }
 
-    handleSubmit(evt: any) {
+    handleSubmit(evt: any, inputs: BasicAttr[]) {
         evt.preventDefault();
         const pin: PinData[] = [];
 
         const map: MapData = {
-            data: {attributes: this.state.simpleAttr},
+            data: {attributes: inputs, complexAttributes: this.state.complexAttr},
             id: 0,
             pins: pin
         };
@@ -104,12 +105,11 @@ export class CreationMenu extends React.Component <any, CreationMenuState> {
         });
     }
 
-    handleSaveComplexAttr(complexAt: Array<ComplexAttribute>) {
+    handleSaveComplexAttr(attr: Array<ComplexAttrType>) {
         this.setState({
-            complexAttr: complexAt,
+            complexAttr: attr,
             complexAttrBox: false
         });
-
     }
 
     handleBackToSimpleAttr() {
@@ -123,6 +123,7 @@ export class CreationMenu extends React.Component <any, CreationMenuState> {
         return (
         <ComplexAttribute
             simpleAttr={this.state.simpleAttr}
+            complexAttr={this.state.complexAttr}
             handleBackToSimpleAttr={this.handleBackToSimpleAttr}
             handleSaveComplexAttr={this.handleSaveComplexAttr}
         />

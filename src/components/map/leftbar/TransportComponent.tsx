@@ -9,6 +9,7 @@ import { PinData } from '../../../types/api/PinData';
 export interface TransportComponentProps {
     visiblePins: PinData[];
     showRoadBetweenMarkers: (result: any) => void;
+    onRef: any;
 }
 
 export interface TransportComponentState {
@@ -16,22 +17,36 @@ export interface TransportComponentState {
     directionsService: any;
     startDestination?: any;
     endDestination?: any;
+    currentDistance: any;
 }
 
 export class TransportComponent extends React.Component<TransportComponentProps, TransportComponentState> {
+
+    static getKilometersFromMeters(valueInMeters: number) {
+        return  valueInMeters / 1000;
+    }
 
     constructor(props: TransportComponentProps) {
         super(props);
 
         this.state = {
             directionsService: new google.maps.DirectionsService(),
-            travelMode: google.maps.TravelMode.DRIVING
+            travelMode: google.maps.TravelMode.DRIVING,
+            currentDistance: 0,
         };
 
         this.searchForTransport = this.searchForTransport.bind(this);
         this.removeTransport = this.removeTransport.bind(this);
         this.changeStartPoint = this.changeStartPoint.bind(this);
         this.changeEndPoint = this.changeEndPoint.bind(this);
+    }
+
+    componentDidMount() {
+        this.props.onRef(this);
+    }
+
+    componentWillUnmount() {
+        this.props.onRef(null);
     }
 
     searchForTransport() {
@@ -53,15 +68,16 @@ export class TransportComponent extends React.Component<TransportComponentProps,
                         console.log(`error fetching directions ${result}`);
                     }
                 });
+
+            const startDestination = new google.maps.LatLng(this.props.visiblePins[startPoint].data.position.lat,
+                this.props.visiblePins[startPoint].data.position.lng);
+            const endDestination =  new google.maps.LatLng(this.props.visiblePins[endPoint].data.position.lat,
+                this.props.visiblePins[endPoint].data.position.lng);
+            this.setState({
+                currentDistance:  TransportComponent.getKilometersFromMeters(
+                    google.maps.geometry.spherical.computeDistanceBetween(startDestination, endDestination)),
+            });
         }
-
-        // const startDestination = new google.maps.LatLng(this.props.visiblePins[startPoint].data.position.lat,
-        //     this.props.visiblePins[startPoint].data.position.lng);
-        // const endDestination =  new google.maps.LatLng(this.props.visiblePins[endPoint].data.position.lat,
-        //     this.props.visiblePins[endPoint].data.position.lng);
-        // this.references.currentDistance.value =
-        //     google.maps.geometry.spherical.computeDistanceBetween(startDestination, endDestination);
-
     }
 
     changeStartPoint(event: any) {
@@ -78,16 +94,10 @@ export class TransportComponent extends React.Component<TransportComponentProps,
 
     removeTransport() {
         this.props.showRoadBetweenMarkers(null);
-        // this.setCurrentDistance(0);
+        this.setState({
+           currentDistance: 0,
+        });
     }
-
-    // setCurrentDistance(distance: any) {
-    //     this.references.currentDistance.value = this.getKilometersFromMeters(distance) + 'km';
-    // }
-    //
-    // getKilometersFromMeters(valueInMeters: number) {
-    //     return  valueInMeters / 1000;
-    // }
 
     render() {
         return (
@@ -96,11 +106,11 @@ export class TransportComponent extends React.Component<TransportComponentProps,
                     <Col componentClass={ControlLabel} sm={8}>Select Destiantion</Col>
                     <Col sm={8}>
                         <FormControl
-                            placeholder={'Right click on marker to start ...'}
+                            placeholder={'Start destination index'}
                             onChange={this.changeStartPoint}
                         />
                         <FormControl
-                            placeholder="Enter index of final destination"
+                            placeholder={'End destination index'}
                             onChange={this.changeEndPoint}
                         />
                     </Col>
@@ -120,14 +130,9 @@ export class TransportComponent extends React.Component<TransportComponentProps,
                     >REMOVE PATH
                     </Button>
                 </FormGroup>
-                {/*<label>*/}
-                    {/*Distance:*/}
-                {/*<FormControl*/}
-                    {/*inputRef={(ref) => {this.references.currentDistance = ref; }}*/}
-                    {/*readOnly={true}*/}
-                    {/*onChange={this.setCurrentDistance}*/}
-                {/*/>*/}
-                {/*</label>*/}
+                <label>
+                    Distance: {this.state.currentDistance}
+                </label>
             </div>
         );
     }

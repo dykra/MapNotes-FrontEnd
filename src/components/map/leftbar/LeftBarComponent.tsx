@@ -15,6 +15,7 @@ export interface LeftBarComponentProps {
     visiblePins: PinData[];
     changePins: (pins: PinData[]) => void;
     deleteMap: () => void;
+    callbackOnRef: any;
 }
 
 export interface LeftBarState {
@@ -23,6 +24,9 @@ export interface LeftBarState {
 
 export class LeftBarComponent extends React.Component<LeftBarComponentProps, LeftBarState> {
 
+    references: {transportComponent: any; } =
+        {transportComponent: null};
+
     constructor(props: LeftBarComponentProps) {
         super(props);
         this.state = {
@@ -30,6 +34,14 @@ export class LeftBarComponent extends React.Component<LeftBarComponentProps, Lef
         };
         this.showLeftBar = this.showLeftBar.bind(this);
         this.hideLeftBar = this.hideLeftBar.bind(this);
+    }
+
+    componentDidMount() {
+        this.props.callbackOnRef(this);
+    }
+
+    componentWillUnmount() {
+        this.props.callbackOnRef(null);
     }
 
     showLeftBar() {
@@ -72,10 +84,13 @@ export class LeftBarComponent extends React.Component<LeftBarComponentProps, Lef
                            Home
                        </Button>
                    </Link>
+                   <div className={'TransportComponent'}>
                    <TransportComponent
+                       onRef={(ref: any) => (this.references.transportComponent = ref)}
                        showRoadBetweenMarkers={this.props.showRoadBetweenMarkers}
                        visiblePins={this.props.visiblePins}
                    />
+                   </div>
                    <FilterComponent
                        filter={this.props.filter}
                        removeFilter={this.props.removeFilter}

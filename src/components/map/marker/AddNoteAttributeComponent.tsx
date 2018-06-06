@@ -1,21 +1,21 @@
 import * as React from 'react';
-import { Button } from 'react-bootstrap';
+import { Button, Checkbox } from 'react-bootstrap';
 import { FormGroup, FormControl, Form, Col, ControlLabel,
     MenuItem, DropdownButton } from 'react-bootstrap/lib';
 import { TYPES } from '../../../constants';
 
 export interface AddAttributeComponentProps {
     cancel: () => void;
-    save: (name: string) => void;
+    save: (name: string, type: string, isDefault: boolean ) => void;
 }
 
 export interface AddAttributeComponentState {
-    selected: String;
+    selected: string;
     isDefault: boolean;
     name: string;
 }
 
-export class AddAttributeComponent extends React.Component<AddAttributeComponentProps, AddAttributeComponentState> {
+export class AddNoteAttributeComponent extends React.Component<AddAttributeComponentProps, AddAttributeComponentState> {
 
     constructor(props: any) {
         super(props);
@@ -43,7 +43,7 @@ export class AddAttributeComponent extends React.Component<AddAttributeComponent
 
     handleSave() {
         if (this.getValidationStateName() === 'success' && this.getValidationStateType() === 'success') {
-            this.props.save(this.state.name);
+            this.props.save(this.state.name, this.state.selected, this.state.isDefault);
         } else {
             alert('Fill out all mandatory fields');
         }
@@ -115,6 +115,12 @@ export class AddAttributeComponent extends React.Component<AddAttributeComponent
                                     })
                                 }
                             </DropdownButton>
+                        </Col>
+                    </FormGroup>
+                    <FormGroup>
+                        <Col smOffset={2} sm={4}>
+                           <Checkbox onClick={this.handleCheckbox} onSelect={this.handleCheckbox}>
+                                Add attribute as default</Checkbox>
                         </Col>
                     </FormGroup>
                 </Form>

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Button, Modal } from 'react-bootstrap';
-import { AddAttributeComponent } from './AddAttributeComponent';
+import { AddNoteAttributeComponent } from './AddNoteAttributeComponent';
 import Form from 'reactstrap/lib/Form';
 import * as FormGroup from 'react-bootstrap/lib/FormGroup';
 import Col from 'reactstrap/lib/Col';
@@ -12,11 +12,13 @@ export interface EditNoteComponentProps {
     pin: PinData;
     mapData: MapSettings;
     savePin: (pin: PinData) => void;
+    updateMapSettings: (mapSettings: MapSettings) => void;
     close: () => void;
 }
 
 export interface EditNoteComponentState {
     pin: PinData;
+    mapData: MapSettings;
     input: any;
     isAddNewAttrClick: boolean;
 }
@@ -26,16 +28,54 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
     constructor(props: any) {
         super(props);
         this.state = {
-            pin: this.props.pin,
+            mapData: this.props.mapData,
+            pin: this.handlePin(),
             input: '',
             isAddNewAttrClick: false
         };
         this.handleAddingNewAttribute = this.handleAddingNewAttribute.bind(this);
+        this.handlePin = this.handlePin.bind(this);
+
     }
 
-    handleAddingNewAttribute(name: string) {
+    checkIfAttributeAdded(name: string, pins: PinData) {
+        const pinAttrs = pins.data.attributes;
+        for (let i = 0; i < pinAttrs.length; i++) {
+            if (pinAttrs[i].name === name) {
+                return true;
+            }
+        }
+        return false;
+    }
+    handlePin() {
+
+        const pin = this.props.pin;
+        const defaultAttr = this.props.mapData.attributes;
+
+        if (pin.data.attributes.length === 0 ) {
+            for (let i = 0; i < defaultAttr.length; i++) {
+                pin.data.attributes.push({name: defaultAttr[i].name, type: defaultAttr[i].type, value: ''});
+            }
+        } else {
+            let i = defaultAttr.length - 1;
+            while (!this.checkIfAttributeAdded(defaultAttr[i].name, pin)) {
+                pin.data.attributes.push({name: defaultAttr[i].name, type: defaultAttr[i].type, value: ''});
+                i--;
+            }
+        }
+        return pin;
+
+    }
+
+    handleAddingNewAttribute(nameAttr: string, typeAttr: string, isDefault: boolean) {
         const pin = this.state.pin;
-        pin.data.attributes[name] = undefined;
+        if (isDefault) {
+            const mapAttr = this.state.mapData;
+            mapAttr.attributes.push({name: nameAttr, type: typeAttr});
+            this.props.updateMapSettings(mapAttr);
+
+        }
+        pin.data.attributes.push({name: nameAttr, type: typeAttr, value: ''});
         this.setState({
             pin,
             isAddNewAttrClick: false
@@ -45,7 +85,7 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
     renderAddAtributeNote() {
         if (this.state.isAddNewAttrClick) {
             return (
-                <AddAttributeComponent
+                <AddNoteAttributeComponent
                     cancel={() => this.setState({isAddNewAttrClick: false})}
                     save={this.handleAddingNewAttribute}
                 />
@@ -56,7 +96,7 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
 
     handleChange (key: any, event: any) {
         const pin = this.state.pin;
-        pin.data.attributes[key] = event.target.value;
+        pin.data.attributes[key].value = event.target.value;
         this.setState({pin});
     }
 
@@ -72,13 +112,13 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
                         {keys.map(key => (
                             <div key={key}>
                                 <Col sm={4}>
-                                    {key}
+                                    {attributes[key].name}
                                 </Col>
                                 <Col sm={8}>
                                     <FormControl
                                         onChange={(event) => this.handleChange(key, event)}
                                         placeholder="Enter a value"
-                                        value={attributes[key]}
+                                        value={attributes[key].value}
                                     />
                                 </Col>
                             </div>
@@ -110,7 +150,10 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
                         <Button className="btn btn-secondary" onClick={this.props.close}>
                             Close
                         </Button>
-                        <Button className="btn btn-primary" onClick={() => this.props.savePin(this.state.pin)}>
+                        <Button
+                            className="btn btn-primary"
+                            onClick={() => this.props.savePin(this.state.pin)}
+                        >
                             Save
                         </Button>
                     </Modal.Footer>
