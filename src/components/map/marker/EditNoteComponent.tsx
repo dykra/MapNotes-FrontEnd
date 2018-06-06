@@ -131,18 +131,10 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
     }
 
     cancelNewInputs() {
-        const pinAttr = this.state.pin.data.attributes;
         const pin = this.state.pin;
-        let loop = pinAttr.length;
-        for (let i = 0; i < loop; i++) {
-            if (pinAttr[i].value === '') {
-                pinAttr.slice(i, 1);
-                loop--;
-                i--;
-
-            }
-        }
-        pin.data.attributes = pinAttr;
+        pin.data.attributes = this.state.pin.data.attributes.filter((element) => {
+            return (element.value !== '');
+        });
         this.setState({
             pin,
             isAddNewAttrClick: false

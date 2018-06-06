@@ -48,21 +48,12 @@ export class CreationMenu extends React.Component <any, CreationMenuState> {
     }
 
     deleteEmptyInputs(inputs: BasicAttr[]) {
-        console.log(inputs);
-        let temp: BasicAttr[];
-        temp = [];
-        for ( let i = 0; i < inputs.length; i++) {
-            console.log('ENTER' + inputs[i].name + inputs[i].type + i);
-            if (inputs[i].name === '' || inputs[i].type === '') {
-                console.log('eloeoel');
-                inputs.splice(i, 1);
-
-            } else {
-                console.log('input' + i + inputs[i].name + inputs[i].type);
-                temp.push(inputs[i]);
+        return inputs.filter((elem) => {
+            if (elem.name !== '' && elem.type !== '') {
+                return elem;
             }
-        }
-        return temp;
+            return;
+        });
     }
 
     handleSubmit(evt: any, inputs: BasicAttr[]) {

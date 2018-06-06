@@ -9,7 +9,7 @@ export interface AddAttributeComponentProps {
 }
 
 export interface AddAttributeComponentState {
-    selected: string;
+    selectedType: string;
     isDefault: boolean;
     name: string;
 }
@@ -19,7 +19,7 @@ export class AddNoteAttributeComponent extends React.Component<AddAttributeCompo
     constructor(props: any) {
         super(props);
         this.state = {
-            selected: 'Choose type',
+            selectedType: 'Choose type',
             isDefault: false,
             name: ''
         };
@@ -29,8 +29,8 @@ export class AddNoteAttributeComponent extends React.Component<AddAttributeCompo
         this.handleSave = this.handleSave.bind(this);
     }
 
-    handleTypeChange(type: string) {
-        this.setState({selected: type});
+    handleTypeChange(selectedType: string) {
+        this.setState({selectedType});
     }
 
     handleCheckbox() {
@@ -42,7 +42,7 @@ export class AddNoteAttributeComponent extends React.Component<AddAttributeCompo
 
     handleSave() {
         if (this.getValidationStateName() === 'success' && this.getValidationStateType() === 'success') {
-            this.props.save(this.state.name, this.state.selected, this.state.isDefault);
+            this.props.save(this.state.name, this.state.selectedType, this.state.isDefault);
         } else {
             alert('Fill out all mandatory fields');
         }
@@ -65,7 +65,7 @@ export class AddNoteAttributeComponent extends React.Component<AddAttributeCompo
     }
 
     getValidationStateType() {
-        if (this.state.selected === 'Choose type') {
+        if (this.state.selectedType === 'Choose type') {
             return 'error';
         } else {
             return 'success';
@@ -100,7 +100,6 @@ export class AddNoteAttributeComponent extends React.Component<AddAttributeCompo
                             Type
                         </Col>
                             {this.createButtonTypes()}
-
                     </FormGroup>
                     <FormGroup>
                         <Col smOffset={2} sm={4}>
@@ -118,13 +117,10 @@ export class AddNoteAttributeComponent extends React.Component<AddAttributeCompo
             </div>
         );
     }
-    handleDisplayButton(type: string) {
-        return this.state.selected === type;
-    }
 
     createButtonTypes() {
-        let buttonTypes: JSX.Element[];
-        buttonTypes = [];
+        const buttonTypes: JSX.Element[] = [];
+        const isButtonChoose = (type: string) => {return (this.state.selectedType === type); } ;
 
         TYPES.map(type => {
                buttonTypes.push(
@@ -134,7 +130,7 @@ export class AddNoteAttributeComponent extends React.Component<AddAttributeCompo
                         key={type}
                         value={type}
                         onClick={() => this.handleTypeChange(type)}
-                        active={this.handleDisplayButton(type)}
+                        active={isButtonChoose(type)}
 
                     > {type.toString()}
                     </Button>
@@ -142,6 +138,6 @@ export class AddNoteAttributeComponent extends React.Component<AddAttributeCompo
             }
 
         );
-        return buttonTypes;
+        // return buttonTypes;
     }
 }
