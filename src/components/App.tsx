@@ -11,15 +11,16 @@ import { BrowserRouter as Router, Route } from 'react-router-dom';
 export class App extends React.Component<{}, {}> {
 
     render() {
-        return(
-            <Router>
-                <div className="container">
-                    <Route path="/map/:id" component={MapMenu} />
-                    <Route path="/create" component={CreationMenu}/>
-                    <Route exact={true} path="/" component={HomeMenu} />
-                </div>
-            </Router>
-        );
-    }
+            console.log('Jestem w APP');
+            return (
+                <Router>
+                    <div className="container">
+                        <Route path="/map/:id" component={MapMenu}/>
+                        <Route path="/create" component={CreationMenu}/>
+                        <Route exact={true} path="/" render={(props) => <HomeMenu {...props} isStartMenu={true} />} />
+                    </div>
+                </Router>
+            );
+        }
 
 }

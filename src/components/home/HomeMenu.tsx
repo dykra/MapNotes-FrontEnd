@@ -6,16 +6,21 @@ import { Link } from 'react-router-dom';
 import { Redirect } from 'react-router';
 import { localStorageInfo } from '../../constants';
 
+export interface HomeMenutProps {
+    isStartMenu: boolean;
+    location: any;
+}
+
 export interface HomeMenuState {
     maps: MapData[];
 }
 
-export class HomeMenu extends React.Component<{}, HomeMenuState> {
+export class HomeMenu extends React.Component<HomeMenutProps, HomeMenuState> {
 
-    constructor(props: {}) {
+    constructor(props: HomeMenutProps) {
         super(props);
         this.state = {
-            maps: []
+            maps: [],
         };
     }
 
@@ -23,13 +28,18 @@ export class HomeMenu extends React.Component<{}, HomeMenuState> {
         getAllMaps(maps => this.setState( { maps }));
     }
 
-    // TODO zawsze zapetla sie otweiranie mapy
     getLastMapUsed() {
-        let mapId = localStorage.getItem(localStorageInfo);
-        if (mapId) {
-            let parserMapID = JSON.parse(mapId);
-            if (this.isMapInCurrentState(parserMapID)) {
-                return parserMapID;
+        try {
+            let a = this.props.location.state.isStartMenu;
+            console.log(a);
+        } catch (e) {
+            let mapId = localStorage.getItem(localStorageInfo);
+
+            if (mapId) {
+                let parserMapID = JSON.parse(mapId);
+                if (this.isMapInCurrentState(parserMapID)) {
+                    return parserMapID;
+                }
             }
         }
         return null;
