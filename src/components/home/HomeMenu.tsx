@@ -7,7 +7,6 @@ import { Redirect } from 'react-router';
 import { localStorageInfo } from '../../constants';
 
 export interface HomeMenutProps {
-    isStartMenu: boolean;
     location: any;
 }
 
@@ -28,11 +27,18 @@ export class HomeMenu extends React.Component<HomeMenutProps, HomeMenuState> {
         getAllMaps(maps => this.setState( { maps }));
     }
 
-    getLastMapUsed() {
+    ifOpenStartMenu() {
         try {
             let a = this.props.location.state.isStartMenu;
             console.log(a);
         } catch (e) {
+            return true;
+        }
+        return false;
+    }
+
+    getLastMapUsed() {
+        if (this.ifOpenStartMenu()) {
             let mapId = localStorage.getItem(localStorageInfo);
 
             if (mapId) {
