@@ -2,10 +2,13 @@ import * as React from 'react';
 import MapAttr from './MapAttribute';
 import { MapData } from '../../types/api/MapData';
 import { PinData } from '../../types/api/PinData';
-import { putMap } from '../../api/MapApi';
 import ComplexAttribute from './ComplexAttribiute';
 import { BasicAttr } from '../../types/creation/BasicAttr';
 import { ComplexAttrType } from '../../types/creation/ComplexAttrType';
+import { FormulaLists } from '../../types/creation/FormulaLists';
+import _ from 'lodash';
+import { OPERATORS } from '../../constants/index';
+import { putMap } from '../../api/MapApi';
 
 interface CreationMenuState {
 
@@ -38,6 +41,9 @@ export class CreationMenu extends React.Component <any, CreationMenuState> {
         this.toggleModal = this.toggleModal.bind(this);
         this.getSimpleAttr = this.getSimpleAttr.bind(this);
         this.isArrayContains = this.isArrayContains.bind(this);
+        this.getAttrList = this.getAttrList.bind(this);
+        this.getOperatorList = this.getOperatorList.bind(this);
+        this.prepareComplexAttr = this.prepareComplexAttr.bind(this);
     }
 
     toggleModal() {
@@ -46,7 +52,6 @@ export class CreationMenu extends React.Component <any, CreationMenuState> {
             isNewMapClicked: !this.state.isNewMapClicked
         });
     }
-
     deleteEmptyInputs(inputs: BasicAttr[]) {
         return inputs.filter((elem) => {
             if (elem.name !== '' && elem.type !== '') {
@@ -56,17 +61,45 @@ export class CreationMenu extends React.Component <any, CreationMenuState> {
         });
     }
 
+    getAttrList(value: string) {
+        value = value.split(' ').join('');
+        let args = value.split(/\[|\]/ );
+        return _.filter(args, i => !_.includes(OPERATORS, i) && i !== '');
+    }
+
+    getOperatorList(value: string) {
+        value = value.split(' ').join('');
+        let args = value.split(/\[|\]/);
+        return _.filter(args, i => _.includes(OPERATORS, i));
+    }
+
+    prepareComplexAttr(complexAttributes: Array<ComplexAttrType>) {
+        let complexAttrMap: Map<string, FormulaLists> = new Map();
+        _.map(complexAttributes, i => complexAttrMap.set(
+            i.name,
+            {
+                'attrList': this.getAttrList(i.value),
+                'opList': this.getOperatorList(i.value)
+
+            }
+        ));
+        console.log(complexAttrMap);
+        return complexAttrMap;
+    }
+
     handleSubmit(evt: any, inputs: BasicAttr[]) {
         evt.preventDefault();
         const pin: PinData[] = [];
 
         const map: MapData = {
-            data: {attributes: this.deleteEmptyInputs(inputs), complexAttributes: this.state.complexAttr},
+            data: {
+                attributes: this.deleteEmptyInputs(inputs),
+                complexAttributes: this.prepareComplexAttr(this.state.complexAttr)
+            } ,
             id: 0,
             pins: pin
         };
         putMap(map, this.myCallback);
-
     }
 
     public myCallback(map: MapData): void {
