@@ -37,8 +37,16 @@ export class HomeMenu extends React.Component<HomeMenutProps, HomeMenuState> {
         return false;
     }
 
+    static canUseLocalStorage() {
+        let isNode = typeof module !== 'undefined';
+        if( !isNode ) {
+            return true;
+        }
+        return false;
+    }
+
     getLastMapUsed() {
-        if (this.ifOpenStartMenu()) {
+        if (HomeMenu.canUseLocalStorage() && this.ifOpenStartMenu()) {
             let mapId = localStorage.getItem(localStorageInfo);
 
             if (mapId) {
