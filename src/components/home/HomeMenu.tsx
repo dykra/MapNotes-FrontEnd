@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import { Redirect } from 'react-router';
 import { localStorageInfo } from '../../constants';
 
-export interface HomeMenutProps {
+export interface HomeMenuProps {
     location: any;
 }
 
@@ -14,9 +14,13 @@ export interface HomeMenuState {
     maps: MapData[];
 }
 
-export class HomeMenu extends React.Component<HomeMenutProps, HomeMenuState> {
+export class HomeMenu extends React.Component<HomeMenuProps, HomeMenuState> {
 
-    constructor(props: HomeMenutProps) {
+    static canUseLocalStorage() {
+        return typeof(Storage) !== 'undefined';
+    }
+
+    constructor(props: HomeMenuProps) {
         super(props);
         this.state = {
             maps: [],
@@ -32,14 +36,6 @@ export class HomeMenu extends React.Component<HomeMenutProps, HomeMenuState> {
             let a = this.props.location.state.isStartMenu;
             console.log(a);
         } catch (e) {
-            return true;
-        }
-        return false;
-    }
-
-    static canUseLocalStorage() {
-        let isNode = typeof module !== 'undefined';
-        if( !isNode ) {
             return true;
         }
         return false;

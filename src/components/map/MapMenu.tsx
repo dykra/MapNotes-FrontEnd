@@ -13,7 +13,7 @@ import { Filter } from '../../types/filter/Filter';
 import { deletePin } from '../../api/PinApi';
 import { MapSettings } from '../../types/map/MapSettings';
 import { localStorageInfo } from '../../constants';
-import {HomeMenu} from "../home/HomeMenu";
+import { HomeMenu } from '../home/HomeMenu';
 
 export interface MapMenuProps {
     id: number;
