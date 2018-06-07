@@ -79,7 +79,6 @@ export class MapContainer extends React.Component<MapContainerProps, MapContaine
 
     references: { map: any; searchBox: any; directionsService: any; } =
         {map: null, searchBox: null, directionsService: null};
-    // {map: null, searchBox: null, directionsService: null};
 
     constructor(props: MapContainerProps) {
         super(props);
