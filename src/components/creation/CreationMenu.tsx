@@ -82,7 +82,6 @@ export class CreationMenu extends React.Component <any, CreationMenuState> {
 
             }
         ));
-        console.log(complexAttrMap);
         return complexAttrMap;
     }
 
