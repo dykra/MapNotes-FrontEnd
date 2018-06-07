@@ -11,7 +11,6 @@ import { BrowserRouter as Router, Route } from 'react-router-dom';
 export class App extends React.Component<{}, {}> {
 
     render() {
-            console.log('Jestem w APP');
             return (
                 <Router>
                     <div className="container">
