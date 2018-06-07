@@ -159,7 +159,6 @@ export default class NewComplexAttribute extends React.Component<any, NewComplex
             newComplexAttrName: '',
             newComplexAttrValue: '',
         });
-        console.log('close ');
         this.props.handleCloseAddNewAttrBox();
     }
 
@@ -185,7 +184,6 @@ export default class NewComplexAttribute extends React.Component<any, NewComplex
                 'value': this.state.newComplexAttrValue
             };
             this.props.handleClickSaveOnComplexAttrButton(complexAttr);
-            console.log('save');
             this.handleClose();
         }
     }

@@ -62,7 +62,6 @@ export class CreationMenu extends React.Component <any, CreationMenuState> {
 
     getAttrList(value: string) {
         value = value.split(' ').join('');
-        console.log(value);
         let args = value.split(/\[|\]/ );
         return args.filter(i => !_.includes(OPERATORS, i) && i !== '');
     }
