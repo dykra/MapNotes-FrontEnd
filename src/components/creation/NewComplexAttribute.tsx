@@ -140,18 +140,17 @@ export default class NewComplexAttribute extends React.Component<any, NewComplex
     }
 
     createListOfButtonsWithOperands() {
-        let operatorButtons = [];
-        for ( let i = 0 ; i < OPERATORS.length ; i++ ) {
-            operatorButtons.push((
+        let operatorButtons: JSX.Element[] = [];
+        OPERATORS.map(operator =>
+            operatorButtons.push(
                 <Button
                     className={'simpleAttrButton'}
-                    id={OPERATORS[i]}
-                    value={OPERATORS[i]}
+                    id={operator}
+                    value={operator}
                     onClick={this.onChangeAttributeValueInputOperatorsForButtons}
-                > {OPERATORS[i]}
+                > {operator}
                 </Button>
             ));
-        }
         return operatorButtons;
     }
 
