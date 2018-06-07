@@ -132,8 +132,7 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
 
     render() {
         return(
-            <div>
-                "bla"
+            <div className="static-modal">
                 <Modal.Dialog>
                     <Modal.Header>
                         <Modal.Title>Edit note</Modal.Title>

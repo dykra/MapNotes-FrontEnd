@@ -16,8 +16,6 @@ export interface LeftBarComponentProps {
     changePins: (pins: PinData[]) => void;
     deleteMap: () => void;
     callbackOnRef: any;
-    showInLeftBar: (component: any) => void;
-    leftBarComponentChild?: any;
 }
 
 export interface LeftBarState {
@@ -60,55 +58,48 @@ export class LeftBarComponent extends React.Component<LeftBarComponentProps, Lef
     }
 
     render() {
-        if (this.props.leftBarComponentChild) {
+        if (this.state.visibleLeftBar) {
             return (
                 <div className="OpenedLeftBar">
-                    {this.props.leftBarComponentChild}
+                    <div>
+                        <Button
+                            className="CloseLeftBarButton"
+                            onClick={this.hideLeftBar}
+                        >
+                            hide BAR
+                        </Button>
+                    </div>
+                    <div>
+                        <Button
+                            className="DeleteMapButton"
+                            onClick={this.props.deleteMap}
+                        >
+                            Delete Map
+                        </Button>
+                    </div>
+                    <Link to={{ pathname: '/',  state: { isStartMenu: false }}}  >
+                        <Button
+                            className="HomeButton"
+                        >
+                            Home
+                        </Button>
+                    </Link>
+                    <div className={'TransportComponent'}>
+                        <TransportComponent
+                            onRef={(ref: any) => (this.references.transportComponent = ref)}
+                            showRoadBetweenMarkers={this.props.showRoadBetweenMarkers}
+                            visiblePins={this.props.visiblePins}
+                        />
+                    </div>
+                    <FilterComponent
+                        filter={this.props.filter}
+                        removeFilter={this.props.removeFilter}
+                    />
+                    <GroupsComponent
+                        changePins={this.props.changePins}
+                        visiblePins={this.props.visiblePins}
+                    />
                 </div>
-            );
-        }
-        if (this.state.visibleLeftBar) {
-           return (
-               <div className="OpenedLeftBar">
-                   <div>
-                       <Button
-                           className="CloseLeftBarButton"
-                           onClick={this.hideLeftBar}
-                       >
-                           hide BAR
-                       </Button>
-                   </div>
-                   <div>
-                       <Button
-                           className="DeleteMapButton"
-                           onClick={this.props.deleteMap}
-                       >
-                           Delete Map
-                       </Button>
-                   </div>
-                   <Link to={{ pathname: '/',  state: { isStartMenu: false }}}  >
-                       <Button
-                           className="HomeButton"
-                       >
-                           Home
-                       </Button>
-                   </Link>
-                   <div className={'TransportComponent'}>
-                   <TransportComponent
-                       onRef={(ref: any) => (this.references.transportComponent = ref)}
-                       showRoadBetweenMarkers={this.props.showRoadBetweenMarkers}
-                       visiblePins={this.props.visiblePins}
-                   />
-                   </div>
-                   <FilterComponent
-                       filter={this.props.filter}
-                       removeFilter={this.props.removeFilter}
-                   />
-                   <GroupsComponent
-                       changePins={this.props.changePins}
-                       visiblePins={this.props.visiblePins}
-                   />
-               </div>
             );
         }
         return (

@@ -67,7 +67,6 @@ export interface MapContainerProps {
     deletePin: (pin: PinData) => void;
     directions: any;
     leftBar: any;
-    showInLeftBar: (component: any) => void;
 }
 
 export interface MapContainerState {
@@ -80,7 +79,7 @@ export class MapContainer extends React.Component<MapContainerProps, MapContaine
 
     references: { map: any; searchBox: any; directionsService: any; } =
         {map: null, searchBox: null, directionsService: null};
-        // {map: null, searchBox: null, directionsService: null};
+    // {map: null, searchBox: null, directionsService: null};
 
     constructor(props: MapContainerProps) {
         super(props);
@@ -167,7 +166,6 @@ export class MapContainer extends React.Component<MapContainerProps, MapContaine
                     deletePin={() => this.setState({newPin: undefined})}
                     updateMapSettings={(mapSetting) => this.props.updateMapSettings(mapSetting)}
                     showTransportComponent={this.showTransportComponent}
-                    showInLeftBar={this.props.showInLeftBar}
                 />);
         }
         return null;
@@ -175,20 +173,19 @@ export class MapContainer extends React.Component<MapContainerProps, MapContaine
 
     renderMarkers() {
         const mapMarkers = this.props.visiblePins.map((pin: PinData, index: any) => {
-            return (
-                <MarkerComponent
-                    pin={pin}
-                    mapData={this.props.map.data}
-                    index={index}
-                    key={index}
-                    savePin={(savePin) => {
-                        this.props.changePins([savePin]);
-                    }}
-                    updateMapSettings={(mapSetting) => this.props.updateMapSettings(mapSetting)}
-                    deletePin={this.props.deletePin}
-                    showTransportComponent={this.showTransportComponent}
-                    showInLeftBar={this.props.showInLeftBar}
-                />);
+                return (
+                    <MarkerComponent
+                        pin={pin}
+                        mapData={this.props.map.data}
+                        index={index}
+                        key={index}
+                        savePin={(savePin) => {
+                            this.props.changePins([savePin]);
+                        }}
+                        updateMapSettings={(mapSetting) => this.props.updateMapSettings(mapSetting)}
+                        deletePin={this.props.deletePin}
+                        showTransportComponent={this.showTransportComponent}
+                    />);
             }
         );
         return(
