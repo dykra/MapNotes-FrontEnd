@@ -27,10 +27,9 @@ export class GroupsComponent extends React.Component<GroupsComponentProps , Grou
     }
 
     showColors() {
-            this.setState({
-                visibleColors: true,
-            });
-
+        this.setState({
+            visibleColors: true,
+        });
     }
 
     hideColors() {
@@ -40,15 +39,25 @@ export class GroupsComponent extends React.Component<GroupsComponentProps , Grou
     }
 
     handleColor(color: string) {
-        this.props.visiblePins.forEach(pin => pin.data.groupName = color);
+        console.log('visible pins');
+        console.log(this.props.visiblePins);
+        console.log('changed pins');
+        console.log(this.props.changePins);
+        this.props.visiblePins.forEach(pin => {
+            pin.data.groupName = color;
+                console.log(pin);
+            }
+        );
         this.props.changePins(this.props.visiblePins);
     }
 
     renderColorButtons() {
+        if (this.state.visibleColors) {
             return (
                 <div className="OpenedColors">
                     <Button onClick={this.hideColors}>Hide</Button>
                     <ButtonToolbar>
+                        <Button bsClass="redButton" onClick={() => this.handleColor('red')}>Red</Button>
                         <Button bsClass="pinkButton" onClick={() => this.handleColor('pink')}>Pink</Button>
                         <Button bsClass="greenButton" onClick={() => this.handleColor('green')}>Green</Button>
                         <Button bsClass="yellowButton" onClick={() => this.handleColor('yellow')}>Yellow</Button>
@@ -56,29 +65,15 @@ export class GroupsComponent extends React.Component<GroupsComponentProps , Grou
                     </ButtonToolbar>
                 </div>
             );
-    }
-
-    renderNewGroupButton() {
-        return(
-            <div className="groups">
-                <Button onClick={this.showColors}>New group</Button>
-            </div>
-        );
+        }
+        return null;
     }
 
     render() {
-        if (!this.state.visibleColors) {
-            return (
-                <div>
-                    {this.renderNewGroupButton()}
-                </div>
-            );
-        }
-        return(
-            <div>
+        return (
+            <div className="groups">
                 {this.renderColorButtons()}
-            </div>
-        );
-
+                <Button onClick={this.showColors}>New group</Button>
+            </div>);
     }
 }
