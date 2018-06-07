@@ -3,8 +3,9 @@ import { MapData } from '../../types/api/MapData';
 import { PinData } from '../../types/api/PinData';
 import { putMap } from '../../api/MapApi';
 import ComplexAttribute from './ComplexAttribiute';
-import { BasicAttr } from '../../types/creation/BasicAttr';
 import { ComplexAttrType } from '../../types/creation/ComplexAttrType';
+import SimpleAttribute from './SimpleAttribute';
+import { BasicAttrType } from '../../types/BasicAttrType';
 
 interface CreationMenuState {
 
@@ -12,7 +13,7 @@ interface CreationMenuState {
     isOpen: boolean;
     complexAttrBox: boolean;
     complexAttr: Array<ComplexAttrType>;
-    simpleAttr:  BasicAttr[];
+    simpleAttr:  BasicAttrType[];
 }
 
 export class CreationMenu extends React.Component <any, CreationMenuState> {
@@ -51,16 +52,6 @@ export class CreationMenu extends React.Component <any, CreationMenuState> {
         return this.props.history.push('/');
     }
 
-    handleSaveSimpleAttr(basicAttributes: Array<BasicAttr>) {
-        this.setState({
-            simpleAttr: basicAttributes
-        });
-        this.handleSubmit();
-        this.toggleModal();
-    }
-
-    handleSubmit() {
-    handleSubmit(evt: any) {
     getAttrList(value: string) {
         value = value.split(' ').join('');
         const args = value.split(/\[|\]/ );
@@ -86,15 +77,19 @@ export class CreationMenu extends React.Component <any, CreationMenuState> {
         return complexAttrMap;
     }
 
-    handleSubmit(evt: any, inputs: BasicAttr[]) {
-        evt.preventDefault();
+    handleSaveSimpleAttr(basicAttributes: Array<BasicAttr>) {
+        this.setState({
+            simpleAttr: basicAttributes
+        });
+        this.handleSubmit();
+        this.toggleModal();
+    }
+
+    handleSubmit() {
         const pin: PinData[] = [];
 
         const map: MapData = {
-            data: {
-                attributes: this.deleteEmptyInputs(inputs),
-                complexAttributes: this.prepareComplexAttr(this.state.complexAttr)
-            } ,
+            data: {attributes: this.deleteEmptyInputs(inputs), complexAttributes: this.state.complexAttr},
             id: 0,
             pins: pin
         };
@@ -106,7 +101,7 @@ export class CreationMenu extends React.Component <any, CreationMenuState> {
         return this.props.history.push(path);
     }
 
-    handleAddComplexAttr(simpleAttr: Array<BasicAttr>) {
+    handleAddComplexAttr(simpleAttr: Array<BasicAttrType>) {
         this.toggleModal();
         this.setState({
             simpleAttr: simpleAttr,

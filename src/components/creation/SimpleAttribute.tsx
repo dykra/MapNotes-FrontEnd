@@ -2,10 +2,11 @@ import * as React from 'react';
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import * as Button from 'react-bootstrap/lib/Button';
-import { SimpleAttrType } from '../../types/SimpleAttrType';
+import { SimpleAttrType } from '../../types/creation/SimpleAttrType';
 import * as Modal from 'react-bootstrap/lib/Modal';
 import _ from 'lodash';
 import { ComplexAttrType } from '../../types/creation/ComplexAttrType';
+import { BasicAttrType } from '../../types/BasicAttrType';
 
 interface SimpleAttributeState {
     simpleAttributes: Array<SimpleAttrType>;
@@ -16,7 +17,7 @@ interface SimpleAttributeState {
 export default class SimpleAttribute extends React.Component<any, SimpleAttributeState> {
 
     counter = 0;
-    getSimpleAttr(simpleAttr: Array<BasicAtrrType>) {
+    getSimpleAttr(simpleAttr: Array<BasicAttrType>) {
         let simpleAttrWithIndex: Array<SimpleAttrType> = [];
         if (simpleAttr.length > 0 ) {
             simpleAttrWithIndex = _.map(simpleAttr, (attr) => {
@@ -27,16 +28,16 @@ export default class SimpleAttribute extends React.Component<any, SimpleAttribut
                     'type': attr.type
                 };
             });
-        } else {
-            simpleAttrWithIndex = _.map( [1, 2, 3, 4], i => {
-                this.counter++;
-                return {
+        }
+        _.map( [1, 2, 3, 4], i => {
+            this.counter++;
+                simpleAttrWithIndex.push({
                     'id': this.counter,
                     'name': '',
                     'type': ''
-                };
+                });
             });
-        }
+
     return simpleAttrWithIndex;
     }
 
@@ -65,7 +66,7 @@ export default class SimpleAttribute extends React.Component<any, SimpleAttribut
     prepareBasicAttr() {
         let simpleAttr: Array<SimpleAttrType> = _.filter(this.state.simpleAttributes,
             (attr) => attr.name !== '' && attr.type !== '');
-        let basicAttr: Array<BasicAtrrType>  = _.map(simpleAttr, (attr) => {
+        let basicAttr: Array<BasicAttrType>  = _.map(simpleAttr, (attr) => {
             return {
                 'name': attr.name,
                 'type': attr.type
