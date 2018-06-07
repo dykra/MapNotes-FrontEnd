@@ -32,7 +32,7 @@ export class HomeMenu extends React.Component<HomeMenuProps, HomeMenuState> {
         getAllMaps(maps => this.setState( { maps }));
     }
 
-    ifOpenStartMenu() {
+    openStartMenu() {
         try {
             let a = this.props.location.state.isStartMenu;
             console.log(a);
@@ -43,21 +43,14 @@ export class HomeMenu extends React.Component<HomeMenuProps, HomeMenuState> {
     }
 
     getLastMapUsed() {
-        if (HomeMenu.canUseLocalStorage() && this.ifOpenStartMenu()) {
+        if (HomeMenu.canUseLocalStorage() && this.openStartMenu()) {
             let mapId = localStorage.getItem(localStorageInfo);
-
             if (mapId) {
                 let parserMapID = JSON.parse(mapId);
-                if (this.isMapInCurrentState(parserMapID)) {
-                    return parserMapID;
-                }
+                return parserMapID;
             }
         }
         return null;
-    }
-
-    isMapInCurrentState(mapID: any) {
-        return mapID in this.state.maps;
     }
 
     renderMapsLinks() {
