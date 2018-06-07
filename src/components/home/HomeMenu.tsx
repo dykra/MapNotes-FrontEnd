@@ -5,9 +5,10 @@ import { getAllMaps } from '../../api/MapApi';
 import { Link } from 'react-router-dom';
 import { Redirect } from 'react-router';
 import { localStorageInfo } from '../../constants';
+import { StartMenuProps } from '../../types/map/StartMenuProps';
 
 export interface HomeMenuProps {
-    location: any;
+    location: StartMenuProps;
 }
 
 export interface HomeMenuState {
