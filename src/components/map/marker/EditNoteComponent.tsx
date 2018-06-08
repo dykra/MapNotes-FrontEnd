@@ -7,7 +7,6 @@ import Col from 'reactstrap/lib/Col';
 import * as FormControl from 'react-bootstrap/lib/FormControl';
 import { MapSettings } from '../../../types/map/MapSettings';
 import { PinData } from '../../../types/api/PinData';
-// import { getPinById } from '../../../api/PinApi';
 
 export interface EditNoteComponentProps {
     pin: PinData;
