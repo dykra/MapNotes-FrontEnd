@@ -34,7 +34,6 @@ export class MarkerComponent extends React.Component<MarkerComponentProps, Marke
     }
 
     savePin(pin: PinData) {
-
         this.setState(
             () => this.props.savePin(pin)
         );
@@ -81,7 +80,7 @@ export class MarkerComponent extends React.Component<MarkerComponentProps, Marke
 
     renderSmallNote() {
         return(
-            <InfoWindow >
+            <InfoWindow onCloseClick={() => this.setState({isDetailOpen: false})}>
                 <div>
                     <b>
                         Pin note
@@ -93,10 +92,7 @@ export class MarkerComponent extends React.Component<MarkerComponentProps, Marke
     }
 
     renderNote() {
-        if (this.state.isDetailOpen) {
-            return this.renderSmallNote();
-        }
-        if (this.state.isMouseOver && !this.state.isDetailOpen) {
+        if (this.state.isDetailOpen || this.state.isMouseOver ) {
             return this.renderSmallNote();
         }
         return null;
