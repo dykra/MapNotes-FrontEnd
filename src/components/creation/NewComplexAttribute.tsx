@@ -125,7 +125,7 @@ export default class NewComplexAttribute extends React.Component<any, NewComplex
         for (let i = 0; i < this.props.simpleAttr.length; i++) {
             if (this.props.simpleAttr[i].type === 'pln' || this.props.simpleAttr[i].type === 'm^2'
                 || this.props.simpleAttr[i].type === 'number') {
-                simpleAttButtons.push((
+                simpleAttButtons.push(
                     <Button
                         className={'simpleAttrButton'}
                         id={this.props.simpleAttr[i].name}
@@ -133,25 +133,22 @@ export default class NewComplexAttribute extends React.Component<any, NewComplex
                         onClick={this.onChangeAttributeValueInputForButtons}
                     > {this.props.simpleAttr[i].name}
                     </Button>
-                ));
+                );
             }
         }
         return simpleAttButtons;
     }
 
     createListOfButtonsWithOperands() {
-        let operatorButtons: JSX.Element[] = [];
-        OPERATORS.map(operator =>
-            operatorButtons.push(
-                <Button
-                    className={'simpleAttrButton'}
-                    id={operator}
-                    value={operator}
-                    onClick={this.onChangeAttributeValueInputOperatorsForButtons}
-                > {operator}
-                </Button>
-            ));
-        return operatorButtons;
+        return OPERATORS.map(operator => (
+            <Button
+                className={'simpleAttrButton'}
+                id={operator}
+                value={operator}
+                onClick={this.onChangeAttributeValueInputOperatorsForButtons}
+            > {operator}
+            </Button>
+        ));
     }
 
     handleClose() {

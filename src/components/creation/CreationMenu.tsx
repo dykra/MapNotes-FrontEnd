@@ -41,8 +41,6 @@ export class CreationMenu extends React.Component <any, CreationMenuState> {
         this.toggleModal = this.toggleModal.bind(this);
         this.getSimpleAttr = this.getSimpleAttr.bind(this);
         this.isArrayContains = this.isArrayContains.bind(this);
-        this.getOperatorList = this.getOperatorList.bind(this);
-        this.prepareComplexAttr = this.prepareComplexAttr.bind(this);
     }
 
     toggleModal() {
@@ -62,18 +60,18 @@ export class CreationMenu extends React.Component <any, CreationMenuState> {
 
     getAttrList(value: string) {
         value = value.split(' ').join('');
-        let args = value.split(/\[|\]/ );
+        const args = value.split(/\[|\]/ );
         return args.filter(i => !_.includes(OPERATORS, i) && i !== '');
     }
 
     getOperatorList(value: string) {
         value = value.split(' ').join('');
-        let args = value.split(/\[|\]/);
+        const args = value.split(/\[|\]/);
         return args.filter(i => _.includes(OPERATORS, i));
     }
 
     prepareComplexAttr(complexAttributes: Array<ComplexAttrType>) {
-        let complexAttrMap: Map<string, FormulaLists> = new Map();
+        const complexAttrMap: Map<string, FormulaLists> = new Map();
         complexAttributes.map(i => complexAttrMap.set(
             i.name,
             {
