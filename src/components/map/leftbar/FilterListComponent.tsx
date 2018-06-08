@@ -11,8 +11,7 @@ export interface FilterListComponentProps {
 }
 
 export interface FilterListComponentState {
-    pins: String[];
-    pinIdPrinted: number;
+    pinIdPrinted: any;
     buttonClicked: boolean;
     attributes: PinAttr[];
 }
@@ -22,7 +21,6 @@ export class FilterListComponent extends React.Component<FilterListComponentProp
         super(props);
 
         this.state = {
-            pins: ['pin1', 'pin2', 'pin3'],
             pinIdPrinted: 0, // TODO - co tu wpisac??
             buttonClicked: false,
             attributes: [],
@@ -32,7 +30,7 @@ export class FilterListComponent extends React.Component<FilterListComponentProp
 
     }
 
-    handleClick(id: number) {
+    handleClick(id: any) {
         if (!this.state.buttonClicked) {
             this.setState({buttonClicked: true});
             this.setState({pinIdPrinted: id});
@@ -46,7 +44,7 @@ export class FilterListComponent extends React.Component<FilterListComponentProp
         this.setState({attributes: pin.data.attributes});
     }
 
-    renderNote(id: number) {
+    renderNote(id: any) {
         if (this.state.buttonClicked && id === this.state.pinIdPrinted) {
             getPinById(this.state.pinIdPrinted, this.getPinCallback);
             return this.state.attributes.map(e =>
@@ -64,12 +62,12 @@ export class FilterListComponent extends React.Component<FilterListComponentProp
 
     renderList() {
         return (
-            <ul>
-                {this.state.pins.map((pins, i) => {
-                        const id = i;
+            <ul className="pins">
+                {this.props.visiblePins.map((pins) => {
+                        const id = pins.id;
                         return (
                             <li key={id}>
-                                <Button onClick={() => this.handleClick(i)}>
+                                <Button onClick={() => this.handleClick(id)}>
                                     Pin {id}
                                 </Button>
                                 {this.renderNote(id)}
