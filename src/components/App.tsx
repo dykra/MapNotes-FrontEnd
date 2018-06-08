@@ -16,9 +16,10 @@ export class App extends React.Component<{}, {}> {
                 <div className="container">
                     <Route path="/map/:id" component={MapMenu}/>
                     <Route path="/create" component={CreationMenu}/>
-                    <Route exact={true}
-                           path="/"
-                           render={(props) => <HomeMenu {...props} location={{state: { isStartMenu: true}}}/>}
+                    <Route
+                        exact={true}
+                        path="/"
+                        render={(props) => <HomeMenu {...props} location={{state: { isStartMenu: true}}}/>}
                     />
                 </div>
             </Router>
