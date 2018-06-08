@@ -18,6 +18,7 @@ export interface LeftBarComponentProps {
     callbackOnRef: any;
     showInLeftBar: (component: any) => void;
     leftBarComponentChild?: any;
+    showAnimation: (id: number) => void;
 }
 
 export interface LeftBarState {
@@ -107,6 +108,8 @@ export class LeftBarComponent extends React.Component<LeftBarComponentProps, Lef
                    <FilterListComponent
                        changePins={this.props.changePins}
                        visiblePins={this.props.visiblePins}
+                       animatedId={-1}
+                       showAnimation={this.props.showAnimation}
                    />
                    <GroupsComponent
                        changePins={this.props.changePins}

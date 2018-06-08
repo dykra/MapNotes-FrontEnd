@@ -23,6 +23,7 @@ export interface MapMenuState {
     directions: any;
     leftBar: any;
     leftBarComponentChild?: any;
+    animatedId: any;
 }
 
 export class MapMenu extends React.Component<RouteComponentProps<MapMenuProps>, MapMenuState> {
@@ -33,6 +34,7 @@ export class MapMenu extends React.Component<RouteComponentProps<MapMenuProps>, 
         this.state = {
             directions : null,
             leftBar: null,
+            animatedId: -1,
         };
 
         this.filter = this.filter.bind(this);
@@ -44,6 +46,7 @@ export class MapMenu extends React.Component<RouteComponentProps<MapMenuProps>, 
         this.deleteMap = this.deleteMap.bind(this);
         this.updateMapSettings = this.updateMapSettings.bind(this);
         this.showInLeftBar = this.showInLeftBar.bind(this);
+        this.animatePin = this.animatePin.bind(this);
     }
 
     componentWillMount() {
@@ -131,6 +134,14 @@ export class MapMenu extends React.Component<RouteComponentProps<MapMenuProps>, 
         });
     }
 
+    animatePin(id: number) {
+        console.log('jestem w animatePin w MapMenu, id pinezki to');
+        console.log(id);
+        this.setState({
+            animatedId: id
+        });
+    }
+
     removeFilter() {
         this.setState({filterPin: undefined});
     }
@@ -150,6 +161,7 @@ export class MapMenu extends React.Component<RouteComponentProps<MapMenuProps>, 
                         callbackOnRef={(ref: any) => (this.setState({ leftBar: ref}))}
                         leftBarComponentChild={this.state.leftBarComponentChild}
                         showInLeftBar={this.showInLeftBar}
+                        showAnimation={this.animatePin}
                     />
                     <MapContainer
                         map={this.state.map}
@@ -161,6 +173,7 @@ export class MapMenu extends React.Component<RouteComponentProps<MapMenuProps>, 
                         leftBar={this.state.leftBar}
                         updateMapSettings={this.updateMapSettings}
                         showInLeftBar={this.showInLeftBar}
+                        animatedId={this.state.animatedId}
                     />
                 </div>
             );

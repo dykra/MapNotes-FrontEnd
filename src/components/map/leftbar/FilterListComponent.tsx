@@ -8,6 +8,8 @@ import { PinAttr } from '../../../types/creation/PinAttr';
 export interface FilterListComponentProps {
     visiblePins: PinData[];
     changePins: (pins: PinData[]) => void;
+    animatedId: number;
+    showAnimation: (id: any) => void;
 }
 
 export interface FilterListComponentState {
@@ -27,23 +29,23 @@ export class FilterListComponent extends React.Component<FilterListComponentProp
             buttonClicked: false,
             attributes: [],
         };
-
         this.getPinCallback = this.getPinCallback.bind(this);
-
     }
 
     handleClick(id: number) {
         if (!this.state.buttonClicked) {
             this.setState({buttonClicked: true});
             this.setState({pinIdPrinted: id});
-
         } else {
             this.setState({buttonClicked: false});
+            this.setState({pinIdPrinted: -1});
+            this.props.showAnimation(-1);
         }
     }
 
     getPinCallback(pin: PinData) {
         this.setState({attributes: pin.data.attributes});
+        this.props.showAnimation(pin.id);
     }
 
     renderNote(id: number) {

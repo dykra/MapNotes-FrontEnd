@@ -68,6 +68,7 @@ export interface MapContainerProps {
     directions: any;
     leftBar: any;
     showInLeftBar: (component: any) => void;
+    animatedId: number;
 }
 
 export interface MapContainerState {
@@ -168,6 +169,7 @@ export class MapContainer extends React.Component<MapContainerProps, MapContaine
                     updateMapSettings={(mapSetting) => this.props.updateMapSettings(mapSetting)}
                     showTransportComponent={this.showTransportComponent}
                     showInLeftBar={this.props.showInLeftBar}
+                    animatedId={1}
                 />);
         }
         return null;
@@ -188,6 +190,7 @@ export class MapContainer extends React.Component<MapContainerProps, MapContaine
                     deletePin={this.props.deletePin}
                     showTransportComponent={this.showTransportComponent}
                     showInLeftBar={this.props.showInLeftBar}
+                    animatedId={this.props.animatedId}
                 />);
             }
         );

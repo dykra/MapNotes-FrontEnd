@@ -15,6 +15,7 @@ export interface MarkerComponentProps {
     deletePin: (pin: PinData) => void;
     showTransportComponent: (index: any) => void;
     showInLeftBar: (component: any) => void;
+    animatedId: number;
 }
 
 export interface MarkerComponentState {
@@ -101,6 +102,44 @@ export class MarkerComponent extends React.Component<MarkerComponentProps, Marke
         return null;
     }
 
+    animation() {
+        console.log('jestem w animation w markercomponent, id pinezki to');
+        console.log(this.props.animatedId);
+        console.log(this.props.index);
+        const position = this.props.pin.data.position;
+        const iconURL = BASE_ICON_URL + this.props.pin.data.groupName + '.png';
+        if (this.props.animatedId === this.props.index) {
+            return(
+                    <Marker
+                        key={this.props.index}
+                        position={position}
+                        icon={iconURL}
+                        label={this.props.index.toString()}
+                        onClick={() => this.handleMouseClick()}
+                        onMouseOver={() => this.setState({isMouseOver: true})}
+                        onMouseOut={() => this.setState({isMouseOver: false})}
+                        onRightClick={() => this.props.showTransportComponent(this.props.index)}
+                        animation={google.maps.Animation.BOUNCE}
+                    />
+                );
+        } else if (this.props.animatedId === -1) {
+            return(
+                <Marker
+                    key={this.props.index}
+                    position={position}
+                    icon={iconURL}
+                    label={this.props.index.toString()}
+                    onClick={() => this.handleMouseClick()}
+                    onMouseOver={() => this.setState({isMouseOver: true})}
+                    onMouseOut={() => this.setState({isMouseOver: false})}
+                    onRightClick={() => this.props.showTransportComponent(this.props.index)}
+                />
+            );
+        }
+        return null;
+
+    }
+
     render() {
         const position = this.props.pin.data.position;
         const iconURL = BASE_ICON_URL + this.props.pin.data.groupName + '.png';
@@ -115,6 +154,7 @@ export class MarkerComponent extends React.Component<MarkerComponentProps, Marke
                 onMouseOut={() => this.setState({isMouseOver: false})}
                 onRightClick={() => this.props.showTransportComponent(this.props.index)}
             >
+                {this.animation()}
                 {this.renderNote()}
             </Marker>
         );
