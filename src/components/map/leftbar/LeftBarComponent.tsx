@@ -4,7 +4,7 @@ import { TransportComponent } from './TransportComponent';
 import { GroupsComponent } from './GroupsComponent';
 
 import FilterComponent from './FilterComponent';
-import FilterListComponent from './FilterListComponent';
+// import FilterListComponent from './FilterListComponent';
 import { Filter } from '../../../types/filter/Filter';
 import { PinData } from '../../../types/api/PinData';
 import { Link } from 'react-router-dom';
@@ -109,7 +109,7 @@ export class LeftBarComponent extends React.Component<LeftBarComponentProps, Lef
                        changePins={this.props.changePins}
                        visiblePins={this.props.visiblePins}
                    />
-                   <FilterListComponent/>
+                   {/*<FilterListComponent/>*/}
                </div>
             );
         }
