@@ -7,6 +7,7 @@ import { CreationMenu } from './creation/CreationMenu';
 import { MapMenu } from './map/MapMenu';
 import { HomeMenu } from './home/HomeMenu';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { ChooseRouterPathComponent } from './creation/ChooseRouterPathComponent';
 
 export class App extends React.Component<{}, {}> {
 
@@ -16,11 +17,8 @@ export class App extends React.Component<{}, {}> {
                 <div className="container">
                     <Route path="/map/:id" component={MapMenu}/>
                     <Route path="/create" component={CreationMenu}/>
-                    <Route
-                        exact={true}
-                        path="/"
-                        render={(props) => <HomeMenu {...props} location={{state: { isStartMenu: true}}}/>}
-                    />
+                    <Route path="/home" component={HomeMenu}/>
+                    <Route exact={true} path="/" component={ChooseRouterPathComponent}/>
                 </div>
             </Router>
         );

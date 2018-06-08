@@ -12,6 +12,8 @@ import { PinData } from '../../types/api/PinData';
 import { Filter } from '../../types/filter/Filter';
 import { deletePin } from '../../api/PinApi';
 import { MapSettings } from '../../types/map/MapSettings';
+import { updateLocalStorageInfo } from '../../utils/localStorage/localStorageUtils';
+import { LOCAL_STORAGE_INFO } from '../../constants';
 
 export interface MapMenuProps {
     id: number;
@@ -46,6 +48,7 @@ export class MapMenu extends React.Component<RouteComponentProps<MapMenuProps>, 
 
     componentWillMount() {
         getMapById(this.props.match.params.id, map => this.setState({ map }));
+        updateLocalStorageInfo(LOCAL_STORAGE_INFO, JSON.stringify(this.props.match.params.id));
     }
 
     filter(filter: Filter) {
