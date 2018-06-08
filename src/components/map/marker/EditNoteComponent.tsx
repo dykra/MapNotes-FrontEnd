@@ -157,13 +157,13 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
                         Add new attribute
                     </Button>
                     <Button
-                            className="btn btn-secondary"
-                            onClick={() => {
-                                this.cancelNewInputs();
-                                this.props.close();
-                            }}
-                        >
-                            Close
+                        className="btn btn-secondary"
+                        onClick={() => {
+                            this.cancelNewInputs();
+                            this.props.close();
+                        }}
+                    >
+                        Close
                     </Button>
                     <Button
                         className="btn btn-primary"

@@ -74,6 +74,7 @@ export class MarkerComponent extends React.Component<MarkerComponentProps, Marke
                 savePin={this.savePin}
                 updateMapSettings={this.props.updateMapSettings}
                 showInLeftBar={this.props.showInLeftBar}
+                deletePin={this.props.deletePin}
             />
         );
     }

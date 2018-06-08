@@ -10,22 +10,18 @@ export interface ExtendNoteComponentProps {
     savePin: (pin: PinData) => void;
     updateMapSettings: (mapSettings: MapSettings) => void;
     showInLeftBar: (component: any) => void;
+    deletePin: (pin: PinData) => void;
 }
 
 export interface ExtendNoteState {
-    visibleLeftBar: boolean;
     isEditMode: boolean;
 }
 
 export class ExtendNoteComponent extends React.Component<ExtendNoteComponentProps, ExtendNoteState> {
 
-    references: {transportComponent: any; } =
-        {transportComponent: null};
-
     constructor(props: ExtendNoteComponentProps) {
         super(props);
         this.state = {
-            visibleLeftBar: false,
             isEditMode: false,
         };
         this.savePin = this.savePin.bind(this);
@@ -39,22 +35,8 @@ export class ExtendNoteComponent extends React.Component<ExtendNoteComponentProp
         );
     }
 
-    showLeftBar() {
-        this.setState(
-            {
-                visibleLeftBar: true,
-            });
-    }
-
-    hideLeftBar() {
-        this.setState({
-            visibleLeftBar: false
-        });
-    }
-
     renderPinAttributes() {
 
-        console.log('Map data attributes', this.props.mapData.attributes);
         const attributes = this.props.pin.data.attributes;
 
         return attributes.map(e =>
@@ -108,9 +90,9 @@ export class ExtendNoteComponent extends React.Component<ExtendNoteComponentProp
                     >
                         Save
                     </Button>
-                    {/*<Button className="btn btn-danger" onClick={() => this.props.deletePin(this.props.pin)}>*/}
-                        {/*Delete*/}
-                    {/*</Button>*/}
+                    <Button className="btn btn-danger" onClick={() => this.props.deletePin(this.props.pin)}>
+                        Delete
+                    </Button>
                 </div>
             </div>
         );
