@@ -6,6 +6,9 @@ import ComplexAttribute from './ComplexAttribiute';
 import { ComplexAttrType } from '../../types/creation/ComplexAttrType';
 import SimpleAttribute from './SimpleAttribute';
 import { BasicAttrType } from '../../types/BasicAttrType';
+import { OPERATORS } from '../../constants/index';
+import { FormulaLists } from '../../types/creation/FormulaLists';
+import _ from 'lodash';
 
 interface CreationMenuState {
 
@@ -77,7 +80,7 @@ export class CreationMenu extends React.Component <any, CreationMenuState> {
         return complexAttrMap;
     }
 
-    handleSaveSimpleAttr(basicAttributes: Array<BasicAttr>) {
+    handleSaveSimpleAttr(basicAttributes: Array<BasicAttrType>) {
         this.setState({
             simpleAttr: basicAttributes
         });
@@ -89,7 +92,10 @@ export class CreationMenu extends React.Component <any, CreationMenuState> {
         const pin: PinData[] = [];
 
         const map: MapData = {
-            data: {attributes: this.deleteEmptyInputs(inputs), complexAttributes: this.state.complexAttr},
+            data: {
+                attributes: this.state.simpleAttr,
+                complexAttributes: this.prepareComplexAttr(this.state.complexAttr)
+            },
             id: 0,
             pins: pin
         };
@@ -97,8 +103,8 @@ export class CreationMenu extends React.Component <any, CreationMenuState> {
     }
 
     public myCallback(map: MapData): void {
-        let path = '/map/' + map.id;
-        return this.props.history.push(path);
+        const path = '/map/' + map.id;
+        this.props.history.push(path);
     }
 
     handleAddComplexAttr(simpleAttr: Array<BasicAttrType>) {
