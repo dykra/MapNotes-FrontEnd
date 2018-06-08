@@ -7,7 +7,7 @@ import { CreationMenu } from './creation/CreationMenu';
 import { MapMenu } from './map/MapMenu';
 import { HomeMenu } from './home/HomeMenu';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
-import { ChooseRouterPathComponent } from './creation/ChooseRouterPathComponent';
+import { ChooseRouterPathComponent } from './ChooseRouterPathComponent';
 
 export class App extends React.Component<{}, {}> {
 

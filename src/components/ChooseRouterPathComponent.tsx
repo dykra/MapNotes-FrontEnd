@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Redirect } from 'react-router';
-import { LOCAL_STORAGE_INFO } from '../../constants';
-import { getLocalStorageInfo } from '../../utils/localStorage/localStorageUtils';
+import { MAP_ID_STORAGE } from '../constants';
+import { getFromStorage } from '../utils/localStorage/localStorageUtils';
 
 export class ChooseRouterPathComponent extends React.Component<{}, {}> {
 
@@ -9,17 +9,8 @@ export class ChooseRouterPathComponent extends React.Component<{}, {}> {
         super(props);
     }
 
-    getLastMapUsed() {
-        let mapId = getLocalStorageInfo(LOCAL_STORAGE_INFO);
-        if (mapId) {
-            return JSON.parse(mapId);
-        }
-        return mapId;
-    }
-
     render() {
-        let lastMapID = this.getLastMapUsed();
-        console.log(lastMapID);
+        const lastMapID = getFromStorage(MAP_ID_STORAGE);
         if (lastMapID) {
             return(
                 <Redirect to={'/map/' + lastMapID}/>

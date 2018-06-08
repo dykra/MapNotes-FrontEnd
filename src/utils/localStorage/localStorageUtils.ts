@@ -2,16 +2,25 @@ function canUseLocalStorage() {
     return typeof(Storage) !== 'undefined';
 }
 
-export function updateLocalStorageInfo(key: string, value: string) {
+export function setInStorage(key: string, value: any) {
     if (canUseLocalStorage()) {
-        localStorage.setItem(key, value);
+        localStorage.setItem(key, JSON.stringify(value));
     }
-    return null;
 }
 
-export function getLocalStorageInfo(key: string) {
+export function removeFromStorage(key: string) {
     if (canUseLocalStorage()) {
-        return localStorage.getItem(key);
+        localStorage.removeItem(key);
+    }
+}
+
+export function getFromStorage(key: string) {
+    if (canUseLocalStorage()) {
+        const value = localStorage.getItem(key);
+        if (value) {
+            return JSON.parse(value);
+        }
+        return value;
     }
     return null;
 }
