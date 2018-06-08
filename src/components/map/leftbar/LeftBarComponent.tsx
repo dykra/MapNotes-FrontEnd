@@ -2,12 +2,11 @@ import React from 'react';
 import { Button } from 'react-bootstrap';
 import { TransportComponent } from './TransportComponent';
 import { GroupsComponent } from './GroupsComponent';
-
 import FilterComponent from './FilterComponent';
-// import FilterListComponent from './FilterListComponent';
 import { Filter } from '../../../types/filter/Filter';
 import { PinData } from '../../../types/api/PinData';
 import { Link } from 'react-router-dom';
+import { FilterListComponent } from './FilterListComponent';
 
 export interface LeftBarComponentProps {
     filter: (filter: Filter) => void;
@@ -105,11 +104,14 @@ export class LeftBarComponent extends React.Component<LeftBarComponentProps, Lef
                        filter={this.props.filter}
                        removeFilter={this.props.removeFilter}
                    />
+                   <FilterListComponent
+                       changePins={this.props.changePins}
+                       visiblePins={this.props.visiblePins}
+                   />
                    <GroupsComponent
                        changePins={this.props.changePins}
                        visiblePins={this.props.visiblePins}
                    />
-                   {/*<FilterListComponent/>*/}
                </div>
             );
         }
