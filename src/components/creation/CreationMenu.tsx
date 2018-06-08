@@ -1,14 +1,14 @@
 import * as React from 'react';
-import MapAttr from './MapAttribute';
 import { MapData } from '../../types/api/MapData';
 import { PinData } from '../../types/api/PinData';
+import { putMap } from '../../api/MapApi';
 import ComplexAttribute from './ComplexAttribiute';
-import { BasicAttr } from '../../types/creation/BasicAttr';
 import { ComplexAttrType } from '../../types/creation/ComplexAttrType';
+import SimpleAttribute from './SimpleAttribute';
+import { BasicAttrType } from '../../types/BasicAttrType';
+import { OPERATORS } from '../../constants/index';
 import { FormulaLists } from '../../types/creation/FormulaLists';
 import _ from 'lodash';
-import { OPERATORS } from '../../constants/index';
-import { putMap } from '../../api/MapApi';
 
 interface CreationMenuState {
 
@@ -16,7 +16,7 @@ interface CreationMenuState {
     isOpen: boolean;
     complexAttrBox: boolean;
     complexAttr: Array<ComplexAttrType>;
-    simpleAttr:  BasicAttr[];
+    simpleAttr:  BasicAttrType[];
 }
 
 export class CreationMenu extends React.Component <any, CreationMenuState> {
@@ -39,8 +39,8 @@ export class CreationMenu extends React.Component <any, CreationMenuState> {
         this.handleBackToSimpleAttr = this.handleBackToSimpleAttr.bind(this);
         this.handleSaveComplexAttr = this.handleSaveComplexAttr.bind(this);
         this.toggleModal = this.toggleModal.bind(this);
-        this.getSimpleAttr = this.getSimpleAttr.bind(this);
-        this.isArrayContains = this.isArrayContains.bind(this);
+        this.closeSimpleAttr = this.closeSimpleAttr.bind(this);
+        this.handleSaveSimpleAttr = this.handleSaveSimpleAttr.bind(this);
     }
 
     toggleModal() {
@@ -49,13 +49,10 @@ export class CreationMenu extends React.Component <any, CreationMenuState> {
             isNewMapClicked: !this.state.isNewMapClicked
         });
     }
-    deleteEmptyInputs(inputs: BasicAttr[]) {
-        return inputs.filter((elem) => {
-            if (elem.name !== '' && elem.type !== '') {
-                return elem;
-            }
-            return;
-        });
+
+    closeSimpleAttr() {
+        this.toggleModal();
+        this.props.history.push('/');
     }
 
     getAttrList(value: string) {
@@ -83,15 +80,22 @@ export class CreationMenu extends React.Component <any, CreationMenuState> {
         return complexAttrMap;
     }
 
-    handleSubmit(evt: any, inputs: BasicAttr[]) {
-        evt.preventDefault();
+    handleSaveSimpleAttr(basicAttributes: Array<BasicAttrType>) {
+        this.setState({
+            simpleAttr: basicAttributes
+        });
+        this.handleSubmit();
+        this.toggleModal();
+    }
+
+    handleSubmit() {
         const pin: PinData[] = [];
 
         const map: MapData = {
             data: {
-                attributes: this.deleteEmptyInputs(inputs),
+                attributes: this.state.simpleAttr,
                 complexAttributes: this.prepareComplexAttr(this.state.complexAttr)
-            } ,
+            },
             id: 0,
             pins: pin
         };
@@ -99,46 +103,14 @@ export class CreationMenu extends React.Component <any, CreationMenuState> {
     }
 
     public myCallback(map: MapData): void {
-        let path = '/map/' + map.id;
-        return this.props.history.push(path);
+        const path = '/map/' + map.id;
+        this.props.history.push(path);
     }
 
-    renderMapAttribute() {
-        return(
-            <MapAttr
-                simpleAttr={this.state.simpleAttr}
-                handleSubmit={this.handleSubmit}
-                handleAddComplexAttr={this.handleAddComplexAttr}
-
-            />
-        );
-    }
-
-    isArrayContains(name: String) {
-        for ( let i = 0; i < this.state.simpleAttr.length; i++) {
-            if (this.state.simpleAttr[i].name === name) {
-                return true;
-            }
-                }
-                return false;
-    }
-
-    getSimpleAttr(simpleAttr: BasicAttr[]) {
-        let temp: BasicAttr[];
-        temp = [];
-        for (let i = 0; i < simpleAttr.length; i++) {
-            if (simpleAttr[i].name !== '' && !this.isArrayContains(simpleAttr[i].name) ) {
-                temp.push(simpleAttr[i]);
-            }
-        }
-        return temp;
-    }
-
-    handleAddComplexAttr(simpleAttr: BasicAttr[]) {
-
+    handleAddComplexAttr(simpleAttr: Array<BasicAttrType>) {
         this.toggleModal();
         this.setState({
-            simpleAttr: this.state.simpleAttr.concat(this.getSimpleAttr(simpleAttr)),
+            simpleAttr,
             complexAttrBox: true
         });
     }
@@ -165,6 +137,19 @@ export class CreationMenu extends React.Component <any, CreationMenuState> {
             handleBackToSimpleAttr={this.handleBackToSimpleAttr}
             handleSaveComplexAttr={this.handleSaveComplexAttr}
         />
+        );
+    }
+
+    renderMapAttribute() {
+        return(
+            <SimpleAttribute
+                simpleAttr={this.state.simpleAttr}
+                complexAttr={this.state.complexAttr}
+                handleSubmit={this.handleSubmit}
+                handleAddComplexAttr={this.handleAddComplexAttr}
+                closeSimpleAttr={this.closeSimpleAttr}
+                saveSimpleAttr={this.handleSaveSimpleAttr}
+            />
         );
     }
 
