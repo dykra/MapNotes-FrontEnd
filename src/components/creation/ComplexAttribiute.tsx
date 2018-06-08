@@ -13,7 +13,6 @@ interface ComplexAttributeState {
     complexAttributes: Array<ComplexAttrType>;
     newComplexAttrName: string;
     newComplexAttrValue: string;
-    operators: Array<string>;
     simpleAttrAvailableNames: Array<string>;
 }
 
@@ -36,7 +35,6 @@ export default class ComplexAttribute extends React.Component<any, ComplexAttrib
             showAddNewComplexAttr: false,
             newComplexAttrName: '',
             newComplexAttrValue: '',
-            operators: ['+', '-', '*', '/'],
             simpleAttrAvailableNames: ComplexAttribute.getSimpleAttributesAvailableNames(this.props.simpleAttr),
         };
         this.handleClickAddNewComplexAttr = this.handleClickAddNewComplexAttr.bind(this);
