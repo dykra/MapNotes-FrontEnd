@@ -42,11 +42,8 @@ export class MarkerComponent extends React.Component<MarkerComponentProps, Marke
     renderPinAttributes() {
 
         const defaults = this.props.mapData.attributes.map(e => e.name);
-        console.log('Map data attributes', this.props.mapData.attributes);
         const attributes = this.props.pin.data.attributes;
-        console.log('Props attributes', attributes);
         const res = attributes.filter(e => defaults.find(a => a === e.name) !== undefined);
-        console.log(res);
 
         return res.map(e =>
             (
