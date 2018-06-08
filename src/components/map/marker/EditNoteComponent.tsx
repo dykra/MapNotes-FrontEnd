@@ -7,7 +7,6 @@ import Col from 'reactstrap/lib/Col';
 import * as FormControl from 'react-bootstrap/lib/FormControl';
 import { MapSettings } from '../../../types/map/MapSettings';
 import { PinData } from '../../../types/api/PinData';
-import { AttributeInfo } from '../../../types/creation/AttributeInfo';
 
 export interface EditNoteComponentProps {
     pin: PinData;
@@ -44,7 +43,7 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
         const defaultAttr = this.props.mapData.attributes;
         defaultAttr.forEach(attribute => {
             if (!(attribute.name in pin.data.attributes)) {
-                pin.data.attributes.set(attribute.name, {type: attribute.type, value: ''});
+                pin.data.attributes[attribute.name] = {type: attribute.type, value: ''};
             }
         } );
         return pin;
@@ -59,7 +58,7 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
             this.props.updateMapSettings(mapAttr);
 
         }
-        pin.data.attributes.set(nameAttr, {type: typeAttr, value: ''});
+        pin.data.attributes[nameAttr] = {type: typeAttr, value: ''};
         this.setState({
             pin,
             isAddNewAttrClick: false
@@ -84,20 +83,9 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
         this.setState({pin});
     }
 
-    getValueFromMap(p: AttributeInfo | undefined) {
-        if (typeof(p) !== 'undefined') {
-            return p.value;
-        }
-        return '';
-
-    }
-
     renderModalBody() {
         const attributes = this.state.pin.data.attributes;
-
-        const keys = Array.from(attributes.keys());
-
-        console.log('keys', keys);
+        const keys = Object.keys(attributes);
         return(
             <Modal.Body>
                 <Form >
@@ -113,7 +101,7 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
                                     <FormControl
                                         onChange={(event) => this.handleChange(key, event)}
                                         placeholder="Enter a value"
-                                        value={this.getValueFromMap(attributes.get(key))}
+                                        value={attributes[key].value}
                                     />
                                 </Col>
                             </div>
@@ -127,24 +115,11 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
 
     cancelNewInputs() {
         const pin = this.state.pin;
-        const keys = Object.keys(pin.data.attributes);
-        const attr = keys.filter(key => { return ( pin.data.attributes[key].value !== '') ; } );
-        console.log(pin.data.attributes);
-       console.log(attr);
-       // pin.data.attributes.
-        //
-        // const attributes = pin.data.attributes;
-        // pin.data.attributes = pin.data.attributes.filter(elem => value !== '');
-        // // pin.data.attributes = pin.data.attributes.forEach((name,info) =>info.type);
-
-        // attr.forEach((key) => {
-        //     console.log('elem', key);
-        //    if (pin.data.attributes.get(key).value !== '') {
-        //        console.log('elem2', key);
-        //        delete pin.data.attributes[key];
-        //    }
-
-        // });
+        for (let key in pin.data.attributes) {
+            if (pin.data.attributes[key].value === '') {
+                delete pin.data.attributes[key];
+            }
+        }
 
         this.setState({
             pin,
