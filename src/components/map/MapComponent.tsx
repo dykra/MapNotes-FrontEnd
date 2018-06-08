@@ -11,7 +11,6 @@ import SearchBox from 'react-google-maps/lib/components/places/SearchBox';
 import { MapData } from '../../types/api/MapData';
 import { PinData } from '../../types/api/PinData';
 import { MapSettings } from '../../types/map/MapSettings';
-import { AttributeInfo } from '../../types/creation/AttributeInfo';
 
 export interface MapProps {
     markers: any;
@@ -104,7 +103,7 @@ export class MapContainer extends React.Component<MapContainerProps, MapContaine
                 position: event.latLng.toJSON(),
                 isWindowOpened: false,
                 groupName: 'red',
-                attributes: new Map<string, AttributeInfo>(),
+                attributes: [],
             },
         };
         this.setState({newPin});
@@ -143,7 +142,7 @@ export class MapContainer extends React.Component<MapContainerProps, MapContaine
 
         const newPin = {data:
                 {position: searchBoxMarkers[0].position.toJSON(), groupName: searchBoxMarkers[0].groupName,
-                    isWindowOpened: false, attributes: new Map<string, AttributeInfo>()}
+                    isWindowOpened: false, attributes: []}
         };
         this.setState({ newPin });
 

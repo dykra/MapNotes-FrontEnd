@@ -28,7 +28,6 @@ export class ExtendNoteComponent extends React.Component<ExtendNoteComponentProp
     }
 
     savePin(pin: PinData) {
-
         this.setState(
             {isEditMode: false},
             () => this.props.savePin(pin)
@@ -36,24 +35,12 @@ export class ExtendNoteComponent extends React.Component<ExtendNoteComponentProp
     }
 
     renderPinAttributes() {
-
         const attributes = this.props.pin.data.attributes;
-
-        const result: any = [];
-
-        console.log(attributes);
-
-        attributes.forEach((value, key) => {
-            result.push(
-                <div key={key}>
-                    <b>
-                        {key}
-                    </b> {value.value}
-                </div>
-            );
-        });
-
-        return result;
+        return attributes.map(attribute => (
+            <div key={attribute.name}>
+                <b>{attribute.name} </b> {attribute.value}
+            </div>
+        ));
     }
 
     renderEditNote() {
