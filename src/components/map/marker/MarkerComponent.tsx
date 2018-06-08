@@ -54,23 +54,21 @@ export class MarkerComponent extends React.Component<MarkerComponentProps, Marke
             />
         );
     }
-    
+
     renderPinAttributes() {
 
         const defaults = this.props.mapData.attributes.map(e => e.name);
-        console.log('Map data attributes', this.props.mapData.attributes);
         const attributes = this.props.pin.data.attributes;
-        console.log('Props attributes', attributes);
-        const res = attributes.filter(e => defaults.find(a => a === e.name) !== undefined);
-        console.log(res);
+        const keys = Object.keys(attributes);
+        const defaultKeys = keys.filter(e => defaults.find(a => a === e) );
 
-        return res.map(e =>
+        return defaultKeys.map(key =>
             (
-            <div key={e.name}>
-                <b>
-                    {e.name}
-                </b> {e.value}
-            </div>
+                <div key={key}>
+                    <b>
+                        {key}
+                    </b> {attributes[key].value}
+                </div>
             )
         );
     }

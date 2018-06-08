@@ -7,6 +7,7 @@ import Col from 'reactstrap/lib/Col';
 import * as FormControl from 'react-bootstrap/lib/FormControl';
 import { MapSettings } from '../../../types/map/MapSettings';
 import { PinData } from '../../../types/api/PinData';
+// import { getPinById } from '../../../api/PinApi';
 
 export interface EditNoteComponentProps {
     pin: PinData;
@@ -38,28 +39,19 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
 
     }
 
-    checkIfAttributeAdded(name: string, pins: PinData) {
-        const pinAttrs = pins.data.attributes;
-        for (let i = 0; i < pinAttrs.length; i++) {
-            if (pinAttrs[i].name === name) {
-                return true;
-            }
-        }
-        return false;
-    }
     handlePin() {
 
         const pin = this.props.pin;
         const defaultAttr = this.props.mapData.attributes;
 
-        if (pin.data.attributes.length === 0 ) {
+        if (Object.keys(pin.data.attributes).length === 0 ) {
             for (let i = 0; i < defaultAttr.length; i++) {
-                pin.data.attributes.push({name: defaultAttr[i].name, type: defaultAttr[i].type, value: ''});
+                pin.data.attributes[defaultAttr[i].name] = {type: defaultAttr[i].type, value: ''};
             }
         } else {
             let i = defaultAttr.length - 1;
-            while (!this.checkIfAttributeAdded(defaultAttr[i].name, pin)) {
-                pin.data.attributes.push({name: defaultAttr[i].name, type: defaultAttr[i].type, value: ''});
+            while (!(defaultAttr[i].name in pin.data.attributes)) {
+                pin.data.attributes[defaultAttr[i].name] = {type: defaultAttr[i].type, value: ''};
                 i--;
             }
         }
@@ -75,7 +67,7 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
             this.props.updateMapSettings(mapAttr);
 
         }
-        pin.data.attributes.push({name: nameAttr, type: typeAttr, value: ''});
+        pin.data.attributes[nameAttr] = {type: typeAttr, value: ''};
         this.setState({
             pin,
             isAddNewAttrClick: false
@@ -112,7 +104,7 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
                         {keys.map(key => (
                             <div key={key}>
                                 <Col sm={4}>
-                                    {attributes[key].name}
+                                    {key}
                                 </Col>
                                 <Col sm={8}>
                                     <FormControl
@@ -132,9 +124,13 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
 
     cancelNewInputs() {
         const pin = this.state.pin;
-        pin.data.attributes = this.state.pin.data.attributes.filter((element) => {
-            return (element.value !== '');
-        });
+
+        for (let key in pin.data.attributes) {
+            if (pin.data.attributes[key].value === '') {
+                delete pin.data.attributes[key];
+            }
+        }
+
         this.setState({
             pin,
             isAddNewAttrClick: false

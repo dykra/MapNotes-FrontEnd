@@ -44,7 +44,8 @@
     "run": "^1.4.0",
     "style-loader": "^0.21.0",
     "transport-api": "0.0.2",
-    "valuelink": "^1.5.5"
+    "valuelink": "^1.5.5",
+    "@typed/hashmap": "latest"
   },
   "scripts": {
     "start": "react-scripts-ts start",

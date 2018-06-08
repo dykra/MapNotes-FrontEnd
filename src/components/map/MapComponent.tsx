@@ -103,7 +103,7 @@ export class MapContainer extends React.Component<MapContainerProps, MapContaine
                 position: event.latLng.toJSON(),
                 isWindowOpened: false,
                 groupName: 'red',
-                attributes: [],
+                attributes: {},
             },
         };
         this.setState({newPin});
@@ -142,7 +142,7 @@ export class MapContainer extends React.Component<MapContainerProps, MapContaine
 
         const newPin = {data:
                 {position: searchBoxMarkers[0].position.toJSON(), groupName: searchBoxMarkers[0].groupName,
-                    isWindowOpened: false, attributes: []}
+                    isWindowOpened: false, attributes: {}}
         };
         this.setState({ newPin });
 
