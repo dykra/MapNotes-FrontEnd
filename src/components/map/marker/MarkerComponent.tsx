@@ -50,7 +50,7 @@ export class MarkerComponent extends React.Component<MarkerComponentProps, Marke
             />
         );
     }
-    
+
     renderPinAttributes() {
 
         const defaults = this.props.mapData.attributes.map(e => e.name);

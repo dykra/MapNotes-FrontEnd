@@ -86,7 +86,7 @@ export class LeftBarComponent extends React.Component<LeftBarComponentProps, Lef
                            Delete Map
                        </Button>
                    </div>
-                   <Link to="/">
+                   <Link to="/home">
                        <Button
                            className="HomeButton"
                        >
