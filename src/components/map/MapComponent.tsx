@@ -11,6 +11,7 @@ import SearchBox from 'react-google-maps/lib/components/places/SearchBox';
 import { MapData } from '../../types/api/MapData';
 import { PinData } from '../../types/api/PinData';
 import { MapSettings } from '../../types/map/MapSettings';
+import { AttributeInfo } from '../../types/creation/AttributeInfo';
 
 export interface MapProps {
     markers: any;
@@ -27,7 +28,7 @@ export interface MapProps {
 
 type MapComposeProps = WithScriptjsProps & WithGoogleMapProps & MapProps;
 
-const Map = compose<MapProps, MapComposeProps>(
+const MapView = compose<MapProps, MapComposeProps>(
     withScriptjs,
     withGoogleMap,
 )
@@ -79,7 +80,6 @@ export class MapContainer extends React.Component<MapContainerProps, MapContaine
 
     references: { map: any; searchBox: any; directionsService: any; } =
         {map: null, searchBox: null, directionsService: null};
-        // {map: null, searchBox: null, directionsService: null};
 
     constructor(props: MapContainerProps) {
         super(props);
@@ -103,7 +103,7 @@ export class MapContainer extends React.Component<MapContainerProps, MapContaine
                 position: event.latLng.toJSON(),
                 isWindowOpened: false,
                 groupName: 'red',
-                attributes: {},
+                attributes: new Map<string, AttributeInfo>(),
             },
         };
         this.setState({newPin});
@@ -142,7 +142,7 @@ export class MapContainer extends React.Component<MapContainerProps, MapContaine
 
         const newPin = {data:
                 {position: searchBoxMarkers[0].position.toJSON(), groupName: searchBoxMarkers[0].groupName,
-                    isWindowOpened: false, attributes: {}}
+                    isWindowOpened: false, attributes: new Map<string, AttributeInfo>()}
         };
         this.setState({ newPin });
 
@@ -199,7 +199,7 @@ export class MapContainer extends React.Component<MapContainerProps, MapContaine
     render() {
         const markers = this.renderMarkers();
         return (
-            <Map
+            <MapView
                 googleMapURL={GOOGLE_MAP_URL}
                 loadingElement={<div style={{height: `100%`}}/>}
                 containerElement={<div style={{ height: '100vh'}} />}
