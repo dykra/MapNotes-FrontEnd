@@ -39,15 +39,21 @@ export class ExtendNoteComponent extends React.Component<ExtendNoteComponentProp
 
         const attributes = this.props.pin.data.attributes;
 
-        return attributes.map(e =>
-            (
-                <div key={e.name}>
+        const result: any = [];
+
+        console.log(attributes);
+
+        attributes.forEach((value, key) => {
+            result.push(
+                <div key={key}>
                     <b>
-                        {e.name}
-                    </b> {e.value}
+                        {key}
+                    </b> {value.value}
                 </div>
-            )
-        );
+            );
+        });
+
+        return result;
     }
 
     renderEditNote() {
