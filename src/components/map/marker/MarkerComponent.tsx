@@ -38,20 +38,34 @@ export class MarkerComponent extends React.Component<MarkerComponentProps, Marke
             () => this.props.savePin(pin)
         );
     }
+
+    renderEditNote() {
+        return (
+            <EditNoteComponent
+                pin={this.props.pin}
+                mapData={this.props.mapData}
+                savePin={this.savePin}
+                updateMapSettings={this.props.updateMapSettings}
+                close={() => this.setState({isEditMode: false})}
+            />
+        );
+    }
     
     renderPinAttributes() {
 
         const defaults = this.props.mapData.attributes.map(e => e.name);
         const attributes = this.props.pin.data.attributes;
+        const keys = Object.keys(attributes);
+        const defaultKeys = keys.filter(e => defaults.find(a => a === e) );
         const res = attributes.filter(e => defaults.find(a => a === e.name) !== undefined);
 
-        return res.map(e =>
+        return defaultKeys.map(key =>
             (
-            <div key={e.name}>
-                <b>
-                    {e.name}
-                </b> {e.value}
-            </div>
+                <div key={key}>
+                    <b>
+                        {key}
+                    </b> {attributes[key].value}
+                </div>
             )
         );
     }
