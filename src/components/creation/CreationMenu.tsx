@@ -49,7 +49,7 @@ export class CreationMenu extends React.Component <any, CreationMenuState> {
 
     closeSimpleAttr() {
         this.toggleModal();
-        return this.props.history.push('/');
+        this.props.history.push('/');
     }
 
     getAttrList(value: string) {
@@ -104,7 +104,7 @@ export class CreationMenu extends React.Component <any, CreationMenuState> {
     handleAddComplexAttr(simpleAttr: Array<BasicAttrType>) {
         this.toggleModal();
         this.setState({
-            simpleAttr: simpleAttr,
+            simpleAttr,
             complexAttrBox: true
         });
     }

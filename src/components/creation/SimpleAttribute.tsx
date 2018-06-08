@@ -7,11 +7,11 @@ import * as Modal from 'react-bootstrap/lib/Modal';
 import _ from 'lodash';
 import { ComplexAttrType } from '../../types/creation/ComplexAttrType';
 import { BasicAttrType } from '../../types/BasicAttrType';
+import { TYPES } from '../../constants/index';
 
 interface SimpleAttributeState {
     simpleAttributes: Array<SimpleAttrType>;
     complexAttributes: Array<ComplexAttrType>;
-    types: Array<string>;
 }
 
 export default class SimpleAttribute extends React.Component<any, SimpleAttributeState> {
@@ -20,7 +20,7 @@ export default class SimpleAttribute extends React.Component<any, SimpleAttribut
     getSimpleAttr(simpleAttr: Array<BasicAttrType>) {
         let simpleAttrWithIndex: Array<SimpleAttrType> = [];
         if (simpleAttr.length > 0 ) {
-            simpleAttrWithIndex = _.map(simpleAttr, (attr) => {
+            simpleAttrWithIndex = simpleAttr.map( (attr) => {
                 this.counter++;
                 return {
                     'id': this.counter,
@@ -29,7 +29,7 @@ export default class SimpleAttribute extends React.Component<any, SimpleAttribut
                 };
             });
         }
-        _.map( [1, 2, 3, 4], i => {
+        [1, 2, 3, 4].map( i => {
             this.counter++;
                 simpleAttrWithIndex.push({
                     'id': this.counter,
@@ -45,7 +45,6 @@ export default class SimpleAttribute extends React.Component<any, SimpleAttribut
         super(props);
 
         this.state = {
-            types: [ 'm^2', 'pln', 'yes', 'no' ],
             simpleAttributes: this.getSimpleAttr(this.props.simpleAttr),
             complexAttributes: this.props.complexAttr
         };
@@ -59,35 +58,35 @@ export default class SimpleAttribute extends React.Component<any, SimpleAttribut
     }
 
     handleClickCloseSimpleAttr () {
-        console.log('close simple attr back to main component');
         this.props.closeSimpleAttr();
     }
 
     prepareBasicAttr() {
-        let simpleAttr: Array<SimpleAttrType> = _.filter(this.state.simpleAttributes,
+        const simpleAttr: Array<SimpleAttrType> = this.state.simpleAttributes.filter(
             (attr) => attr.name !== '' && attr.type !== '');
-        let basicAttr: Array<BasicAttrType>  = _.map(simpleAttr, (attr) => {
+        return simpleAttr.map((attr) => {
             return {
                 'name': attr.name,
                 'type': attr.type
             };
         });
-        return basicAttr;
     }
 
     handleClickSaveSimpleAttr() {
         this.props.saveSimpleAttr(this.prepareBasicAttr());
-        console.log('save simple attr, back to main component');
     }
 
     handleAddComplexAttr() {
-        console.log('save simple attr, go to complex attr');
         this.props.handleAddComplexAttr(this.prepareBasicAttr());
     }
 
-    handleDeleteRow(row: any) {
-        console.log('delete');
-        console.log(row);
+    handleDeleteRow(rows: any) {
+        alert('The rows are deleted: \n');
+        const newSimpleAttributes: Array<SimpleAttrType> =
+            this.state.simpleAttributes.filter((attr) => !_.includes(rows,  attr.id));
+        this.setState({
+            simpleAttributes: newSimpleAttributes
+        });
     }
 
     handleClickAddNewSimpleAttr() {
@@ -98,25 +97,21 @@ export default class SimpleAttribute extends React.Component<any, SimpleAttribut
             'type': ''
         };
         this.setState({
-            simpleAttributes: this.state.simpleAttributes.concat(newSimpleAttr),
+            simpleAttributes: [...this.state.simpleAttributes, newSimpleAttr]
         });
     }
 
     isNewAttrNameUsed(newName: string) {
-        let simpleNames: Array<string>  = _.map(this.state.simpleAttributes, i => i.name);
-        let complexNames: Array<string>  = _.map(this.state.complexAttributes, i => i.name);
+        const simpleNames: Array<string>  = this.state.simpleAttributes.map( i => i.name);
+        const complexNames: Array<string>  = this.state.complexAttributes.map(i => i.name);
 
         return (_.includes(simpleNames, newName) ||
             _.includes(complexNames, newName));
     }
 
     onBeforeSaveCell(row: any, cellName: any, cellValue: any) {
-        console.log(row);
-        console.log(cellValue);
-        console.log(cellName);
 
-        console.log('on before save cell');
-        let newSimpleAttr: SimpleAttrType = _.filter(this.state.simpleAttributes, (attr) => attr.id === row.id)[0];
+        const newSimpleAttr: SimpleAttrType = this.state.simpleAttributes.filter((attr) => attr.id === row.id)[0];
         if ( cellName === 'name') {
             if (this.isNewAttrNameUsed(cellValue)) {
                 alert ('name must be unique! ');
@@ -126,9 +121,8 @@ export default class SimpleAttribute extends React.Component<any, SimpleAttribut
         } else if ( cellName === 'type' ) {
             newSimpleAttr.type = cellValue;
         }
-        let index = _.findIndex(this.state.simpleAttributes, (attr) => attr.id === row.id);
+        const index = _.findIndex(this.state.simpleAttributes, (attr) => attr.id === row.id);
         this.state.simpleAttributes[index] = newSimpleAttr;
-        console.log(this.state.simpleAttributes);
         return true;
     }
 
@@ -139,46 +133,43 @@ export default class SimpleAttribute extends React.Component<any, SimpleAttribut
         };
 
         let simpleAttr;
-        switch (this.state.simpleAttributes) {
-            case [] :
-                simpleAttr = <div/>;
-                break;
-            default:
-                simpleAttr = (
-                    <div>
-                        <Button
-                            className={'NewComplexAttrButton'}
-                            bsSize="small"
-                            bsStyle="success"
-                            active={true}
-                            onClick={this.handleClickAddNewSimpleAttr}
-                        >New
-                        </Button>
-                        <BootstrapTable
-                            deleteRow={true}
-                            selectRow={{mode: 'checkbox'}}
-                            cellEdit={{mode: 'click', blurToSave: true, beforeSaveCell: this.onBeforeSaveCell }}
-                            data={this.state.simpleAttributes}
-                            options={options}
-                        >
-                            <TableHeaderColumn
-                                dataField="id"
-                                isKey={true}
-                                hidden={true}
-                            > id
-                            </TableHeaderColumn>
-                            <TableHeaderColumn
-                                dataField="name"
-                            > simple attribute name
-                            </TableHeaderColumn>
-                            <TableHeaderColumn
-                                dataField="type"
-                                dataSort={true}
-                                editable={{ type: 'select', options: {values: this.state.types }}}
-                            >simple attr type
-                            </TableHeaderColumn>
-                        </BootstrapTable>
-                    </div>);
+        if (this.state.simpleAttributes.length === 0) {
+            simpleAttr = <div/>;
+        } else {
+            simpleAttr = (
+                <div>
+                    <Button
+                        className={'NewComplexAttrButton'}
+                        bsSize="small"
+                        bsStyle="success"
+                        active={true}
+                        onClick={this.handleClickAddNewSimpleAttr}
+                    >New
+                    </Button>
+                    <BootstrapTable
+                        deleteRow={true}
+                        selectRow={{mode: 'checkbox'}}
+                        cellEdit={{mode: 'click', blurToSave: true, beforeSaveCell: this.onBeforeSaveCell }}
+                        data={this.state.simpleAttributes}
+                        options={options}
+                    ><TableHeaderColumn
+                        dataField="id"
+                        isKey={true}
+                        hidden={true}
+                    > id
+                    </TableHeaderColumn>
+                        <TableHeaderColumn
+                            dataField="name"
+                        > simple attribute name
+                        </TableHeaderColumn>
+                        <TableHeaderColumn
+                            dataField="type"
+                            dataSort={true}
+                            editable={{ type: 'select', options: {values: TYPES }}}
+                        >simple attr type
+                        </TableHeaderColumn>
+                    </BootstrapTable>
+                </div>);
         }
 
         return (
@@ -188,7 +179,6 @@ export default class SimpleAttribute extends React.Component<any, SimpleAttribut
                         <Modal.Title> Create attibutes to map </Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        {/*<div className={'AttributeTitle'}>Simple Attributes</div>*/}
                         <div>
                             {simpleAttr}
                         </div>
