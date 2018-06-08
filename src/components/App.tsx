@@ -11,15 +11,17 @@ import { BrowserRouter as Router, Route } from 'react-router-dom';
 export class App extends React.Component<{}, {}> {
 
     render() {
-            return (
-                <Router>
-                    <div className="container">
-                        <Route path="/map/:id" component={MapMenu}/>
-                        <Route path="/create" component={CreationMenu}/>
-                        <Route exact={true} path="/" component={HomeMenu} />
-                    </div>
-                </Router>
-            );
-        }
-
+        return (
+            <Router>
+                <div className="container">
+                    <Route path="/map/:id" component={MapMenu}/>
+                    <Route path="/create" component={CreationMenu}/>
+                    <Route exact={true}
+                           path="/"
+                           render={(props) => <HomeMenu {...props} location={{state: { isStartMenu: true}}}/>}
+                    />
+                </div>
+            </Router>
+        );
+    }
 }
