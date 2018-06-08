@@ -63,12 +63,12 @@ export class FilterListComponent extends React.Component<FilterListComponentProp
     renderList() {
         return (
             <ul className="pins">
-                {this.props.visiblePins.map((pins) => {
+                {this.props.visiblePins.map((pins, i) => {
                         const id = pins.id;
                         return (
                             <li key={id}>
                                 <Button onClick={() => this.handleClick(id)}>
-                                    Pin {id}
+                                    Pin {i}
                                 </Button>
                                 {this.renderNote(id)}
                             </li>
