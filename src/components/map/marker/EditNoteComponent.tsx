@@ -95,7 +95,8 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
     renderModalBody() {
         const attributes = this.state.pin.data.attributes;
 
-        const keys = attributes.keys();
+        const keys = Array.from(attributes.keys());
+
         console.log('keys', keys);
         return(
             <Modal.Body>
@@ -103,7 +104,7 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
                     <FormGroup
                         controlId="NewNote"
                     >
-                        {attributes.forEach(key => (
+                        {keys.map(key => (
                             <div key={key}>
                                 <Col sm={4}>
                                     {key}
