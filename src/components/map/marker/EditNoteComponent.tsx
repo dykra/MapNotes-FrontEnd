@@ -38,16 +38,15 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
     }
 
     handlePin() {
-
         const pin = this.props.pin;
         const defaultAttr = this.props.mapData.attributes;
         defaultAttr.forEach(attribute => {
-            if (!(attribute.name in pin.data.attributes)) {
-                pin.data.attributes[attribute.name] = {type: attribute.type, value: ''};
+            const index = pin.data.attributes.findIndex(value => value.name === attribute.name);
+            if (index === -1) {
+                pin.data.attributes.push({name: attribute.name, type: attribute.type, value: ''});
             }
-        } );
+        });
         return pin;
-
     }
 
     handleAddingNewAttribute(nameAttr: string, typeAttr: string, isDefault: boolean) {
@@ -56,9 +55,14 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
             const mapAttr = this.state.mapData;
             mapAttr.attributes.push({name: nameAttr, type: typeAttr});
             this.props.updateMapSettings(mapAttr);
-
         }
-        pin.data.attributes[nameAttr] = {type: typeAttr, value: ''};
+        const newValue = {name: nameAttr, type: typeAttr, value: ''};
+        const index = pin.data.attributes.findIndex(value => value.name === nameAttr);
+        if (index !== -1) {
+            pin.data.attributes[index] = newValue;
+        } else {
+            pin.data.attributes.push(newValue);
+        }
         this.setState({
             pin,
             isAddNewAttrClick: false
@@ -79,29 +83,33 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
 
     handleChange (key: any, event: any) {
         const pin = this.state.pin;
-        pin.data.attributes[key].value = event.target.value;
+        pin.data.attributes.forEach((value, index, attributes) => {
+            if (value.name === key) {
+                value.value = event.target.value;
+                attributes[index] = value;
+            }
+        });
         this.setState({pin});
     }
 
     renderModalBody() {
         const attributes = this.state.pin.data.attributes;
-        const keys = Object.keys(attributes);
         return(
             <Modal.Body>
                 <Form >
                     <FormGroup
                         controlId="NewNote"
                     >
-                        {keys.map(key => (
-                            <div key={key}>
+                        {attributes.map(attribute => (
+                            <div key={attribute.name}>
                                 <Col sm={4}>
-                                    {key}
+                                    {attribute.name}
                                 </Col>
                                 <Col sm={8}>
                                     <FormControl
-                                        onChange={(event) => this.handleChange(key, event)}
+                                        onChange={(event) => this.handleChange(attribute.name, event)}
                                         placeholder="Enter a value"
-                                        value={attributes[key].value}
+                                        value={attribute.value}
                                     />
                                 </Col>
                             </div>
@@ -120,12 +128,10 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
                 delete pin.data.attributes[key];
             }
         }
-
         this.setState({
             pin,
             isAddNewAttrClick: false
         });
-
     }
 
     render() {

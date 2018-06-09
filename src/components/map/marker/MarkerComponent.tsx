@@ -40,17 +40,12 @@ export class MarkerComponent extends React.Component<MarkerComponentProps, Marke
     }
 
     renderPinAttributes() {
-
         const defaults = this.props.mapData.attributes.map(e => e.name);
-        const attributes = this.props.pin.data.attributes;
-        const keys = Object.keys(attributes);
-        const defaultKeys = keys.filter(e => defaults.find(a => a === e) );
-        return defaultKeys.map(key =>
+        const attributes = this.props.pin.data.attributes.filter(e => defaults.find(d => d === e.name));
+        return attributes.map(attribute =>
             (
-                <div key={key}>
-                    <b>
-                        {key}
-                    </b> {attributes[key].value}
+                <div key={attribute.name}>
+                    <b>{attribute.name} </b> {attribute.value}
                 </div>
             )
         );
@@ -98,12 +93,14 @@ export class MarkerComponent extends React.Component<MarkerComponentProps, Marke
     render() {
         const position = this.props.pin.data.position;
         const iconURL = BASE_ICON_URL + this.props.pin.data.groupName + '.png';
+        const index = this.props.index;
+        const label = index !== -1 ? index.toString() : '';
         return(
             <Marker
-                key={this.props.index}
+                key={index}
                 position={position}
                 icon={iconURL}
-                label={this.props.index.toString()}
+                label={label}
                 onClick={() => this.handleMouseClick()}
                 onMouseOver={() => this.setState({isMouseOver: true})}
                 onMouseOut={() => this.setState({isMouseOver: false})}
