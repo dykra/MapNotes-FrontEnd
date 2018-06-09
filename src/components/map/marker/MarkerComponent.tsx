@@ -35,28 +35,19 @@ export class MarkerComponent extends React.Component<MarkerComponentProps, Marke
     }
 
     savePin(pin: PinData) {
-
         this.setState(
             () => this.props.savePin(pin)
         );
     }
-    
+
     renderPinAttributes() {
-
         const defaults = this.props.mapData.attributes.map(e => e.name);
-        console.log('Map data attributes', this.props.mapData.attributes);
-        const attributes = this.props.pin.data.attributes;
-        console.log('Props attributes', attributes);
-        const res = attributes.filter(e => defaults.find(a => a === e.name) !== undefined);
-        console.log(res);
-
-        return res.map(e =>
+        const attributes = this.props.pin.data.attributes.filter(e => defaults.find(d => d === e.name));
+        return attributes.map(attribute =>
             (
-            <div key={e.name}>
-                <b>
-                    {e.name}
-                </b> {e.value}
-            </div>
+                <div key={attribute.name}>
+                    <b>{attribute.name} </b> {attribute.value}
+                </div>
             )
         );
     }
@@ -75,13 +66,14 @@ export class MarkerComponent extends React.Component<MarkerComponentProps, Marke
                 savePin={this.savePin}
                 updateMapSettings={this.props.updateMapSettings}
                 showInLeftBar={this.props.showInLeftBar}
+                deletePin={this.props.deletePin}
             />
         );
     }
 
     renderSmallNote() {
         return(
-            <InfoWindow >
+            <InfoWindow onCloseClick={() => this.setState({isDetailOpen: false})}>
                 <div>
                     <b>
                         Pin note
@@ -93,10 +85,7 @@ export class MarkerComponent extends React.Component<MarkerComponentProps, Marke
     }
 
     renderNote() {
-        if (this.state.isDetailOpen) {
-            return this.renderSmallNote();
-        }
-        if (this.state.isMouseOver && !this.state.isDetailOpen) {
+        if (this.state.isDetailOpen || this.state.isMouseOver ) {
             return this.renderSmallNote();
         }
         return null;
@@ -143,12 +132,14 @@ export class MarkerComponent extends React.Component<MarkerComponentProps, Marke
     render() {
         const position = this.props.pin.data.position;
         const iconURL = BASE_ICON_URL + this.props.pin.data.groupName + '.png';
+        const index = this.props.index;
+        const label = index !== -1 ? index.toString() : '';
         return(
             <Marker
-                key={this.props.index}
+                key={index}
                 position={position}
                 icon={iconURL}
-                label={this.props.index.toString()}
+                label={label}
                 onClick={() => this.handleMouseClick()}
                 onMouseOver={() => this.setState({isMouseOver: true})}
                 onMouseOut={() => this.setState({isMouseOver: false})}

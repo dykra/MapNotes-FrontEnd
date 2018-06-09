@@ -73,34 +73,34 @@ export class LeftBarComponent extends React.Component<LeftBarComponentProps, Lef
                <div className="OpenedLeftBar">
                    <div>
                        <Button
-                           className="CloseLeftBarButton"
+                           className="CloseLeftBarButton btn btn-primary"
                            onClick={this.hideLeftBar}
                        >
                            hide BAR
                        </Button>
-                   </div>
-                   <div>
                        <Button
-                           className="DeleteMapButton"
-                           onClick={this.props.deleteMap}
+                           className="DeleteMapButton btn btn-danger"
+                           onClick={() => {
+                               if (window.confirm('Are you sure you wish to delete map?')) {
+                                   this.props.deleteMap();
+                               }
+                           }}
                        >
                            Delete Map
                        </Button>
+                       <Link to="/home">
+                           <Button
+                               className="HomeButton"
+                           >
+                               Home
+                           </Button>
+                       </Link>
                    </div>
-                   <Link to="/">
-                       <Button
-                           className="HomeButton"
-                       >
-                           Home
-                       </Button>
-                   </Link>
-                   <div className={'TransportComponent'}>
                    <TransportComponent
                        onRef={(ref: any) => (this.references.transportComponent = ref)}
                        showRoadBetweenMarkers={this.props.showRoadBetweenMarkers}
                        visiblePins={this.props.visiblePins}
                    />
-                   </div>
                    <FilterComponent
                        filter={this.props.filter}
                        removeFilter={this.props.removeFilter}
@@ -119,9 +119,9 @@ export class LeftBarComponent extends React.Component<LeftBarComponentProps, Lef
             );
         }
         return (
-            <div className={'ClosedLeftBar'}>
+            <div className="ClosedLeftBar">
                 <button
-                    className={'OpenLeftBarButton'}
+                    className="OpenLeftBarButton btn btn-primary"
                     onClick={this.showLeftBar}
                 > open BAR
                 </button>

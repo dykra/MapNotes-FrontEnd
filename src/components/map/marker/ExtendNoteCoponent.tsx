@@ -10,62 +10,37 @@ export interface ExtendNoteComponentProps {
     savePin: (pin: PinData) => void;
     updateMapSettings: (mapSettings: MapSettings) => void;
     showInLeftBar: (component: any) => void;
+    deletePin: (pin: PinData) => void;
 }
 
 export interface ExtendNoteState {
-    visibleLeftBar: boolean;
     isEditMode: boolean;
 }
 
 export class ExtendNoteComponent extends React.Component<ExtendNoteComponentProps, ExtendNoteState> {
 
-    references: {transportComponent: any; } =
-        {transportComponent: null};
-
     constructor(props: ExtendNoteComponentProps) {
         super(props);
         this.state = {
-            visibleLeftBar: false,
             isEditMode: false,
         };
         this.savePin = this.savePin.bind(this);
     }
 
     savePin(pin: PinData) {
-
         this.setState(
             {isEditMode: false},
             () => this.props.savePin(pin)
         );
     }
 
-    showLeftBar() {
-        this.setState(
-            {
-                visibleLeftBar: true,
-            });
-    }
-
-    hideLeftBar() {
-        this.setState({
-            visibleLeftBar: false
-        });
-    }
-
     renderPinAttributes() {
-
-        console.log('Map data attributes', this.props.mapData.attributes);
         const attributes = this.props.pin.data.attributes;
-
-        return attributes.map(e =>
-            (
-                <div key={e.name}>
-                    <b>
-                        {e.name}
-                    </b> {e.value}
-                </div>
-            )
-        );
+        return attributes.map(attribute => (
+            <div key={attribute.name}>
+                <b>{attribute.name} </b> {attribute.value}
+            </div>
+        ));
     }
 
     renderEditNote() {
@@ -80,6 +55,10 @@ export class ExtendNoteComponent extends React.Component<ExtendNoteComponentProp
         );
     }
 
+    close() {
+        this.props.showInLeftBar(undefined);
+    }
+
     render() {
         if (this.state.isEditMode) {
             return this.renderEditNote();
@@ -89,7 +68,7 @@ export class ExtendNoteComponent extends React.Component<ExtendNoteComponentProp
                 <div>
                     <Button
                         className="CloseLeftBarButton"
-                        onClick={() => this.props.showInLeftBar(undefined)}
+                        onClick={() => this.close()}
                     >
                         Close
                     </Button>
@@ -104,13 +83,22 @@ export class ExtendNoteComponent extends React.Component<ExtendNoteComponentProp
                     </Button>
                     <Button
                         className="btn btn-primary Save"
-                        onClick={() => this.props.savePin(this.props.pin)}
+                        onClick={() => {
+                            this.props.savePin(this.props.pin);
+                            this.close();
+                        }}
                     >
                         Save
                     </Button>
-                    {/*<Button className="btn btn-danger" onClick={() => this.props.deletePin(this.props.pin)}>*/}
-                        {/*Delete*/}
-                    {/*</Button>*/}
+                    <Button
+                        className="btn btn-danger"
+                        onClick={() => {
+                            this.props.deletePin(this.props.pin);
+                            this.close();
+                        }}
+                    >
+                        Delete
+                    </Button>
                 </div>
             </div>
         );

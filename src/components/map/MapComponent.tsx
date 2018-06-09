@@ -27,7 +27,7 @@ export interface MapProps {
 
 type MapComposeProps = WithScriptjsProps & WithGoogleMapProps & MapProps;
 
-const Map = compose<MapProps, MapComposeProps>(
+const MapView = compose<MapProps, MapComposeProps>(
     withScriptjs,
     withGoogleMap,
 )
@@ -81,7 +81,6 @@ export class MapContainer extends React.Component<MapContainerProps, MapContaine
 
     references: { map: any; searchBox: any; directionsService: any; } =
         {map: null, searchBox: null, directionsService: null};
-        // {map: null, searchBox: null, directionsService: null};
 
     constructor(props: MapContainerProps) {
         super(props);
@@ -142,9 +141,13 @@ export class MapContainer extends React.Component<MapContainerProps, MapContaine
             isWindowOpened: false
         }));
 
-        const newPin = {data:
-                {position: searchBoxMarkers[0].position.toJSON(), groupName: searchBoxMarkers[0].groupName,
-                    isWindowOpened: false, attributes: []}
+        const newPin = {
+            data: {
+                position: searchBoxMarkers[0].position.toJSON(),
+                isWindowOpened: false,
+                groupName: 'red',
+                attributes: [],
+            }
         };
         this.setState({ newPin });
 
@@ -205,7 +208,7 @@ export class MapContainer extends React.Component<MapContainerProps, MapContaine
     render() {
         const markers = this.renderMarkers();
         return (
-            <Map
+            <MapView
                 googleMapURL={GOOGLE_MAP_URL}
                 loadingElement={<div style={{height: `100%`}}/>}
                 containerElement={<div style={{ height: '100vh'}} />}
@@ -213,7 +216,7 @@ export class MapContainer extends React.Component<MapContainerProps, MapContaine
                 onMapClick={this.handleMapClick}
                 markers={markers}
                 directions={this.props.directions}
-                defaultCenter={{lat: -34.397, lng: 150.644}}
+                defaultCenter={{lat: 50.03, lng: 19.56}}
                 defaultZoom={8}
                 handleMapMounted={this.handleMapMounted}
                 handleSearchBoxMounted={this.handleSearchBoxMounted}
