@@ -151,6 +151,12 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
                     >
                         Close
                     </Button>
+                    <Button
+                        className="btn btn-primary"
+                        onClick={() => this.props.savePin(this.state.pin)}
+                    >
+                        Save
+                    </Button>
                 </Modal.Footer>
             </div>
         );
