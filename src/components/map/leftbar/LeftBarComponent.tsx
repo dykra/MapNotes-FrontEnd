@@ -16,6 +16,8 @@ export interface LeftBarComponentProps {
     changePins: (pins: PinData[]) => void;
     deleteMap: () => void;
     callbackOnRef: any;
+    showInLeftBar: (component: any) => void;
+    leftBarComponentChild?: any;
 }
 
 export interface LeftBarState {
@@ -58,7 +60,14 @@ export class LeftBarComponent extends React.Component<LeftBarComponentProps, Lef
     }
 
     render() {
-       if (this.state.visibleLeftBar) {
+        if (this.props.leftBarComponentChild) {
+            return (
+                <div className="OpenedLeftBar">
+                    {this.props.leftBarComponentChild}
+                </div>
+            );
+        }
+        if (this.state.visibleLeftBar) {
            return (
                <div className="OpenedLeftBar">
                    <div>
@@ -77,7 +86,7 @@ export class LeftBarComponent extends React.Component<LeftBarComponentProps, Lef
                            Delete Map
                        </Button>
                    </div>
-                   <Link to="/">
+                   <Link to="/home">
                        <Button
                            className="HomeButton"
                        >

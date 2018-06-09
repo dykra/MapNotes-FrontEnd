@@ -35,34 +35,17 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
         };
         this.handleAddingNewAttribute = this.handleAddingNewAttribute.bind(this);
         this.handlePin = this.handlePin.bind(this);
-
     }
 
-    checkIfAttributeAdded(name: string, pins: PinData) {
-        const pinAttrs = pins.data.attributes;
-        for (let i = 0; i < pinAttrs.length; i++) {
-            if (pinAttrs[i].name === name) {
-                return true;
-            }
-        }
-        return false;
-    }
     handlePin() {
 
         const pin = this.props.pin;
         const defaultAttr = this.props.mapData.attributes;
-
-        if (pin.data.attributes.length === 0 ) {
-            for (let i = 0; i < defaultAttr.length; i++) {
-                pin.data.attributes.push({name: defaultAttr[i].name, type: defaultAttr[i].type, value: ''});
+        defaultAttr.forEach(attribute => {
+            if (!(attribute.name in pin.data.attributes)) {
+                pin.data.attributes[attribute.name] = {type: attribute.type, value: ''};
             }
-        } else {
-            let i = defaultAttr.length - 1;
-            while (!this.checkIfAttributeAdded(defaultAttr[i].name, pin)) {
-                pin.data.attributes.push({name: defaultAttr[i].name, type: defaultAttr[i].type, value: ''});
-                i--;
-            }
-        }
+        } );
         return pin;
 
     }
@@ -75,7 +58,7 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
             this.props.updateMapSettings(mapAttr);
 
         }
-        pin.data.attributes.push({name: nameAttr, type: typeAttr, value: ''});
+        pin.data.attributes[nameAttr] = {type: typeAttr, value: ''};
         this.setState({
             pin,
             isAddNewAttrClick: false
@@ -112,7 +95,7 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
                         {keys.map(key => (
                             <div key={key}>
                                 <Col sm={4}>
-                                    {attributes[key].name}
+                                    {key}
                                 </Col>
                                 <Col sm={8}>
                                     <FormControl
@@ -130,34 +113,51 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
         );
     }
 
+    cancelNewInputs() {
+        const pin = this.state.pin;
+        for (let key in pin.data.attributes) {
+            if (pin.data.attributes[key].value === '') {
+                delete pin.data.attributes[key];
+            }
+        }
+
+        this.setState({
+            pin,
+            isAddNewAttrClick: false
+        });
+
+    }
+
     render() {
         return(
-            <div className="static-modal">
-                <Modal.Dialog>
-                    <Modal.Header>
-                        <Modal.Title>Edit note</Modal.Title>
-                    </Modal.Header>
+            <div>
+                <Modal.Title>Edit note</Modal.Title>
 
-                    {this.renderModalBody()}
+                {this.renderModalBody()}
 
-                    <Modal.Footer>
-                        <Button
-                            className="btn btn-secondary"
-                            onClick={() => this.setState({isAddNewAttrClick: true})}
-                        >
-                            Add new attribute
-                        </Button>
-                        <Button className="btn btn-secondary" onClick={this.props.close}>
-                            Close
-                        </Button>
-                        <Button
-                            className="btn btn-primary"
-                            onClick={() => this.props.savePin(this.state.pin)}
-                        >
-                            Save
-                        </Button>
-                    </Modal.Footer>
-                </Modal.Dialog>
+                <Modal.Footer>
+                    <Button
+                        className="btn btn-secondary"
+                        onClick={() => this.setState({isAddNewAttrClick: true})}
+                    >
+                        Add new attribute
+                    </Button>
+                    <Button
+                        className="btn btn-secondary"
+                        onClick={() => {
+                            this.cancelNewInputs();
+                            this.props.close();
+                        }}
+                    >
+                        Close
+                    </Button>
+                    <Button
+                        className="btn btn-primary"
+                        onClick={() => this.props.savePin(this.state.pin)}
+                    >
+                        Save
+                    </Button>
+                </Modal.Footer>
             </div>
         );
     }
