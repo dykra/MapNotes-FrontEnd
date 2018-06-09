@@ -93,12 +93,14 @@ export class MarkerComponent extends React.Component<MarkerComponentProps, Marke
     render() {
         const position = this.props.pin.data.position;
         const iconURL = BASE_ICON_URL + this.props.pin.data.groupName + '.png';
+        const index = this.props.index;
+        const label = index !== -1 ? index.toString() : '';
         return(
             <Marker
-                key={this.props.index}
+                key={index}
                 position={position}
                 icon={iconURL}
-                label={this.props.index.toString()}
+                label={label}
                 onClick={() => this.handleMouseClick()}
                 onMouseOver={() => this.setState({isMouseOver: true})}
                 onMouseOut={() => this.setState({isMouseOver: false})}
