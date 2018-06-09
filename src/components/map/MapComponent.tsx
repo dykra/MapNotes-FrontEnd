@@ -140,9 +140,13 @@ export class MapContainer extends React.Component<MapContainerProps, MapContaine
             isWindowOpened: false
         }));
 
-        const newPin = {data:
-                {position: searchBoxMarkers[0].position.toJSON(), groupName: searchBoxMarkers[0].groupName,
-                    isWindowOpened: false, attributes: []}
+        const newPin = {
+            data: {
+                position: searchBoxMarkers[0].position.toJSON(),
+                isWindowOpened: false,
+                groupName: 'red',
+                attributes: [],
+            }
         };
         this.setState({ newPin });
 
