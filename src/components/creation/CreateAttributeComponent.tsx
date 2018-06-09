@@ -18,7 +18,7 @@ interface CreateAttributeState {
     simpleAttrAvailableNames: Array<string>;
 }
 
-export default class CreateAttribiuteComponent extends React.Component<any, CreateAttributeState> {
+export default class CreateAttributeComponent extends React.Component<any, CreateAttributeState> {
 
     counter = 0;
     getSimpleAttr(simpleAttr: Array<BasicAttrType>) {

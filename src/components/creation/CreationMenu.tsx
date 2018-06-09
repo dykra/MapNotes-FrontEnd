@@ -7,7 +7,7 @@ import { BasicAttrType } from '../../types/BasicAttrType';
 import { OPERATORS } from '../../constants/index';
 import { FormulaLists } from '../../types/creation/FormulaLists';
 import _ from 'lodash';
-import CreateAttribiuteComponent from './CreateAttribiuteComponent';
+import CreateAttributeComponent from './CreateAttributeComponent';
 
 interface CreationMenuState {
     isNewMapClicked: boolean;
@@ -88,7 +88,7 @@ export class CreationMenu extends React.Component <any, CreationMenuState> {
 
     render() {
         return (
-            <CreateAttribiuteComponent
+            <CreateAttributeComponent
                 handleClose={this.handleCloseAttr}
                 handleSave={this.handleSaveAttr}
             />
