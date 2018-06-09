@@ -210,7 +210,7 @@ export class MapContainer extends React.Component<MapContainerProps, MapContaine
                 onMapClick={this.handleMapClick}
                 markers={markers}
                 directions={this.props.directions}
-                defaultCenter={{lat: -34.397, lng: 150.644}}
+                defaultCenter={{lat: 50.03, lng: 19.56}}
                 defaultZoom={8}
                 handleMapMounted={this.handleMapMounted}
                 handleSearchBoxMounted={this.handleSearchBoxMounted}
