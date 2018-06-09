@@ -3,7 +3,7 @@ import { Button } from 'react-bootstrap';
 import { PinData } from '../../../types/api/PinData';
 import '../../../styles/map/GroupsStyle.css';
 import { getPinById } from '../../../api/PinApi';
-import { PinAttr } from '../../../types/creation/PinAttr';
+import { AttributeInfo } from '../../../types/creation/AttributeInfo';
 
 export interface FilterListComponentProps {
     visiblePins: PinData[];
@@ -15,7 +15,7 @@ export interface FilterListComponentProps {
 export interface FilterListComponentState {
     pinIdPrinted: any;
     buttonClicked: boolean;
-    attributes: PinAttr[];
+    attributes: AttributeInfo [];
 }
 
 export class FilterListComponent extends React.Component<FilterListComponentProps, FilterListComponentState> {
@@ -49,15 +49,12 @@ export class FilterListComponent extends React.Component<FilterListComponentProp
     renderNote(id: any) {
         if (this.state.buttonClicked && id === this.state.pinIdPrinted) {
             getPinById(this.state.pinIdPrinted, this.getPinCallback);
-            return this.state.attributes.map(e =>
-                (
-                    <div key={e.name}>
-                        <b>
-                            {e.name}
-                        </b> {e.value}
-                    </div>
-                )
-            );
+            console.log(this.state.attributes);
+            return this.state.attributes.map(attribute => (
+                <div key={attribute.name}>
+                    <b>{attribute.name} </b> {attribute.value}
+                </div>
+            ));
         }
         return null;
     }
