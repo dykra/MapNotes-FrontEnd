@@ -80,8 +80,12 @@ export class LeftBarComponent extends React.Component<LeftBarComponentProps, Lef
                    </div>
                    <div>
                        <Button
-                           className="DeleteMapButton"
-                           onClick={this.props.deleteMap}
+                           className="DeleteMapButton btn btn-danger"
+                           onClick={() => {
+                               if (window.confirm('Are you sure you wish to delete map?')) {
+                                   this.props.deleteMap();
+                               }
+                           }}
                        >
                            Delete Map
                        </Button>
