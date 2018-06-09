@@ -14,6 +14,7 @@ export interface FilterListComponentProps {
 
 export interface FilterListComponentState {
     pinIdPrinted: any;
+    pinIdAnimated: any;
     buttonClicked: boolean;
     attributes: AttributeInfo [];
 }
@@ -24,16 +25,18 @@ export class FilterListComponent extends React.Component<FilterListComponentProp
 
         this.state = {
             pinIdPrinted: 0, // TODO - co tu wpisac??
+            pinIdAnimated: -1,
             buttonClicked: false,
             attributes: [],
         };
         this.getPinCallback = this.getPinCallback.bind(this);
     }
 
-    handleClick(id: any) {
+    handleClick(id: any, i: any) {
         if (!this.state.buttonClicked) {
             this.setState({buttonClicked: true});
             this.setState({pinIdPrinted: id});
+            this.setState({pinIdAnimated: i});
         } else {
             this.setState({buttonClicked: false});
             this.setState({pinIdPrinted: -1});
@@ -43,7 +46,7 @@ export class FilterListComponent extends React.Component<FilterListComponentProp
 
     getPinCallback(pin: PinData) {
         this.setState({attributes: pin.data.attributes});
-        this.props.showAnimation(pin.id);
+        this.props.showAnimation(this.state.pinIdAnimated);
     }
 
     renderNote(id: any) {
@@ -66,7 +69,7 @@ export class FilterListComponent extends React.Component<FilterListComponentProp
                         const id = pins.id;
                         return (
                             <li key={id}>
-                                <Button onClick={() => this.handleClick(id)}>
+                                <Button onClick={() => this.handleClick(id, i)}>
                                     Pin {i}
                                 </Button>
                                 {this.renderNote(id)}
