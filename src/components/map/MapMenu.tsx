@@ -129,7 +129,7 @@ export class MapMenu extends React.Component<RouteComponentProps<MapMenuProps>, 
     deleteMap() {
         if (this.state.map && this.state.map.id) {
             deleteMapById(this.state.map.id, () => {
-                this.props.history.push('/');
+                this.props.history.push('/home');
             });
         }
     }
