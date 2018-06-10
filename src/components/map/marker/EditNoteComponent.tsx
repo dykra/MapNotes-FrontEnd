@@ -39,11 +39,16 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
         this.handlePin = this.handlePin.bind(this);
     }
 
+    findIndexForAttributeName(complexAttributeName: string) {
+        const pin = this.props.pin;
+        return pin.data.attributes.findIndex(value => value.name === complexAttributeName);
+    }
+
     handlePin() {
         const pin = this.props.pin;
         const defaultAttr = this.props.mapData.attributes;
         defaultAttr.forEach(attribute => {
-            const index = pin.data.attributes.findIndex(value => value.name === attribute.name);
+            const index = this.findIndexForAttributeName(attribute.name);
             if (index === -1) {
                 pin.data.attributes.push({name: attribute.name, type: attribute.type, value: ''});
             }
@@ -57,7 +62,7 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
             'opList': ['*', '-']});
 
         complexAttr.forEach(complexAttribute => {
-            const index = pin.data.attributes.findIndex(value => value.name === complexAttribute.name);
+            const index = this.findIndexForAttributeName(complexAttribute.name);
             if (index === -1) {
                 pin.data.attributes.push({name: complexAttribute.name, type: 'computed', value: ''});
             }
@@ -66,32 +71,20 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
         return pin;
     }
 
-    // todo funkcja do pobierania tego indeksu
     countrComplexAttributeValue(complexAttributeValue: FormulaLists) {
-
         const pin = this.props.pin;
-        // // const complexAttr = this.props.mapData.complexAttributes;
-        // const complexAttr = [];
-        // complexAttr.push( {name: 'Ac', 'attrList': ['a', 'b'],
-        //     'opList': ['+'] });
-        //
-        // complexAttr.push({ name: 'BD', 'attrList': ['a', 'b', 'b'],
-        //     'opList': ['*', '-']});
-
-        const operations = complexAttributeValue.attrList;
-        const simpleAttributeNames = complexAttributeValue.opList;
+        const simpleAttributeNames = complexAttributeValue.attrList;
+        const operations = complexAttributeValue.opList;
 
         var mathOperation: string = '';
-
-        operations.forEach( (operator: string) => {
-            let firstSimpleAttributeName = simpleAttributeNames.shift();
-            console.log(firstSimpleAttributeName);
-            const index = pin.data.attributes.findIndex(value => value.name === firstSimpleAttributeName);
+        simpleAttributeNames.forEach( (simpleAttributeName: string) => {
+            const index = this.findIndexForAttributeName(simpleAttributeName);
             console.log(index);
-            const index2 = pin.data.attributes.findIndex(value => value.name === operations[0]);
-            console.log(index2);
-            mathOperation += pin.data.attributes[index].value + ' ' +
-                operator + pin.data.attributes[index2].value + ' ';
+            mathOperation += pin.data.attributes[index].value + ' ';
+            let nextOperator = operations.shift();
+            if (nextOperator !== undefined) {
+                mathOperation += nextOperator  + ' ';
+            }
 
         });
         return math.eval(mathOperation);
@@ -102,14 +95,14 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
         // const complexAttr = this.props.mapData.complexAttributes;
 
         const complexAttr = [];
-        complexAttr.push( {name: 'Ac', 'attrList': ['a', 'c'],
+        complexAttr.push( {name: 'Ac', 'attrList': ['a', 'b'],
             'opList': ['+'] });
 
-        complexAttr.push({ name: 'BD', 'attrList': ['a', 'c', 'd'],
+        complexAttr.push({ name: 'BD', 'attrList': ['a', 'b', 'b'],
             'opList': ['*', '-']});
 
        complexAttr.forEach( complexAttribute => {
-            const index = pin.data.attributes.findIndex(value => value.name === complexAttribute.name);
+            const index = this.findIndexForAttributeName(complexAttribute.name);
             pin.data.attributes[index].value = this.countrComplexAttributeValue(complexAttribute);
         });
     }
