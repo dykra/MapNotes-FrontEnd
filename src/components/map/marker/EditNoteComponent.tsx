@@ -222,6 +222,11 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
         );
     }
 
+    isAttributeNumber(attribute: any) {
+        return((attribute.type === 'pln' || attribute.type === 'number'  || attribute.type === 'm^2')
+            && isNaN(Number(attribute.value)) );
+    }
+
     handleSave() {
 
         const pin = this.state.pin;
@@ -230,19 +235,16 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
         const emptyAttrWarning: string[] = [];
 
         const isBoolean = ((type: string) =>  {
-            return(type === 'yes' || type === 'no' || type === 'n' || type === 'y');
+            return(type === 'yes' || type === 'no');
         });
         pin.data.attributes.forEach((attr) => {
             if (attr.value === '' && this.isBasicType(attr) )  {
-                console.log('type', attr.type);
-                console.log(this.isBasicType(attr));
                 if (this.checkIfDefault(attr.name)) {
                     emptyDefaultAttr.push(attr.name);
                 } else {
                     emptyAttrWarning.push(attr.name);
                 }
-            } else if ((attr.type === 'pln' || attr.type === 'number'  || attr.type === 'm^2')
-                && isNaN(Number(attr.value)) ) {
+            } else if (this.isAttributeNumber(attr)) {
                     mismatchType.push({name: attr.name, type: attr.type});
 
             } else if (attr.type === 'yes/no' && !isBoolean(attr.value.toLowerCase())) {
