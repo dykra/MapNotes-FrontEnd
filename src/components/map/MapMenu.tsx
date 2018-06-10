@@ -92,7 +92,9 @@ export class MapMenu extends React.Component<RouteComponentProps<MapMenuProps>, 
         if (map && map.id) {
             map.data = mapSettings;
             putMap(map, newMap => {
-                this.setState({map: newMap});
+                this.setState({
+                    map: newMap
+                });
             });
 
         }
@@ -159,6 +161,7 @@ export class MapMenu extends React.Component<RouteComponentProps<MapMenuProps>, 
                         callbackOnRef={(ref: any) => (this.setState({ leftBar: ref}))}
                         leftBarComponentChild={this.state.leftBarComponentChild}
                         showInLeftBar={this.showInLeftBar}
+                        map={this.state.map}
                     />
                     <MapContainer
                         map={this.state.map}

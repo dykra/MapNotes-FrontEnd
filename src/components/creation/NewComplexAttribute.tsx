@@ -170,11 +170,11 @@ export default class NewComplexAttribute extends React.Component<any, NewComplex
 
     handleSave() {
         if (this.state.newComplexAttrName.length === 0) {
-            alert('name cannot be empty!');
+            alert('Name cannot be empty!\n');
         } else if (this.isNewAttrNameUsed()) {
-            alert('name already in use!');
+            alert('Name already in use!\n');
         } else if (!this.isProperValueInput()) {
-            alert('incorresct input !');
+            alert('Incorrect input!\n');
         } else {
             let complexAttr: ComplexAttrType = {
                 'name': this.state.newComplexAttrName,
