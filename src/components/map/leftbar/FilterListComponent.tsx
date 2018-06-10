@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from 'react-bootstrap';
+import { Button, ListGroup, ListGroupItem } from 'react-bootstrap';
 import { PinData } from '../../../types/api/PinData';
 import '../../../styles/map/leftbar/GroupsComponent.css';
 
@@ -46,12 +46,14 @@ export class FilterListComponent extends React.Component<FilterListComponentProp
             this.props.visiblePins.map((pin, i) => {
                 const id = pin.id;
                 return (
-                    <li key={id}>
+                    <ListGroup key={id}>
+                        <ListGroupItem>
                         <Button onClick={() => this.handleClick(id)}>
                             Pin {i}
                         </Button>
                         {this.renderNote(pin)}
-                    </li>
+                        </ListGroupItem>
+                    </ListGroup>
                 );
             })
         );
