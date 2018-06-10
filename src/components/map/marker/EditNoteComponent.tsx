@@ -38,6 +38,7 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
         };
         this.handleAddingNewAttribute = this.handleAddingNewAttribute.bind(this);
         this.handlePin = this.handlePin.bind(this);
+        this.handleSave = this.handleSave.bind(this);
     }
 
     findIndexForAttributeName(attributeName: string) {
@@ -176,16 +177,14 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
 
     deleteEmptyInputs() {
         const pin = this.state.pin;
-        pin.data.attributes = pin.data.attributes.filter(attr => attr.value !== '');
+        pin.data.attributes = pin.data.attributes.filter(attr => {
+                return((attr.value !== '' && this.isBasicType(attr.type)) || !this.isBasicType(attr.type));
+        }
+             );
         this.setState({
             pin,
             isAddNewAttrClick: false
         });
-    }
-
-    savePinAndUpdateComplexAttributes() {
-        this.handleComplexAttributes();
-        this.props.savePin(this.state.pin);
     }
 
     render() {
@@ -205,6 +204,7 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
                     <Button
                         className="btn btn-secondary"
                         onClick={() => {
+
                             this.deleteEmptyInputs();
                             this.props.close();
                         }}
@@ -233,7 +233,9 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
             return(type === 'yes' || type === 'no' || type === 'n' || type === 'y');
         });
         pin.data.attributes.forEach((attr) => {
-            if (attr.value === '')  {
+            if (attr.value === '' && this.isBasicType(attr) )  {
+                console.log('type', attr.type);
+                console.log(this.isBasicType(attr));
                 if (this.checkIfDefault(attr.name)) {
                     emptyDefaultAttr.push(attr.name);
                 } else {
@@ -255,7 +257,11 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
                     ' Attributes will be deleted.';
             }
             if (confirm('Are you sure you want to save?' + warningStatement)) {
-                this.deleteEmptyInputs();
+
+                if (warningStatement.length !== 0 ) {
+                    this.deleteEmptyInputs();
+                }
+                this.handleComplexAttributes();
                 this.props.savePin(this.state.pin);
             }
 
