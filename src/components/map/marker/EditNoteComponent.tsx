@@ -46,7 +46,67 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
                 pin.data.attributes.push({name: attribute.name, type: attribute.type, value: ''});
             }
         });
+
+        const complexAttr = [];
+        complexAttr.push( {name: 'Ac', 'attrList': ['a', 'c'],
+            'opList': ['+'] });
+
+        complexAttr.push({ name: 'BD', 'attrList': ['a', 'c', 'd'],
+            'opList': ['*', '-']});
+
+        complexAttr.forEach(complexAttribute => {
+            const index = pin.data.attributes.findIndex(value => value.name === complexAttribute.name);
+            if (index === -1) {
+                pin.data.attributes.push({name: complexAttribute.name, type: 'computed', value: ''});
+            }
+        });
+
         return pin;
+    }
+
+    countSingleOperation(opType: string, attribute1: number, attribute2: number) {
+        switch (opType) {
+            case '+':
+                return attribute1 + attribute2;
+            case '-':
+                return attribute1 - attribute2;
+            case '*':
+                return attribute1 * attribute2;
+            case '/':
+                return attribute1 / attribute2;
+            default:
+                return 0;
+        }
+    }
+
+    countrComplexAttributeValue(complexAttributeName: string) {
+        return '10';
+    }
+
+    handleComplexAttrib() {
+        const pin = this.props.pin;
+        // const complexAttr = this.props.mapData.complexAttributes;
+
+        const complexAttr = [];
+        complexAttr.push( {name: 'Ac', 'attrList': ['a', 'c'],
+            'opList': ['+'] });
+
+        complexAttr.push({ name: 'BD', 'attrList': ['a', 'c', 'd'],
+            'opList': ['*', '-']});
+
+        complexAttr.forEach(complexAttribute => {
+            const index = pin.data.attributes.findIndex(value => value.name === complexAttribute.name);
+            if (index === -1) {
+                pin.data.attributes.push({name: complexAttribute.name, type: 'computed', value: ''});
+            }
+        });
+
+       complexAttr.forEach( complexAttribute => {
+            const index = pin.data.attributes.findIndex(value => value.name === complexAttribute.name);
+            console.log(index);
+            console.log(this.countrComplexAttributeValue(complexAttribute.name));
+            pin.data.attributes[index].value = this.countrComplexAttributeValue(complexAttribute.name);
+        });
     }
 
     handleAddingNewAttribute(nameAttr: string, typeAttr: string, isDefault: boolean) {
@@ -69,7 +129,7 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
         });
     }
 
-    renderAddAtributeNote() {
+    renderAddAttributeNote() {
         if (this.state.isAddNewAttrClick) {
             return (
                 <AddNoteAttributeComponent
@@ -89,7 +149,16 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
                 attributes[index] = value;
             }
         });
+        this.handleComplexAttrib();
+        console.log(this.state.pin.data.attributes);
         this.setState({pin});
+    }
+
+    isBasicType(attibute: any) {
+        if ( attibute.type === 'computed') {
+            return false;
+        }
+        return true;
     }
 
     renderModalBody() {
@@ -100,7 +169,7 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
                     <FormGroup
                         controlId="NewNote"
                     >
-                        {attributes.map(attribute => (
+                        {attributes.filter(this.isBasicType).map(attribute => (
                             <div key={attribute.name}>
                                 <Col sm={4}>
                                     {attribute.name}
@@ -116,7 +185,7 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
                         ))}
                     </FormGroup>
                 </Form>
-                {this.renderAddAtributeNote()}
+                {this.renderAddAttributeNote()}
             </Modal.Body>
         );
     }
