@@ -41,7 +41,7 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
     }
 
     findIndexForAttributeName(complexAttributeName: string) {
-        const pin = this.state.pin;
+        const pin = this.props.pin;
         return pin.data.attributes.findIndex(value => value.name === complexAttributeName);
     }
 
