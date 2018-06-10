@@ -40,16 +40,16 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
         this.handlePin = this.handlePin.bind(this);
     }
 
-    findIndexForAttributeName(complexAttributeName: string) {
+    findIndexForAttributeName(attributeName: string) {
         const pin = this.props.pin;
-        return pin.data.attributes.findIndex(value => value.name === complexAttributeName);
+        return pin.data.attributes.findIndex(value => value.name === attributeName);
     }
 
     handlePin() {
         const pin = this.props.pin;
         const defaultAttr = this.props.mapData.attributes;
         defaultAttr.forEach(attribute => {
-            const index = this.findIndexForAttributeName(attribute.name);
+            const index = pin.data.attributes.findIndex(value => value.name === attribute.name);
             if (index === -1) {
                 pin.data.attributes.push({name: attribute.name, type: attribute.type, value: ''});
             }
@@ -85,7 +85,7 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
         return math.eval(mathOperation);
     }
 
-    handleComplexAttrib() {
+    handleComplexAttributes() {
         const pin = this.state.pin;
 
         const complexAttr = this.props.mapData.complexAttributes;
@@ -176,11 +176,7 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
 
     cancelNewInputs() {
         const pin = this.state.pin;
-        for (let key in pin.data.attributes) {
-            if (pin.data.attributes[key].value === '') {
-                delete pin.data.attributes[key];
-            }
-        }
+        pin.data.attributes = pin.data.attributes.filter(attr => attr.value !== '');
         this.setState({
             pin,
             isAddNewAttrClick: false
@@ -188,7 +184,7 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
     }
 
     savePinAndUpdateComplexAttributes() {
-        this.handleComplexAttrib();
+        this.handleComplexAttributes();
         this.props.savePin(this.state.pin);
     }
 
