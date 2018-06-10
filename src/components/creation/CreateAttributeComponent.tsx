@@ -13,13 +13,12 @@ import { OPERATORS, TYPES } from '../../constants/index';
 
 interface CreateAttributeState {
     showAddNewComplexAttr: boolean;
-    complexAttributes: Array<ComplexAttrType>;
-    simpleAttributes: Array<SimpleAttrType>;
-    simpleAttrAvailableNames: Array<string>;
+    complexAttributes: ComplexAttrType[];
+    simpleAttributes: SimpleAttrType[];
+    simpleAttrAvailableNames: string[];
 }
 
 export default class CreateAttributeComponent extends React.Component<any, CreateAttributeState> {
-
     counter = 0;
     getSimpleAttr(simpleAttr: Array<BasicAttrType>) {
         let simpleAttrWithIndex: Array<SimpleAttrType> = [];
@@ -60,25 +59,25 @@ export default class CreateAttributeComponent extends React.Component<any, Creat
         this.isNewAttrNameUsed = this.isNewAttrNameUsed.bind(this);
         this.handleClickSaveOnComplexAttrButton = this.handleClickSaveOnComplexAttrButton.bind(this);
         this.handleClickAddNewSimpleAttr = this.handleClickAddNewSimpleAttr.bind(this);
-        this.handleDeleteRow = this.handleDeleteRow.bind(this);
+        this.handleDeleteSimpleAttrRow = this.handleDeleteSimpleAttrRow.bind(this);
+        this.handleDeleteComplexAttrRow = this.handleDeleteComplexAttrRow.bind(this);
         this.handleClickSaveAttributes = this.handleClickSaveAttributes.bind(this);
         this.prepareBasicAttr  = this.prepareBasicAttr.bind(this);
         this.getAttrList = this.getAttrList.bind(this);
+        this.renderSimpleAttrTable = this.renderSimpleAttrTable.bind(this);
+        this.renderComplexAttrTable = this.renderComplexAttrTable.bind(this);
     }
 
-    getSimpleAttributesAvailableNames(simpleAttr: Array<any>) {
-        let a: Array<string> = [];
-        for (let i  = 0; i < simpleAttr.length; i++) {
-            if (simpleAttr[i].type === 'pln' || simpleAttr[i].type === 'm^2' || simpleAttr[i].type === 'number') {
-                a = a.concat(simpleAttr[i].name);
-            }
-        }
-        return a;
+    getSimpleAttributesAvailableNames(simpleAttr: SimpleAttrType[]) {
+        return simpleAttr
+            .filter(attr => attr.type === 'pln' || attr.type === 'm^2' || attr.type === 'number')
+            .filter(attr => attr.name !== '')
+            .map(attr => attr.name);
     }
 
     isNewAttrNameUsed(newName: string) {
-        const simpleNames: Array<string>  = this.state.simpleAttributes.map( i => i.name);
-        const complexNames: Array<string>  = this.state.complexAttributes.map(i => i.name);
+        const simpleNames: string[]  = this.state.simpleAttributes.map( i => i.name);
+        const complexNames: string[]  = this.state.complexAttributes.map(i => i.name);
 
         return (_.includes(simpleNames, newName) ||
             _.includes(complexNames, newName));
@@ -88,11 +87,20 @@ export default class CreateAttributeComponent extends React.Component<any, Creat
         const newSimpleAttr: SimpleAttrType = this.state.simpleAttributes.filter((attr) => attr.id === row.id)[0];
         if ( cellName === 'name') {
             if (this.isNewAttrNameUsed(cellValue) && cellValue !== '') {
-                alert ('name must be unique! ');
+                alert ('Name of simple attribute must be unique! ');
                 return false;
             }
             newSimpleAttr.name = cellValue;
         } else if ( cellName === 'type' ) {
+            // check if row is used in complex Attr
+            const  listOfUsedAttr = this.state.complexAttributes
+                .filter( (attr) => _.includes(this.getAttrList(attr.value), row.name));
+            if (listOfUsedAttr.length !== 0) {
+                alert('The value cannot be changed!\n ' +
+                    'There is a dependency in complex attributes\n' +
+                    'Try to delete first complex attribute. \n');
+                return false;
+            }
             newSimpleAttr.type = cellValue;
         }
         const index = _.findIndex(this.state.simpleAttributes, (attr) => attr.id === row.id);
@@ -130,8 +138,8 @@ export default class CreateAttributeComponent extends React.Component<any, Creat
         return args.filter(i => !_.includes(OPERATORS, i) && i !== '');
     }
 
-    handleDeleteRow(rows: any) {
-        const newSimpleAttributes: Array<SimpleAttrType> =
+    handleDeleteSimpleAttrRow(rows: any) {
+        const newSimpleAttributes: SimpleAttrType[] =
             this.state.simpleAttributes.filter((attr) => !_.includes(rows,  attr.id));
         let listOfUsedAttr: Array<any> = [];
 
@@ -139,6 +147,7 @@ export default class CreateAttributeComponent extends React.Component<any, Creat
             const toDeleteSimpleAttr: Array<string>  = this.state.simpleAttributes
                     .filter( (attr) => _.includes(rows, attr.id))
                     .map( (attr) => attr.name);
+
             for (let i = 0; i < this.state.complexAttributes.length; i++ ) {
                 listOfUsedAttr = this.getAttrList(this.state.complexAttributes[i].value)
                     .filter( j => _.includes(toDeleteSimpleAttr, j));
@@ -146,16 +155,15 @@ export default class CreateAttributeComponent extends React.Component<any, Creat
                     this.setState({
                         simpleAttributes: this.state.simpleAttributes
                     });
-                    alert('The rows cannot be deleted! \n There is a dependency in complex attributes');
+                    alert('The rows cannot be deleted! \n ' +
+                        'There is a dependency in complex attributes \n' +
+                        'Try to delete first complex attribute. \n');
                     return false;
                 }
             }
         }
         if (listOfUsedAttr.length === 0 ) {
-            const newComplexAttributes: Array<ComplexAttrType> =
-                _.filter(this.state.complexAttributes, (attr) => !_.includes(rows, attr.name));
             this.setState({
-                complexAttributes: newComplexAttributes,
                 simpleAttributes: newSimpleAttributes
             });
             alert('The rows are deleted: \n');
@@ -164,10 +172,20 @@ export default class CreateAttributeComponent extends React.Component<any, Creat
         return true;
     }
 
+    handleDeleteComplexAttrRow(rows: any) {
+        const newComplexAttributes: ComplexAttrType[] =
+            this.state.complexAttributes.filter((attr) => !_.includes(rows, attr.name));
+        this.setState({
+            complexAttributes: newComplexAttributes,
+        });
+        alert('The rows are deleted: \n' + rows);
+        return true;
+    }
+
     prepareBasicAttr() {
-        const simpleAttr: Array<SimpleAttrType> = this.state.simpleAttributes.filter(
-            (attr) => attr.name !== '' && attr.type !== '');
-        return simpleAttr.map((attr) => {
+        return this.state.simpleAttributes
+            .filter((attr) => attr.name !== '' && attr.type !== '')
+            .map((attr) => {
             return {
                 'name': attr.name,
                 'type': attr.type
@@ -191,50 +209,84 @@ export default class CreateAttributeComponent extends React.Component<any, Creat
         });
     }
 
-    render() {
-        const options = {
-            onDeleteRow: this.handleDeleteRow,
-        };
+    renderSimpleAttrTable() {
+        return (
+            <div>
+                <Button
+                    className={'NewComplexAttrButton'}
+                    bsSize="small"
+                    bsStyle="success"
+                    active={true}
+                    onClick={this.handleClickAddNewSimpleAttr}
+                >New
+                </Button>
+                <BootstrapTable
+                    deleteRow={true}
+                    selectRow={{mode: 'checkbox'}}
+                    cellEdit={{mode: 'click', blurToSave: true, beforeSaveCell: this.onBeforeSaveCell }}
+                    data={this.state.simpleAttributes}
+                    options={{
+                        onDeleteRow: this.handleDeleteSimpleAttrRow,
+                    }}
+                ><TableHeaderColumn
+                    dataField="id"
+                    isKey={true}
+                    hidden={true}
+                > id
+                </TableHeaderColumn>
+                    <TableHeaderColumn
+                        dataField="name"
+                    > simple attribute name
+                    </TableHeaderColumn>
+                    <TableHeaderColumn
+                        dataField="type"
+                        dataSort={true}
+                        editable={{ type: 'select', options: {values: [''].concat(TYPES)}}}
+                    >simple attr type
+                    </TableHeaderColumn>
+                </BootstrapTable>
+            </div>
+        );
+    }
 
-        let simpleAttrTable;
-        if (this.state.simpleAttributes.length === 0) {
-            simpleAttrTable = <div/>;
-        } else {
-            simpleAttrTable = (
-                <div>
+    renderComplexAttrTable() {
+        return (
+            <div className={'ComplexAttrTable'}>
+                <div className={'NewButton'}>
                     <Button
                         className={'NewComplexAttrButton'}
                         bsSize="small"
                         bsStyle="success"
                         active={true}
-                        onClick={this.handleClickAddNewSimpleAttr}
+                        onClick={this.handleClickAddNewComplexAttr}
                     >New
                     </Button>
-                    <BootstrapTable
-                        deleteRow={true}
-                        selectRow={{mode: 'checkbox'}}
-                        cellEdit={{mode: 'click', blurToSave: true, beforeSaveCell: this.onBeforeSaveCell }}
-                        data={this.state.simpleAttributes}
-                        options={options}
-                    ><TableHeaderColumn
-                        dataField="id"
+                </div>
+                <BootstrapTable
+                    deleteRow={true}
+                    selectRow={{mode: 'checkbox'}}
+                    data={this.state.complexAttributes}
+                    options={{
+                        onDeleteRow: this.handleDeleteComplexAttrRow
+                    }}
+                >
+                    <TableHeaderColumn
+                        dataField="name"
+                        editable={false}
                         isKey={true}
-                        hidden={true}
-                    > id
+                    > complex attribute name
                     </TableHeaderColumn>
-                        <TableHeaderColumn
-                            dataField="name"
-                        > simple attribute name
-                        </TableHeaderColumn>
-                        <TableHeaderColumn
-                            dataField="type"
-                            dataSort={true}
-                            editable={{ type: 'select', options: {values: TYPES }}}
-                        >simple attr type
-                        </TableHeaderColumn>
-                    </BootstrapTable>
-                </div>);
-        }
+                    <TableHeaderColumn
+                        dataField="value"
+                        editable={true}
+                    >complex attribute value
+                    </TableHeaderColumn>
+                </BootstrapTable>
+            </div>
+        );
+    }
+
+    render() {
 
         let newComplexAttrModal;
         if (this.state.showAddNewComplexAttr) {
@@ -251,46 +303,6 @@ export default class CreateAttributeComponent extends React.Component<any, Creat
             newComplexAttrModal = <div/>;
         }
 
-        let complexAttTable;
-        switch (this.state.complexAttributes) {
-            case []:
-                complexAttTable = <div/>;
-                break;
-            default:
-                complexAttTable = (
-                    <div className={'ComplexAttrTable'}>
-                        <div className={'NewButton'}>
-                            <Button
-                                className={'NewComplexAttrButton'}
-                                bsSize="small"
-                                bsStyle="success"
-                                active={true}
-                                onClick={this.handleClickAddNewComplexAttr}
-                            >New
-                            </Button>
-                        </div>
-                        <BootstrapTable
-                            deleteRow={true}
-                            selectRow={{mode: 'checkbox'}}
-                            data={this.state.complexAttributes}
-                            options={options}
-                        >
-                            <TableHeaderColumn
-                                dataField="name"
-                                editable={false}
-                                isKey={true}
-                            > complex attribute name
-                            </TableHeaderColumn>
-                            <TableHeaderColumn
-                                dataField="value"
-                                editable={true}
-                            >complex attribute value
-                            </TableHeaderColumn>
-                        </BootstrapTable>
-                    </div>);
-                break;
-        }
-
         return (
             <div>
                 <Modal.Dialog>
@@ -302,11 +314,11 @@ export default class CreateAttributeComponent extends React.Component<any, Creat
                         <ModalBody>
                             <div className={'attrTable'}>
                                 <h4 className={'attrTitle'}>Basic Attributes</h4>
-                                {simpleAttrTable}
+                                {this.renderSimpleAttrTable()}
                             </div>
                             <div className={'attrTable'}>
                                 <h4 className={'attrTitle'}>Complex Attributes</h4>
-                                {complexAttTable}
+                                {this.renderComplexAttrTable()}
                             </div>
                             <div>{newComplexAttrModal} </div>
                         </ModalBody>

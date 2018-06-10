@@ -9,35 +9,16 @@ import { FormulaLists } from '../../types/creation/FormulaLists';
 import _ from 'lodash';
 import CreateAttributeComponent from './CreateAttributeComponent';
 
-interface CreationMenuState {
-    isNewMapClicked: boolean;
-    isOpen: boolean;
-}
-
-export class CreationMenu extends React.Component <any, CreationMenuState> {
+export class CreationMenu extends React.Component <any, {}> {
 
     constructor(props: any) {
         super(props);
-        this.state = {
-            isNewMapClicked : false,
-            isOpen : false,
-        };
-
         this.myCallback = this.myCallback.bind(this);
-        this.toggleModal = this.toggleModal.bind(this);
         this.handleCloseAttr = this.handleCloseAttr.bind(this);
         this.handleSaveAttr = this.handleSaveAttr.bind(this);
     }
 
-    toggleModal() {
-        this.setState({
-            isOpen: !this.state.isOpen,
-            isNewMapClicked: !this.state.isNewMapClicked
-        });
-    }
-
     handleCloseAttr() {
-        this.toggleModal();
         this.props.history.push('/');
     }
 
@@ -77,7 +58,7 @@ export class CreationMenu extends React.Component <any, CreationMenuState> {
             id: 0,
             pins: pin
         };
-        this.toggleModal();
+        console.log(map);
         putMap(map, this.myCallback);
     }
 
