@@ -1,4 +1,5 @@
 import * as React from 'react';
+import math from 'mathjs';
 import { Button, Modal } from 'react-bootstrap';
 import { AddNoteAttributeComponent } from './AddNoteAttributeComponent';
 import Form from 'reactstrap/lib/Form';
@@ -7,6 +8,7 @@ import Col from 'reactstrap/lib/Col';
 import * as FormControl from 'react-bootstrap/lib/FormControl';
 import { MapSettings } from '../../../types/map/MapSettings';
 import { PinData } from '../../../types/api/PinData';
+import { FormulaLists } from '../../../types/creation/FormulaLists';
 
 export interface EditNoteComponentProps {
     pin: PinData;
@@ -64,23 +66,35 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
         return pin;
     }
 
-    countSingleOperation(opType: string, attribute1: number, attribute2: number) {
-        switch (opType) {
-            case '+':
-                return attribute1 + attribute2;
-            case '-':
-                return attribute1 - attribute2;
-            case '*':
-                return attribute1 * attribute2;
-            case '/':
-                return attribute1 / attribute2;
-            default:
-                return 0;
-        }
-    }
+    // todo funkcja do pobierania tego indeksu
+    countrComplexAttributeValue(complexAttributeValue: FormulaLists) {
 
-    countrComplexAttributeValue(complexAttributeName: string) {
-        return '10';
+        const pin = this.props.pin;
+        // // const complexAttr = this.props.mapData.complexAttributes;
+        // const complexAttr = [];
+        // complexAttr.push( {name: 'Ac', 'attrList': ['a', 'b'],
+        //     'opList': ['+'] });
+        //
+        // complexAttr.push({ name: 'BD', 'attrList': ['a', 'b', 'b'],
+        //     'opList': ['*', '-']});
+
+        const operations = complexAttributeValue.attrList;
+        const simpleAttributeNames = complexAttributeValue.opList;
+
+        var mathOperation: string = '';
+
+        operations.forEach( (operator: string) => {
+            let firstSimpleAttributeName = simpleAttributeNames.shift();
+            console.log(firstSimpleAttributeName);
+            const index = pin.data.attributes.findIndex(value => value.name === firstSimpleAttributeName);
+            console.log(index);
+            const index2 = pin.data.attributes.findIndex(value => value.name === operations[0]);
+            console.log(index2);
+            mathOperation += pin.data.attributes[index].value + ' ' +
+                operator + pin.data.attributes[index2].value + ' ';
+
+        });
+        return math.eval(mathOperation);
     }
 
     handleComplexAttrib() {
@@ -94,18 +108,9 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
         complexAttr.push({ name: 'BD', 'attrList': ['a', 'c', 'd'],
             'opList': ['*', '-']});
 
-        complexAttr.forEach(complexAttribute => {
-            const index = pin.data.attributes.findIndex(value => value.name === complexAttribute.name);
-            if (index === -1) {
-                pin.data.attributes.push({name: complexAttribute.name, type: 'computed', value: ''});
-            }
-        });
-
        complexAttr.forEach( complexAttribute => {
             const index = pin.data.attributes.findIndex(value => value.name === complexAttribute.name);
-            console.log(index);
-            console.log(this.countrComplexAttributeValue(complexAttribute.name));
-            pin.data.attributes[index].value = this.countrComplexAttributeValue(complexAttribute.name);
+            pin.data.attributes[index].value = this.countrComplexAttributeValue(complexAttribute);
         });
     }
 
