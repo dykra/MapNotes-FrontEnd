@@ -66,6 +66,7 @@ export default class CreateAttributeComponent extends React.Component<any, Creat
         this.getAttrList = this.getAttrList.bind(this);
         this.renderSimpleAttrTable = this.renderSimpleAttrTable.bind(this);
         this.renderComplexAttrTable = this.renderComplexAttrTable.bind(this);
+        this.renderNewComplexAttrModal = this.renderNewComplexAttrModal.bind(this);
     }
 
     getSimpleAttributesAvailableNames(simpleAttr: SimpleAttrType[]) {
@@ -91,7 +92,7 @@ export default class CreateAttributeComponent extends React.Component<any, Creat
                 return false;
             }
             newSimpleAttr.name = cellValue;
-        } else if ( cellName === 'type' ) {
+        } else if ( cellName === 'type' && cellValue !== '') {
             // check if row is used in complex Attr
             const  listOfUsedAttr = this.state.complexAttributes
                 .filter( (attr) => _.includes(this.getAttrList(attr.value), row.name));
@@ -286,11 +287,9 @@ export default class CreateAttributeComponent extends React.Component<any, Creat
         );
     }
 
-    render() {
-
-        let newComplexAttrModal;
+    renderNewComplexAttrModal() {
         if (this.state.showAddNewComplexAttr) {
-            newComplexAttrModal = (
+            return (
                 <NewComplexAttribute
                     handleClickSaveOnComplexAttrButton={this.handleClickSaveOnComplexAttrButton}
                     handleCloseAddNewAttrBox={this.handleCloseAddNewAttrBox}
@@ -299,10 +298,11 @@ export default class CreateAttributeComponent extends React.Component<any, Creat
                     simpleAttr={this.state.simpleAttributes}
                 />);
 
-        } else {
-            newComplexAttrModal = <div/>;
         }
+        return null;
+    }
 
+    render() {
         return (
             <div>
                 <Modal.Dialog>
@@ -320,7 +320,7 @@ export default class CreateAttributeComponent extends React.Component<any, Creat
                                 <h4 className={'attrTitle'}>Complex Attributes</h4>
                                 {this.renderComplexAttrTable()}
                             </div>
-                            <div>{newComplexAttrModal} </div>
+                            <div>{this.renderNewComplexAttrModal()} </div>
                         </ModalBody>
                         <Modal.Footer>
                             <Button
