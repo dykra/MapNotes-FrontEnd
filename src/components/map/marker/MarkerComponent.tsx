@@ -37,7 +37,6 @@ export class MarkerComponent extends React.Component<MarkerComponentProps, Marke
         this.setState(
             () => this.props.savePin(pin)
         );
-        console.log(this.props.pin.data.attributes);
     }
 
     renderPinAttributes() {
