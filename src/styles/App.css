@@ -22,43 +22,9 @@
     font-size: large;
 }
 
-
 .google-map {
   width: 100%;
   height: 100%;
-}
-
-.ClosedLeftBar {
-    margin-top: 0.5%;
-    margin-bottom: 0.5%;
-    width: 5%;
-    height: 96%;
-    float: left;
-}
-
-.OpenedLeftBar {
-    margin-top: 0.5%;
-    margin-bottom: 0.5%;
-    width: 25%;
-    height: 96%;
-    float: left;
-}
-
-.CloseLeftBarButton {
-    float: right;
-    background: #4285f4 !important;
-    color: white !important;
-}
-
-.OpenLeftBarButton {
-    float: right;
-    background: #4285f4;
-    color: white;
-}
-
-.TransportBar {
-    display: block;
-    margin: 20% 2.5% 10%;
 }
 
 .PinBar{
@@ -67,28 +33,8 @@
 }
 
 .TransportComponent{
-    /*background: linear-gradient(#d4d4d4, #ddffff);*/
     background-color: #ffffff;
-    /*border-style: solid;*/
-    /*border-color: #2196F3 !important;*/
     border-left: 6px solid #4285f4 !important;
-}
-
-.TransportBar > label{
-    margin-left: 10%;
-}
-
-.SearchTransportButton {
-    margin-top: 5%;
-    margin-bottom:5%;
-    margin-right: 2.5%;
-    float: right;
-}
-
-.RemoveTransport{
-    padding-left: 1%;
-    margin-left: 60%;
-    margin-top: 5%;
 }
 
 .deleteNewAttrNote {
@@ -138,4 +84,9 @@
     display: inline-block;
     margin-top: 2%;
     margin-left: 2%;
+}
+
+.Buttons {
+    display: flex;
+    justify-content: space-between;
 }
