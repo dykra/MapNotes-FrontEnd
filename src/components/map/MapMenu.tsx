@@ -25,7 +25,6 @@ export interface MapMenuState {
     directions: any;
     leftBar: any;
     leftBarComponentChild?: any;
-    animatedId: any;
 }
 
 export class MapMenu extends React.Component<RouteComponentProps<MapMenuProps>, MapMenuState> {
@@ -36,7 +35,6 @@ export class MapMenu extends React.Component<RouteComponentProps<MapMenuProps>, 
         this.state = {
             directions : null,
             leftBar: null,
-            animatedId: -1,
         };
 
         this.filter = this.filter.bind(this);

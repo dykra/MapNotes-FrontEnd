@@ -20,7 +20,7 @@ export class FilterListComponent extends React.Component<FilterListComponentProp
         super(props);
 
         this.state = {
-            pinIdPrinted: 0,
+            pinIdPrinted: undefined,
             buttonClicked: false,
             attributes: [],
         };
@@ -33,7 +33,6 @@ export class FilterListComponent extends React.Component<FilterListComponentProp
             this.setState({buttonClicked: true});
         } else {
             this.setState({buttonClicked: false});
-            // this.setState({pinIdPrinted: -1});
         }
     }
 
@@ -44,7 +43,6 @@ export class FilterListComponent extends React.Component<FilterListComponentProp
     renderNote(id: any) {
         if (this.state.buttonClicked && id === this.state.pinIdPrinted) {
             getPinById(this.state.pinIdPrinted, this.getPinCallback);
-            console.log(this.state.attributes);
             return this.state.attributes.map(attribute => (
                 <div key={attribute.name}>
                     <b>{attribute.name} </b> {attribute.value}
@@ -56,27 +54,26 @@ export class FilterListComponent extends React.Component<FilterListComponentProp
 
     renderList() {
         return (
-            <ul className="pins">
-                {this.props.visiblePins.map((pin) => {
-                        const id = pin.id;
-                        return (
-                            <li key={id}>
-                                <Button onClick={() => this.handleClick(id)}>
-                                    Pin {id}
-                                </Button>
-                                {this.renderNote(id)}
-                            </li>
-                        );
-                    }
-                )}
-            </ul>
+            this.props.visiblePins.map((pin) => {
+                const id = pin.id;
+                return (
+                    <li key={id}>
+                        <Button onClick={() => this.handleClick(id)}>
+                            Pin {id}
+                        </Button>
+                        {this.renderNote(id)}
+                    </li>
+                );
+            })
         );
     }
 
     render() {
         return (
             <div className="filterList">
-                {this.renderList()}
+                <ul className="pins">
+                    {this.renderList()}
+                </ul>
             </div>
         );
     }
