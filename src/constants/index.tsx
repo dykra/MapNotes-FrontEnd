@@ -6,3 +6,4 @@ export const BASE_ICON_URL = 'https://maps.google.com/mapfiles/ms/icons/';
 export const MAP_ID_STORAGE = 'mapID';
 export const TYPES = [ 'm^2', 'pln', 'yes/no', 'text', 'number' ];
 export const OPERATORS = ['+', '-', '*', '/'];
+export const COMPLEX_ATTRIBUTE_TYPE = 'computed';
