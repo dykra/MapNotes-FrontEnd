@@ -55,12 +55,7 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
             }
         });
 
-        const complexAttr = [];
-        complexAttr.push( {name: 'Ac', 'attrList': ['a', 'c'],
-            'opList': ['+'] });
-
-        complexAttr.push({ name: 'BD', 'attrList': ['a', 'c', 'd'],
-            'opList': ['*', '-']});
+        const complexAttr = this.props.mapData.complexAttributes;
 
         complexAttr.forEach(complexAttribute => {
             const index = this.findIndexForAttributeName(complexAttribute.name);
@@ -92,14 +87,8 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
 
     handleComplexAttrib() {
         const pin = this.state.pin;
-        // const complexAttr = this.props.mapData.complexAttributes;
 
-        const complexAttr = [];
-        complexAttr.push( {name: 'Ac', 'attrList': ['a', 'b'],
-            'opList': ['+'] });
-
-        complexAttr.push({ name: 'BD', 'attrList': ['a', 'b', 'b'],
-            'opList': ['*', '-']});
+        const complexAttr = this.props.mapData.complexAttributes;
 
        complexAttr.forEach( complexAttribute => {
             const index = this.findIndexForAttributeName(complexAttribute.name);
