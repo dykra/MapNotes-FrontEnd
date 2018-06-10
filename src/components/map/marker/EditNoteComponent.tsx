@@ -9,6 +9,7 @@ import * as FormControl from 'react-bootstrap/lib/FormControl';
 import { MapSettings } from '../../../types/map/MapSettings';
 import { PinData } from '../../../types/api/PinData';
 import { FormulaLists } from '../../../types/creation/FormulaLists';
+import { COMPLEX_ATTRIBUTE_TYPE } from '../../../constants';
 
 export interface EditNoteComponentProps {
     pin: PinData;
@@ -64,19 +65,20 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
         complexAttr.forEach(complexAttribute => {
             const index = this.findIndexForAttributeName(complexAttribute.name);
             if (index === -1) {
-                pin.data.attributes.push({name: complexAttribute.name, type: 'computed', value: ''});
+                pin.data.attributes.push({name: complexAttribute.name, type: COMPLEX_ATTRIBUTE_TYPE, value: ''});
             }
         });
 
         return pin;
     }
 
-    countrComplexAttributeValue(complexAttributeValue: FormulaLists) {
+    countComplexAttributeValue(complexAttributeValue: FormulaLists) {
         const pin = this.props.pin;
         const simpleAttributeNames = complexAttributeValue.attrList;
         const operations = complexAttributeValue.opList;
 
-        var mathOperation: string = '';
+        let mathOperation: string = '';
+
         simpleAttributeNames.forEach( (simpleAttributeName: string) => {
             const index = this.findIndexForAttributeName(simpleAttributeName);
             console.log(index);
@@ -85,7 +87,6 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
             if (nextOperator !== undefined) {
                 mathOperation += nextOperator  + ' ';
             }
-
         });
         return math.eval(mathOperation);
     }
@@ -103,7 +104,7 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
 
        complexAttr.forEach( complexAttribute => {
             const index = this.findIndexForAttributeName(complexAttribute.name);
-            pin.data.attributes[index].value = this.countrComplexAttributeValue(complexAttribute);
+            pin.data.attributes[index].value = this.countComplexAttributeValue(complexAttribute);
         });
     }
 
@@ -147,16 +148,11 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
                 attributes[index] = value;
             }
         });
-        this.handleComplexAttrib();
-        console.log(this.state.pin.data.attributes);
         this.setState({pin});
     }
 
-    isBasicType(attibute: any) {
-        if ( attibute.type === 'computed') {
-            return false;
-        }
-        return true;
+    isBasicType(attributeType: any) {
+        return attributeType.type !== COMPLEX_ATTRIBUTE_TYPE;
     }
 
     renderModalBody() {
@@ -201,6 +197,11 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
         });
     }
 
+    savePinAndUpdateComplexAttributes() {
+        this.props.savePin(this.state.pin);
+        this.handleComplexAttrib();
+    }
+
     render() {
         return(
             <div>
@@ -226,7 +227,7 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
                     </Button>
                     <Button
                         className="btn btn-primary"
-                        onClick={() => this.props.savePin(this.state.pin)}
+                        onClick={() => this.savePinAndUpdateComplexAttributes()}
                     >
                         Save
                     </Button>
