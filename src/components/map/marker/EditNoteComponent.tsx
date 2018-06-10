@@ -35,6 +35,7 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
         };
         this.handleAddingNewAttribute = this.handleAddingNewAttribute.bind(this);
         this.handlePin = this.handlePin.bind(this);
+        this.handleSave = this.handleSave.bind(this);
     }
 
     handlePin() {
@@ -121,7 +122,7 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
         );
     }
 
-    cancelNewInputs() {
+    deleteEmptyInputs() {
         const pin = this.state.pin;
         pin.data.attributes = pin.data.attributes.filter(attr => attr.value !== '');
         this.setState({
@@ -147,7 +148,7 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
                     <Button
                         className="btn btn-secondary"
                         onClick={() => {
-                            this.cancelNewInputs();
+                            this.deleteEmptyInputs();
                             this.props.close();
                         }}
                     >
@@ -155,12 +156,70 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
                     </Button>
                     <Button
                         className="btn btn-primary"
-                        onClick={() => this.props.savePin(this.state.pin)}
+                        onClick={this.handleSave}
                     >
                         Save
                     </Button>
                 </Modal.Footer>
             </div>
         );
+    }
+
+    handleSave() {
+
+        const pin = this.state.pin;
+        const emptyDefaultAttr: string[] = [];
+        const mismatchType: any[] = [];
+        const emptyAttrWarning: string[] = [];
+
+        const isBoolean = ((type: string) =>  {
+            return(type === 'yes' || type === 'no' || type === 'n' || type === 'y');
+        });
+        pin.data.attributes.forEach((attr) => {
+            if (attr.value === '')  {
+                if (this.checkIfDefault(attr.name)) {
+                    emptyDefaultAttr.push(attr.name);
+                } else {
+                    emptyAttrWarning.push(attr.name);
+                }
+            } else if ((attr.type === 'pln' || attr.type === 'number'  || attr.type === 'm^2')
+                && isNaN(Number(attr.value)) ) {
+                    mismatchType.push({name: attr.name, type: attr.type});
+
+            } else if (attr.type === 'yes/no' && !isBoolean(attr.value.toLowerCase())) {
+                mismatchType.push({name: attr.name, type: attr.type});
+            }
+
+        });
+        if (emptyDefaultAttr.length === 0 && mismatchType.length === 0) {
+            let warningStatement = '';
+            if (emptyAttrWarning.length !== 0) {
+                warningStatement = '\nAdditional attributes (' + emptyAttrWarning + ' )in the note are incomplete.' +
+                    ' Attributes will be deleted.';
+            }
+            if (confirm('Are you sure you want to save?' + warningStatement)) {
+                this.deleteEmptyInputs();
+                this.props.savePin(this.state.pin);
+            }
+
+        } else {
+            let errorStatement = '';
+            if (emptyDefaultAttr.length !== 0) {
+                errorStatement += 'Default attributes ( ' + emptyDefaultAttr + ' ) must be filled out. \n';
+            }
+            if (mismatchType.length !== 0) {
+                mismatchType.forEach(e => {
+                    errorStatement += 'The value of attribute ' + e.name + ' has incompatible type. ' +
+                        'Require - ' + e.type + '.\n';
+                });
+            }
+            alert(errorStatement);
+        }
+    }
+
+    checkIfDefault(name: string) {
+        const defaults = this.props.mapData.attributes.map(e => e.name);
+        const isDefault = defaults.filter(e => e === name );
+        return isDefault.length;
     }
 }
