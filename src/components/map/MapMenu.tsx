@@ -92,7 +92,9 @@ export class MapMenu extends React.Component<RouteComponentProps<MapMenuProps>, 
         if (map && map.id) {
             map.data = mapSettings;
             putMap(map, newMap => {
-                this.setState({map: newMap});
+                this.setState({
+                    map: newMap
+                });
             });
 
         }
