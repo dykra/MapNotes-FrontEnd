@@ -2,8 +2,6 @@ import React from 'react';
 import { Button } from 'react-bootstrap';
 import { PinData } from '../../../types/api/PinData';
 import '../../../styles/map/GroupsStyle.css';
-import { getPinById } from '../../../api/PinApi';
-import { AttributeInfo } from '../../../types/creation/AttributeInfo';
 
 export interface FilterListComponentProps {
     visiblePins: PinData[];
@@ -12,7 +10,6 @@ export interface FilterListComponentProps {
 export interface FilterListComponentState {
     pinIdPrinted: any;
     buttonClicked: boolean;
-    attributes: AttributeInfo[];
 }
 
 export class FilterListComponent extends React.Component<FilterListComponentProps, FilterListComponentState> {
@@ -22,9 +19,7 @@ export class FilterListComponent extends React.Component<FilterListComponentProp
         this.state = {
             pinIdPrinted: undefined,
             buttonClicked: false,
-            attributes: [],
         };
-        this.getPinCallback = this.getPinCallback.bind(this);
     }
 
     handleClick(id: any) {
@@ -36,14 +31,9 @@ export class FilterListComponent extends React.Component<FilterListComponentProp
         }
     }
 
-    getPinCallback(pin: PinData) {
-        this.setState({attributes: pin.data.attributes});
-    }
-
-    renderNote(id: any) {
-        if (this.state.buttonClicked && id === this.state.pinIdPrinted) {
-            getPinById(this.state.pinIdPrinted, this.getPinCallback);
-            return this.state.attributes.map(attribute => (
+    renderNote(pin: PinData) {
+        if (this.state.buttonClicked && pin.id === this.state.pinIdPrinted) {
+            return pin.data.attributes.map(attribute => (
                 <div key={attribute.name}>
                     <b>{attribute.name} </b> {attribute.value}
                 </div>
@@ -61,7 +51,7 @@ export class FilterListComponent extends React.Component<FilterListComponentProp
                         <Button onClick={() => this.handleClick(id)}>
                             Pin {id}
                         </Button>
-                        {this.renderNote(id)}
+                        {this.renderNote(pin)}
                     </li>
                 );
             })
