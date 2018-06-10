@@ -39,25 +39,19 @@ export class GroupsComponent extends React.Component<GroupsComponentProps , Grou
     }
 
     handleColor(color: string) {
-        console.log('visible pins');
-        console.log(this.props.visiblePins);
-        console.log('changed pins');
-        console.log(this.props.changePins);
         this.props.visiblePins.forEach(pin => {
             pin.data.groupName = color;
-                console.log(pin);
             }
         );
         this.props.changePins(this.props.visiblePins);
     }
 
-    renderColorButtons() {
+    renderButtons() {
         if (this.state.visibleColors) {
             return (
                 <div className="OpenedColors">
                     <Button onClick={this.hideColors}>Hide</Button>
                     <ButtonToolbar>
-                        <Button bsClass="redButton" onClick={() => this.handleColor('red')}>Red</Button>
                         <Button bsClass="pinkButton" onClick={() => this.handleColor('pink')}>Pink</Button>
                         <Button bsClass="greenButton" onClick={() => this.handleColor('green')}>Green</Button>
                         <Button bsClass="yellowButton" onClick={() => this.handleColor('yellow')}>Yellow</Button>
@@ -66,14 +60,15 @@ export class GroupsComponent extends React.Component<GroupsComponentProps , Grou
                 </div>
             );
         }
-        return null;
+        return (
+            <Button onClick={this.showColors}>New group</Button>
+        );
     }
 
     render() {
         return (
             <div className="groups">
-                {this.renderColorButtons()}
-                <Button onClick={this.showColors}>New group</Button>
+                {this.renderButtons()}
             </div>);
     }
 }

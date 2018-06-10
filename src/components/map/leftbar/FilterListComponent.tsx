@@ -33,7 +33,7 @@ export class FilterListComponent extends React.Component<FilterListComponentProp
             this.setState({buttonClicked: true});
         } else {
             this.setState({buttonClicked: false});
-            this.setState({pinIdPrinted: -1});
+            // this.setState({pinIdPrinted: -1});
         }
     }
 
@@ -57,15 +57,15 @@ export class FilterListComponent extends React.Component<FilterListComponentProp
     renderList() {
         return (
             <ul className="pins">
-                {this.props.visiblePins.map((pins) => {
-                        const id = pins.id;
+                {this.props.visiblePins.map((pin) => {
+                        const id = pin.id;
                         return (
-                                <li key={id}>
-                                    <Button onClick={() => this.handleClick(id)}>
-                                        Pin {id}
-                                    </Button>
-                                    {this.renderNote(id)}
-                                </li>
+                            <li key={id}>
+                                <Button onClick={() => this.handleClick(id)}>
+                                    Pin {id}
+                                </Button>
+                                {this.renderNote(id)}
+                            </li>
                         );
                     }
                 )}
@@ -77,6 +77,7 @@ export class FilterListComponent extends React.Component<FilterListComponentProp
         return (
             <div className="filterList">
                 {this.renderList()}
-            </div>);
+            </div>
+        );
     }
 }

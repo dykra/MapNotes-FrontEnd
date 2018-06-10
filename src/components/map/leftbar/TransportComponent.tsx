@@ -16,7 +16,7 @@ export interface TransportComponentState {
     travelMode: google.maps.TravelMode;
     directionsService: any;
     startDestination?: any;
-    endDestination?: any;  
+    endDestination?: any;
     currentDistance: any;
 }
 
