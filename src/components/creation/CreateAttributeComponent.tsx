@@ -167,7 +167,7 @@ export default class CreateAttributeComponent extends React.Component<any, Creat
             this.setState({
                 simpleAttributes: newSimpleAttributes
             });
-            alert('The rows are deleted: \n');
+            alert('The rows are deleted: \n' + rows);
             return true;
         }
         return true;

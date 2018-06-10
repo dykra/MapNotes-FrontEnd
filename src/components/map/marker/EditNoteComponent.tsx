@@ -38,6 +38,7 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
         };
         this.handleAddingNewAttribute = this.handleAddingNewAttribute.bind(this);
         this.handlePin = this.handlePin.bind(this);
+        this.handleSave = this.handleSave.bind(this);
     }
 
     findIndexForAttributeName(attributeName: string) {
@@ -174,18 +175,16 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
         );
     }
 
-    cancelNewInputs() {
+    deleteEmptyInputs() {
         const pin = this.state.pin;
-        pin.data.attributes = pin.data.attributes.filter(attr => attr.value !== '');
+        pin.data.attributes = pin.data.attributes.filter(attr => {
+                return((attr.value !== '' && this.isBasicType(attr.type)) || !this.isBasicType(attr.type));
+        }
+             );
         this.setState({
             pin,
             isAddNewAttrClick: false
         });
-    }
-
-    savePinAndUpdateComplexAttributes() {
-        this.handleComplexAttributes();
-        this.props.savePin(this.state.pin);
     }
 
     render() {
@@ -205,7 +204,8 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
                     <Button
                         className="btn btn-secondary"
                         onClick={() => {
-                            this.cancelNewInputs();
+
+                            this.deleteEmptyInputs();
                             this.props.close();
                         }}
                     >
@@ -213,12 +213,78 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
                     </Button>
                     <Button
                         className="btn btn-primary"
-                        onClick={() => this.savePinAndUpdateComplexAttributes()}
+                        onClick={this.handleSave}
                     >
                         Save
                     </Button>
                 </Modal.Footer>
             </div>
         );
+    }
+
+    isAttributeNumber(attribute: any) {
+        return((attribute.type === 'pln' || attribute.type === 'number'  || attribute.type === 'm^2')
+            && isNaN(Number(attribute.value)) );
+    }
+
+    handleSave() {
+
+        const pin = this.state.pin;
+        const emptyDefaultAttr: string[] = [];
+        const mismatchType: any[] = [];
+        const emptyAttrWarning: string[] = [];
+
+        const isBoolean = ((type: string) =>  {
+            return(type === 'yes' || type === 'no');
+        });
+        pin.data.attributes.forEach((attr) => {
+            if (attr.value === '' && this.isBasicType(attr) )  {
+                if (this.checkIfDefault(attr.name)) {
+                    emptyDefaultAttr.push(attr.name);
+                } else {
+                    emptyAttrWarning.push(attr.name);
+                }
+            } else if (this.isAttributeNumber(attr)) {
+                    mismatchType.push({name: attr.name, type: attr.type});
+
+            } else if (attr.type === 'yes/no' && !isBoolean(attr.value.toLowerCase())) {
+                mismatchType.push({name: attr.name, type: attr.type});
+            }
+
+        });
+        if (emptyDefaultAttr.length === 0 && mismatchType.length === 0) {
+            let warningStatement = '';
+            if (emptyAttrWarning.length !== 0) {
+                warningStatement = '\nAdditional attributes (' + emptyAttrWarning + ' )in the note are incomplete.' +
+                    ' Attributes will be deleted.';
+            }
+            if (confirm('Are you sure you want to save?' + warningStatement)) {
+
+                if (warningStatement.length !== 0 ) {
+                    this.deleteEmptyInputs();
+                }
+                this.handleComplexAttributes();
+                this.props.savePin(this.state.pin);
+            }
+
+        } else {
+            let errorStatement = '';
+            if (emptyDefaultAttr.length !== 0) {
+                errorStatement += 'Default attributes ( ' + emptyDefaultAttr + ' ) must be filled out. \n';
+            }
+            if (mismatchType.length !== 0) {
+                mismatchType.forEach(e => {
+                    errorStatement += 'The value of attribute ' + e.name + ' has incompatible type. ' +
+                        'Require - ' + e.type + '.\n';
+                });
+            }
+            alert(errorStatement);
+        }
+    }
+
+    checkIfDefault(name: string) {
+        const defaults = this.props.mapData.attributes.map(e => e.name);
+        const isDefault = defaults.filter(e => e === name );
+        return isDefault.length;
     }
 }
