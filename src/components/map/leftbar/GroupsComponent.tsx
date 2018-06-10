@@ -1,8 +1,8 @@
 import React from 'react';
 import { Button } from 'react-bootstrap';
-import * as ButtonToolbar from 'react-bootstrap/lib/ButtonToolbar';
 import { PinData } from '../../../types/api/PinData';
 import '../../../styles/map/leftbar/GroupsComponent.css';
+import { addStyle } from 'react-bootstrap/lib/utils/bootstrapUtils';
 
 export interface GroupsComponentProps {
     visiblePins: PinData[];
@@ -14,6 +14,7 @@ export interface GroupsComponentState {
 }
 
 export class GroupsComponent extends React.Component<GroupsComponentProps , GroupsComponentState> {
+
     constructor(props: GroupsComponentProps ) {
         super(props);
 
@@ -24,6 +25,11 @@ export class GroupsComponent extends React.Component<GroupsComponentProps , Grou
         this.showColors = this.showColors.bind(this);
         this.hideColors = this.hideColors.bind(this);
         this.handleColor = this.handleColor.bind(this);
+
+        addStyle(Button, 'pink');
+        addStyle(Button, 'green');
+        addStyle(Button, 'yellow');
+        addStyle(Button, 'blue');
     }
 
     showColors() {
@@ -48,21 +54,19 @@ export class GroupsComponent extends React.Component<GroupsComponentProps , Grou
 
     renderButtons() {
         if (this.state.visibleColors) {
-            return (
-                <div className="ChooseGroup">
-                    <div className="ColorButtons">
-                        <ButtonToolbar>
-                            <Button bsClass="pinkButton" onClick={() => this.handleColor('pink')}>Pink</Button>
-                            <Button bsClass="greenButton" onClick={() => this.handleColor('green')}>Green</Button>
-                            <Button bsClass="yellowButton" onClick={() => this.handleColor('yellow')}>Yellow</Button>
-                            <Button bsClass="blueButton" onClick={() => this.handleColor('blue')}>Blue</Button>
-                        </ButtonToolbar>
+                return (
+                    <div>
+                        <div className="ColorButtons">
+                                <Button bsStyle="pink" onClick={() => this.handleColor('pink')}>Pink</Button>
+                                <Button bsStyle="green" onClick={() => this.handleColor('green')}>Green</Button>
+                                <Button bsStyle="yellow" onClick={() => this.handleColor('yellow')}>Yellow</Button>
+                                <Button bsStyle="blue" onClick={() => this.handleColor('blue')}>Blue</Button>
+                        </div>
+                        <div className="Hide">
+                            <Button onClick={this.hideColors}>Hide</Button>
+                        </div>
                     </div>
-                    <div className="HideContent">
-                        <Button bsClass="hideButton" onClick={this.hideColors}>Hide</Button>
-                    </div>
-                </div>
-            );
+                );
         }
         return (
             <Button onClick={this.showColors}>New group</Button>

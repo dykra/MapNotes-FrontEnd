@@ -2,30 +2,27 @@
     display: flex;
     flex-direction: column;
 }
-/*.ChooseGroup{*/
-    /*display: inherit;*/
-    /*flex-direction: ;*/
-/*}*/
-.ColorButtons {
-    alignment: center;
-}
-.HideContent {
-    display: flex;
-    flex-direction: column;
+.ColorButtons{
     padding: 5%;
 }
-.redButton{
-    background-Color: #ff4c4c;
+.Hide {
+    display: flex;
+    flex-direction: column;
 }
-.pinkButton{
-    background-Color: #ff00ce;
+
+.btn-pink {
+    background-color: #dc27db;
+    margin: 1%;
 }
-.yellowButton{
-    background-Color: #ffe700;
+.btn-yellow{
+    background-color: yellow;
+    margin: 1%;
 }
-.greenButton{
-    background-Color: #09d617;
+.btn-green{
+    background-color: #1adc33;
+    margin: 1%;
 }
-.blueButton{
-    background-Color: #0752f2;
+.btn-blue{
+    background-color: #3433dc;
+    margin: 1%;
 }
