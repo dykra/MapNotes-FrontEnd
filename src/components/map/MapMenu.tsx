@@ -1,5 +1,6 @@
 import * as React from 'react';
 import '../../styles/App.css';
+import '../../styles/map/MapMenu.css';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/css/bootstrap-theme.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -150,7 +151,7 @@ export class MapMenu extends React.Component<RouteComponentProps<MapMenuProps>, 
         if (this.state.map) {
             const visiblePins = this.state.filterPin || this.state.map.pins;
             return (
-                <div style={{height: '100%'}} >
+                <div className="menu" >
                     <LeftBarComponent
                         filter={this.filter}
                         removeFilter={this.removeFilter}

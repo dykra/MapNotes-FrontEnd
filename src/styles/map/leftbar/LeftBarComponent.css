@@ -1,0 +1,29 @@
+.LeftBar {
+    overflow: auto;
+    height: 100%;
+    width: auto;
+    float: left;
+    background-color: #0f4057;
+}
+
+.ClosedLeftBar {
+    width: 5vw;
+}
+
+.OpenedLeftBar {
+    width: 25vw;
+}
+
+.LeftBarContent {
+    display: flex;
+    flex-direction: column;
+}
+
+.CloseLeftBarButton {
+    float: right;
+}
+
+
+.NavButtons{
+    padding-bottom: 10px;
+}
