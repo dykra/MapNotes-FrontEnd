@@ -49,7 +49,7 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
         const pin = this.props.pin;
         const defaultAttr = this.props.mapData.attributes;
         defaultAttr.forEach(attribute => {
-            const index = pin.data.attributes.findIndex(value => value.name === attribute.name);
+            const index = this.findIndexForAttributeName(attribute.name);
             if (index === -1) {
                 pin.data.attributes.push({name: attribute.name, type: attribute.type, value: ''});
             }
