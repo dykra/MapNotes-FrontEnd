@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button } from 'react-bootstrap';
 import { PinData } from '../../../types/api/PinData';
-import '../../../styles/map/GroupsStyle.css';
+import '../../../styles/map/leftbar/GroupsComponent.css';
 
 export interface FilterListComponentProps {
     visiblePins: PinData[];
@@ -24,8 +24,7 @@ export class FilterListComponent extends React.Component<FilterListComponentProp
 
     handleClick(id: any) {
         if (!this.state.buttonClicked) {
-            this.setState({pinIdPrinted: id});
-            this.setState({buttonClicked: true});
+            this.setState({pinIdPrinted: id, buttonClicked: true});
         } else {
             this.setState({buttonClicked: false});
         }

@@ -2,7 +2,7 @@ import React from 'react';
 import { Button } from 'react-bootstrap';
 import * as ButtonToolbar from 'react-bootstrap/lib/ButtonToolbar';
 import { PinData } from '../../../types/api/PinData';
-import '../../../styles/map/GroupsStyle.css';
+import '../../../styles/map/leftbar/GroupsComponent.css';
 
 export interface GroupsComponentProps {
     visiblePins: PinData[];
@@ -49,14 +49,18 @@ export class GroupsComponent extends React.Component<GroupsComponentProps , Grou
     renderButtons() {
         if (this.state.visibleColors) {
             return (
-                <div className="OpenedColors">
-                    <Button onClick={this.hideColors}>Hide</Button>
-                    <ButtonToolbar>
-                        <Button bsClass="pinkButton" onClick={() => this.handleColor('pink')}>Pink</Button>
-                        <Button bsClass="greenButton" onClick={() => this.handleColor('green')}>Green</Button>
-                        <Button bsClass="yellowButton" onClick={() => this.handleColor('yellow')}>Yellow</Button>
-                        <Button bsClass="blueButton" onClick={() => this.handleColor('blue')}>Blue</Button>
-                    </ButtonToolbar>
+                <div className="ChooseGroup">
+                    <div className="ColorButtons">
+                        <ButtonToolbar>
+                            <Button bsClass="pinkButton" onClick={() => this.handleColor('pink')}>Pink</Button>
+                            <Button bsClass="greenButton" onClick={() => this.handleColor('green')}>Green</Button>
+                            <Button bsClass="yellowButton" onClick={() => this.handleColor('yellow')}>Yellow</Button>
+                            <Button bsClass="blueButton" onClick={() => this.handleColor('blue')}>Blue</Button>
+                        </ButtonToolbar>
+                    </div>
+                    <div className="HideContent">
+                        <Button bsClass="hideButton" onClick={this.hideColors}>Hide</Button>
+                    </div>
                 </div>
             );
         }
@@ -67,7 +71,7 @@ export class GroupsComponent extends React.Component<GroupsComponentProps , Grou
 
     render() {
         return (
-            <div className="groups">
+            <div className="GroupsContent">
                 {this.renderButtons()}
             </div>);
     }
