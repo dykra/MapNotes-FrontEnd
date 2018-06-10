@@ -162,7 +162,6 @@ export class MapMenu extends React.Component<RouteComponentProps<MapMenuProps>, 
                         callbackOnRef={(ref: any) => (this.setState({ leftBar: ref}))}
                         leftBarComponentChild={this.state.leftBarComponentChild}
                         showInLeftBar={this.showInLeftBar}
-                        // map={this.state.map}
                     />
                     <MapContainer
                         map={this.state.map}

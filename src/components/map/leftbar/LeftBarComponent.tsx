@@ -20,7 +20,6 @@ export interface LeftBarComponentProps {
     callbackOnRef: any;
     showInLeftBar: (component: any) => void;
     leftBarComponentChild?: any;
-    // map: MapData;
 }
 
 export interface LeftBarState {
