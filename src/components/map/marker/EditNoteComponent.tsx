@@ -73,7 +73,7 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
     }
 
     countComplexAttributeValue(complexAttributeValue: FormulaLists) {
-        const pin = this.props.pin;
+        const pin = this.state.pin;
         const simpleAttributeNames = complexAttributeValue.attrList;
         const operations = complexAttributeValue.opList;
 
@@ -81,7 +81,6 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
 
         simpleAttributeNames.forEach( (simpleAttributeName: string) => {
             const index = this.findIndexForAttributeName(simpleAttributeName);
-            console.log(index);
             mathOperation += pin.data.attributes[index].value + ' ';
             let nextOperator = operations.shift();
             if (nextOperator !== undefined) {
@@ -92,7 +91,7 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
     }
 
     handleComplexAttrib() {
-        const pin = this.props.pin;
+        const pin = this.state.pin;
         // const complexAttr = this.props.mapData.complexAttributes;
 
         const complexAttr = [];
@@ -106,6 +105,8 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
             const index = this.findIndexForAttributeName(complexAttribute.name);
             pin.data.attributes[index].value = this.countComplexAttributeValue(complexAttribute);
         });
+
+        this.setState({pin});
     }
 
     handleAddingNewAttribute(nameAttr: string, typeAttr: string, isDefault: boolean) {
@@ -198,8 +199,8 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
     }
 
     savePinAndUpdateComplexAttributes() {
-        this.props.savePin(this.state.pin);
         this.handleComplexAttrib();
+        this.props.savePin(this.state.pin);
     }
 
     render() {
