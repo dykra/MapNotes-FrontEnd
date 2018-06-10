@@ -54,13 +54,13 @@ export default class FilterComponent extends React.Component<FilterComponentProp
                 <FormGroup>
                     <Col componentClass={ControlLabel} sm={8}>Filter</Col>
                     <Col sm={6}><b>Examples:</b> <br/>
-                        {/*a & b | b & c*/}
-                        {/*attributeName:value*/}
-                        {/*canBeRawString*/}
-                        {/*forExactValueUsePoint.*/}
-                        {/*pointsCanBeInAttribute.:value*/}
-                        {/*numberAttribute:!=2*/}
-                        {/*numberAttribute:&lt;3*/}
+                        a & b | b & c
+                        attributeName:value
+                        canBeRawString
+                        forExactValueUsePoint.
+                        pointsCanBeInAttribute.:value
+                        numberAttribute:!=2
+                        numberAttribute:&lt;3
                         <FormControl
                             placeholder="enter filter"
                             onChange={this.onChangeFilterInput}

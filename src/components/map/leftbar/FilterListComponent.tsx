@@ -7,16 +7,12 @@ import { AttributeInfo } from '../../../types/creation/AttributeInfo';
 
 export interface FilterListComponentProps {
     visiblePins: PinData[];
-    changePins: (pins: PinData[]) => void;
-    animatedId: number;
-    showAnimation: (id: any) => void;
 }
 
 export interface FilterListComponentState {
     pinIdPrinted: any;
-    pinIdAnimated: any;
     buttonClicked: boolean;
-    attributes: AttributeInfo [];
+    attributes: AttributeInfo[];
 }
 
 export class FilterListComponent extends React.Component<FilterListComponentProps, FilterListComponentState> {
@@ -24,29 +20,25 @@ export class FilterListComponent extends React.Component<FilterListComponentProp
         super(props);
 
         this.state = {
-            pinIdPrinted: 0, // TODO - co tu wpisac??
-            pinIdAnimated: -1,
+            pinIdPrinted: 0,
             buttonClicked: false,
             attributes: [],
         };
         this.getPinCallback = this.getPinCallback.bind(this);
     }
 
-    handleClick(id: any, i: any) {
+    handleClick(id: any) {
         if (!this.state.buttonClicked) {
-            this.setState({buttonClicked: true});
             this.setState({pinIdPrinted: id});
-            this.setState({pinIdAnimated: i});
+            this.setState({buttonClicked: true});
         } else {
             this.setState({buttonClicked: false});
             this.setState({pinIdPrinted: -1});
-            this.props.showAnimation(-1);
         }
     }
 
     getPinCallback(pin: PinData) {
         this.setState({attributes: pin.data.attributes});
-        this.props.showAnimation(this.state.pinIdAnimated);
     }
 
     renderNote(id: any) {
@@ -65,16 +57,15 @@ export class FilterListComponent extends React.Component<FilterListComponentProp
     renderList() {
         return (
             <ul className="pins">
-                {this.props.visiblePins.map((pins, i) => {
+                {this.props.visiblePins.map((pins) => {
                         const id = pins.id;
                         return (
-                            <li key={id}>
-                                <Button onClick={() => this.handleClick(id, i)}>
-                                    Pin {i}
-                                </Button>
-                                {this.renderNote(id)}
-                            </li>
-
+                                <li key={id}>
+                                    <Button onClick={() => this.handleClick(id)}>
+                                        Pin {id}
+                                    </Button>
+                                    {this.renderNote(id)}
+                                </li>
                         );
                     }
                 )}
