@@ -7,6 +7,8 @@ import FilterComponent from './FilterComponent';
 import { Filter } from '../../../types/filter/Filter';
 import { PinData } from '../../../types/api/PinData';
 import { Link } from 'react-router-dom';
+import { MapData } from '../../../types/api/MapData';
+import { exportToCSV } from '../../../utils/csv/csvConverter';
 
 export interface LeftBarComponentProps {
     filter: (filter: Filter) => void;
@@ -18,6 +20,7 @@ export interface LeftBarComponentProps {
     callbackOnRef: any;
     showInLeftBar: (component: any) => void;
     leftBarComponentChild?: any;
+    map: MapData;
 }
 
 export interface LeftBarState {
@@ -94,6 +97,12 @@ export class LeftBarComponent extends React.Component<LeftBarComponentProps, Lef
                                Home
                            </Button>
                        </Link>
+                       <Button
+                           className="ExportButton"
+                           onClick={() => exportToCSV(this.props.map)}
+                       >
+                           Export to CSV
+                       </Button>
                    </div>
                    <TransportComponent
                        onRef={(ref: any) => (this.references.transportComponent = ref)}
