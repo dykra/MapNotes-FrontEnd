@@ -1,4 +1,5 @@
 import * as React from 'react';
+import math from 'mathjs';
 import { Button, Modal } from 'react-bootstrap';
 import { AddNoteAttributeComponent } from './AddNoteAttributeComponent';
 import Form from 'reactstrap/lib/Form';
@@ -7,6 +8,8 @@ import Col from 'reactstrap/lib/Col';
 import * as FormControl from 'react-bootstrap/lib/FormControl';
 import { MapSettings } from '../../../types/map/MapSettings';
 import { PinData } from '../../../types/api/PinData';
+import { FormulaLists } from '../../../types/creation/FormulaLists';
+import { COMPLEX_ATTRIBUTE_TYPE } from '../../../constants';
 
 export interface EditNoteComponentProps {
     pin: PinData;
@@ -37,16 +40,62 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
         this.handlePin = this.handlePin.bind(this);
     }
 
+    findIndexForAttributeName(attributeName: string) {
+        const pin = this.props.pin;
+        return pin.data.attributes.findIndex(value => value.name === attributeName);
+    }
+
     handlePin() {
         const pin = this.props.pin;
         const defaultAttr = this.props.mapData.attributes;
         defaultAttr.forEach(attribute => {
-            const index = pin.data.attributes.findIndex(value => value.name === attribute.name);
+            const index = this.findIndexForAttributeName(attribute.name);
             if (index === -1) {
                 pin.data.attributes.push({name: attribute.name, type: attribute.type, value: ''});
             }
         });
+
+        const complexAttr = this.props.mapData.complexAttributes;
+
+        complexAttr.forEach(complexAttribute => {
+            const index = this.findIndexForAttributeName(complexAttribute.name);
+            if (index === -1) {
+                pin.data.attributes.push({name: complexAttribute.name, type: COMPLEX_ATTRIBUTE_TYPE, value: ''});
+            }
+        });
+
         return pin;
+    }
+
+    countComplexAttributeValue(complexAttributeValue: FormulaLists) {
+        const pin = this.state.pin;
+        const simpleAttributeNames = complexAttributeValue.attrList;
+        const operations = complexAttributeValue.opList;
+
+        let mathOperation: string = '';
+
+        simpleAttributeNames.forEach( (simpleAttributeName: string) => {
+            const index = this.findIndexForAttributeName(simpleAttributeName);
+            mathOperation += pin.data.attributes[index].value + ' ';
+            let nextOperator = operations.shift();
+            if (nextOperator !== undefined) {
+                mathOperation += nextOperator  + ' ';
+            }
+        });
+        return math.eval(mathOperation);
+    }
+
+    handleComplexAttributes() {
+        const pin = this.state.pin;
+
+        const complexAttr = this.props.mapData.complexAttributes;
+
+       complexAttr.forEach( complexAttribute => {
+            const index = this.findIndexForAttributeName(complexAttribute.name);
+            pin.data.attributes[index].value = this.countComplexAttributeValue(complexAttribute);
+        });
+
+        this.setState({pin});
     }
 
     handleAddingNewAttribute(nameAttr: string, typeAttr: string, isDefault: boolean) {
@@ -69,7 +118,7 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
         });
     }
 
-    renderAddAtributeNote() {
+    renderAddAttributeNote() {
         if (this.state.isAddNewAttrClick) {
             return (
                 <AddNoteAttributeComponent
@@ -92,6 +141,10 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
         this.setState({pin});
     }
 
+    isBasicType(attributeType: any) {
+        return attributeType.type !== COMPLEX_ATTRIBUTE_TYPE;
+    }
+
     renderModalBody() {
         const attributes = this.state.pin.data.attributes;
         return(
@@ -100,7 +153,7 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
                     <FormGroup
                         controlId="NewNote"
                     >
-                        {attributes.map(attribute => (
+                        {attributes.filter(this.isBasicType).map(attribute => (
                             <div key={attribute.name}>
                                 <Col sm={4}>
                                     {attribute.name}
@@ -116,7 +169,7 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
                         ))}
                     </FormGroup>
                 </Form>
-                {this.renderAddAtributeNote()}
+                {this.renderAddAttributeNote()}
             </Modal.Body>
         );
     }
@@ -128,6 +181,11 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
             pin,
             isAddNewAttrClick: false
         });
+    }
+
+    savePinAndUpdateComplexAttributes() {
+        this.handleComplexAttributes();
+        this.props.savePin(this.state.pin);
     }
 
     render() {
@@ -155,7 +213,7 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
                     </Button>
                     <Button
                         className="btn btn-primary"
-                        onClick={() => this.props.savePin(this.state.pin)}
+                        onClick={() => this.savePinAndUpdateComplexAttributes()}
                     >
                         Save
                     </Button>
