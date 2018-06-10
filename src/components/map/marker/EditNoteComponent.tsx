@@ -2,8 +2,6 @@ import * as React from 'react';
 import math from 'mathjs';
 import { Button, Modal } from 'react-bootstrap';
 import { AddNoteAttributeComponent } from './AddNoteAttributeComponent';
-import Form from 'reactstrap/lib/Form';
-import * as FormGroup from 'react-bootstrap/lib/FormGroup';
 import Col from 'reactstrap/lib/Col';
 import * as FormControl from 'react-bootstrap/lib/FormControl';
 import { MapSettings } from '../../../types/map/MapSettings';
@@ -148,29 +146,22 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
     renderModalBody() {
         const attributes = this.state.pin.data.attributes;
         return(
-            <Modal.Body>
-                <Form >
-                    <FormGroup
-                        controlId="NewNote"
-                    >
-                        {attributes.filter(this.isBasicType).map(attribute => (
-                            <div key={attribute.name}>
-                                <Col sm={4}>
-                                    {attribute.name}
-                                </Col>
-                                <Col sm={8}>
-                                    <FormControl
-                                        onChange={(event) => this.handleChange(attribute.name, event)}
-                                        placeholder="Enter a value"
-                                        value={attribute.value}
-                                    />
-                                </Col>
-                            </div>
-                        ))}
-                    </FormGroup>
-                </Form>
-                {this.renderAddAttributeNote()}
-            </Modal.Body>
+            <div>
+                {attributes.filter(this.isBasicType).map(attribute => (
+                    <div key={attribute.name} className={'editNoteOneAttr'}>
+                        <Col sm={4}>
+                            {attribute.name}
+                        </Col>
+                        <Col sm={8} className={'editNoteInputs'}>
+                            <FormControl
+                                onChange={(event) => this.handleChange(attribute.name, event)}
+                                placeholder="Enter a value"
+                                value={attribute.value}
+                            />
+                        </Col>
+                    </div>
+                ))}
+            </div>
         );
     }
 
@@ -191,16 +182,14 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
     render() {
         return(
             <div>
-                <Modal.Title>Edit note</Modal.Title>
-
-                {this.renderModalBody()}
-
+                <h4 className={'editNoteTitle'}>Edit note</h4>
+                <div className={'editNoteFillAttr'}>{this.renderModalBody()} </div>
+                <div className={'editNoteFillAttr'}>{this.renderAddAttributeNote()}</div>
                 <Modal.Footer>
                     <Button
                         className="btn btn-secondary"
                         onClick={() => this.setState({isAddNewAttrClick: true})}
-                    >
-                        Add new attribute
+                    > Add new attribute
                     </Button>
                     <Button
                         className="btn btn-secondary"
@@ -208,14 +197,12 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
                             this.cancelNewInputs();
                             this.props.close();
                         }}
-                    >
-                        Close
+                    > Close
                     </Button>
                     <Button
                         className="btn btn-primary"
                         onClick={() => this.savePinAndUpdateComplexAttributes()}
-                    >
-                        Save
+                    > Save
                     </Button>
                 </Modal.Footer>
             </div>

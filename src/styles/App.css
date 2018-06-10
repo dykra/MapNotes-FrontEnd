@@ -139,3 +139,44 @@
     margin-top: 2%;
     margin-left: 2%;
 }
+
+.typeButton {
+    margin-left: 2%;
+    margin-right: 2%;
+    text-align: left;
+    margin-top: 1%;
+}
+
+.editNoteNewAttrButton {
+    margin-left: 1%;
+}
+
+.editNoteButtons {
+    float: right;
+    margin-bottom: 2%;
+    margin-top: 2%;
+}
+
+.editNoteNewAttr {
+    margin: 5% 2% 2%;
+}
+
+.editNoteFillAttr {
+    margin: 5% 2%;
+    float: left;
+}
+
+.editNoteOneAttr {
+    margin-top: 0.5%;
+    margin-bottom: 0.5%;
+    float: left;
+}
+
+.editNoteTitle {
+    text-align: center;
+    color: darkblue;
+}
+
+.editNoteInputs {
+    text-align: right;
+}

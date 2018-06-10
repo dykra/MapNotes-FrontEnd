@@ -74,8 +74,9 @@ export class AddNoteAttributeComponent extends React.Component<AddAttributeCompo
 
     render() {
         return(
-            <div>
-                <Form horizontal={true}>
+            <div className={'editNoteNewAttr'}>
+                <Form>
+                    <h4 className={'editNoteTitle'}> Add new Attribute </h4>
                     <FormGroup
                         controlId="NewAttrName"
                         validationState={this.getValidationStateName()}
@@ -91,7 +92,6 @@ export class AddNoteAttributeComponent extends React.Component<AddAttributeCompo
                             />
                         </Col>
                     </FormGroup>
-
                     <FormGroup
                         controlId="newAttrType"
                         validationState={this.getValidationStateType()}
@@ -99,21 +99,27 @@ export class AddNoteAttributeComponent extends React.Component<AddAttributeCompo
                         <Col componentClass={ControlLabel} sm={2}>
                             Type
                         </Col>
+                        <Col sm={10}>
                             {this.createButtonTypes()}
+                        </Col>
                     </FormGroup>
                     <FormGroup>
-                        <Col smOffset={2} sm={4}>
+                        <Col smOffset={2} sm={10}>
                            <Checkbox onClick={this.handleCheckbox} onSelect={this.handleCheckbox}>
                                 Add attribute as default</Checkbox>
                         </Col>
                     </FormGroup>
+                    <div className={'editNoteButtons'}>
+                        <Button
+                            onClick={this.props.cancel}
+                        > Cancel
+                        </Button>
+                        <Button
+                            onClick={this.handleSave}
+                        >Save
+                        </Button>
+                    </div>
                 </Form>
-                <Button className="btn btn-secondary" onClick={this.props.cancel}>
-                    Cancel
-                </Button>
-                <Button className="btn btn-primary" onClick={this.handleSave}>
-                    Save
-                </Button>
             </div>
         );
     }
@@ -136,7 +142,6 @@ export class AddNoteAttributeComponent extends React.Component<AddAttributeCompo
                     </Button>
                 );
             }
-
         );
         return buttonTypes;
     }
