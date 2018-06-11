@@ -69,21 +69,21 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
     }
 
     countComplexAttributeValue(complexAttributeValue: FormulaLists) {
-        const pin = this.state.pin;
-        const simpleAttributeNames = complexAttributeValue.attrList;
+
+        const attributes = this.state.pin.data.attributes;
+        const values = complexAttributeValue.attrList.map(name => {
+            const index = attributes.findIndex(attr => attr.name === name);
+            return attributes[index].value;
+        });
         const operations = complexAttributeValue.opList;
 
-        let mathOperation: string = '';
+        let result = values[0];
 
-        simpleAttributeNames.forEach( (simpleAttributeName: string) => {
-            const index = this.findIndexForAttributeName(simpleAttributeName);
-            mathOperation += pin.data.attributes[index].value + ' ';
-            let nextOperator = operations.shift();
-            if (nextOperator !== undefined) {
-                mathOperation += nextOperator  + ' ';
-            }
+        operations.forEach((operator, index) => {
+            result += ` ${operator} ${values[index + 1]}`;
         });
-        return math.eval(mathOperation);
+
+        return math.eval(result);
     }
 
     handleComplexAttributes() {
