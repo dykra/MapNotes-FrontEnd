@@ -1,11 +1,9 @@
 import * as Button from 'react-bootstrap/lib/Button';
 import * as React from 'react';
-import * as FormControl from 'react-bootstrap/lib/FormControl';
-import * as ControlLabel from 'react-bootstrap/lib/ControlLabel';
-import { FormGroup } from 'react-bootstrap';
-import * as Col from 'react-bootstrap/lib/Col';
 import { Filter } from '../../../types/filter/Filter';
 import { parseFilterInput } from '../../../utils/filter/parseFilterInput';
+import '../../../styles/map/leftbar/FilterComponent.css';
+import Input from 'reactstrap/lib/Input';
 
 interface FilterState {
     input: string;
@@ -48,32 +46,61 @@ export default class FilterComponent extends React.Component<FilterComponentProp
         }
     }
 
+    clear() {
+        this.setState({input: ''});
+        this.props.removeFilter();
+    }
+
     render() {
         return (
-            <div className={'FilterBar'}>
-                <FormGroup>
-                    <Col componentClass={ControlLabel} sm={8}>Filter</Col>
-                    <Col sm={6}><b>Examples:</b> <br/>
-                        a & b | b & c
-                        attributeName:value
-                        canBeRawString
-                        forExactValueUsePoint.
-                        pointsCanBeInAttribute.:value
-                        numberAttribute:!=2
-                        numberAttribute:&lt;3
-                        <FormControl
-                            placeholder="enter filter"
-                            onChange={this.onChangeFilterInput}
-                        />
-                    </Col>
+            <div className="FilterContent">
+                Filter
+                <Input
+                    placeholder="enter filter"
+                    onChange={this.onChangeFilterInput}
+                    value={this.state.input}
+                />
+                <div className="Buttons">
                     <Button
-                        className={'FilterButton'}
-                        bsSize="small"
-                        active={true}
+                        className="btn"
                         onClick={this.filter}
-                    >Filter
+                    >
+                        Filter
                     </Button>
-                </FormGroup>
+                    <Button
+                        className="btn"
+                        onClick={() => this.clear()}
+                    >
+                        Clear
+                    </Button>
+                </div>
+
+                <div>
+                    <h4>Examples:</h4>
+                    <ul>
+                        <li>
+                            {'a & b | b & c'}
+                        </li>
+                        <li>
+                            attributeName:value
+                        </li>
+                        <li>
+                            canBeRawString
+                        </li>
+                        <li>
+                            forExactValueUsePoint.
+                        </li>
+                        <li>
+                            pointsCanBeInAttribute.:value
+                        </li>
+                        <li>
+                            numberAttribute:!=2
+                        </li>
+                        <li>
+                            numberAttribute:&lt;3
+                        </li>
+                    </ul>
+                </div>
             </div>
         );
     }

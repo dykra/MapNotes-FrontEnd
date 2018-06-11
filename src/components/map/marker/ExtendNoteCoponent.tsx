@@ -3,6 +3,7 @@ import { Button } from 'react-bootstrap';
 import { MapSettings } from '../../../types/map/MapSettings';
 import { PinData } from '../../../types/api/PinData';
 import { EditNoteComponent } from './EditNoteComponent';
+import * as Glyphicon from 'react-bootstrap/lib/Glyphicon';
 
 export interface ExtendNoteComponentProps {
     pin: PinData;
@@ -67,10 +68,10 @@ export class ExtendNoteComponent extends React.Component<ExtendNoteComponentProp
             <div>
                 <div>
                     <Button
-                        className="CloseLeftBarButton"
+                        className="CloseLeftBarButton btn btn-primary"
                         onClick={() => this.close()}
                     >
-                        Close
+                        <Glyphicon glyph="remove"/>
                     </Button>
                 </div>
                 <div>

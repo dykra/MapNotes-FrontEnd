@@ -1,0 +1,4 @@
+.FilterContent {
+    display: flex;
+    flex-direction: column;
+}
