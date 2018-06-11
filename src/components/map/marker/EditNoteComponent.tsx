@@ -41,16 +41,15 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
         this.handleSave = this.handleSave.bind(this);
     }
 
-    findIndexForAttributeName(attributeName: string) {
-        const pin = this.props.pin;
+    findIndexForAttributeName(pin: PinData, attributeName: string) {
         return pin.data.attributes.findIndex(value => value.name === attributeName);
     }
 
     handlePin() {
-        const pin = this.props.pin;
+        const pin = JSON.parse(JSON.stringify(this.props.pin));
         const defaultAttr = this.props.mapData.attributes;
         defaultAttr.forEach(attribute => {
-            const index = this.findIndexForAttributeName(attribute.name);
+            const index = this.findIndexForAttributeName(pin, attribute.name);
             if (index === -1) {
                 pin.data.attributes.push({name: attribute.name, type: attribute.type, value: ''});
             }
@@ -59,7 +58,7 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
         const complexAttr = this.props.mapData.complexAttributes;
 
         complexAttr.forEach(complexAttribute => {
-            const index = this.findIndexForAttributeName(complexAttribute.name);
+            const index = this.findIndexForAttributeName(pin, complexAttribute.name);
             if (index === -1) {
                 pin.data.attributes.push({name: complexAttribute.name, type: COMPLEX_ATTRIBUTE_TYPE, value: ''});
             }
@@ -92,7 +91,7 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
         const complexAttr = this.props.mapData.complexAttributes;
 
        complexAttr.forEach( complexAttribute => {
-            const index = this.findIndexForAttributeName(complexAttribute.name);
+            const index = this.findIndexForAttributeName(pin, complexAttribute.name);
             pin.data.attributes[index].value = this.countComplexAttributeValue(complexAttribute);
         });
 
@@ -169,7 +168,7 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
                             </div>
                         ))}
                     </FormGroup>
-                </Form>
+                </Form><br/>
                 {this.renderAddAttributeNote()}
             </Modal.Body>
         );
@@ -258,14 +257,11 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
                 warningStatement = '\nAdditional attributes (' + emptyAttrWarning + ' )in the note are incomplete.' +
                     ' Attributes will be deleted.';
             }
-            if (confirm('Are you sure you want to save?' + warningStatement)) {
-
-                if (warningStatement.length !== 0 ) {
-                    this.deleteEmptyInputs();
-                }
-                this.handleComplexAttributes();
-                this.props.savePin(this.state.pin);
+            if (warningStatement.length !== 0 ) {
+                this.deleteEmptyInputs();
             }
+            this.handleComplexAttributes();
+            this.props.savePin(this.state.pin);
 
         } else {
             let errorStatement = '';
