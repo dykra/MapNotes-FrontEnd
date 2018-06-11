@@ -127,7 +127,6 @@ export class TransportComponent extends React.Component<TransportComponentProps,
                     Car distance: {this.state.currentDistance} km
                 </label>
             </div>
-
         );
     }
 }
