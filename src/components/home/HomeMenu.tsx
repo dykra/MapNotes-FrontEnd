@@ -25,7 +25,16 @@ export class HomeMenu extends React.Component<{}, HomeMenuState> {
         return(
             <ul>
                 {this.state.maps.map(map => {
-                        const id = map.id;
+                    const id = map.id;
+                        let name;
+                        console.log(map);
+                        console.log(map.mapName);
+                        if (map.mapName === '') {
+                            name = 'map' + id;
+                        } else {
+                            name = map.mapName;
+                        }
+                        console.log('name', name);
                         const link = `/map/${id}`;
                         return (
                             <li key={id}>

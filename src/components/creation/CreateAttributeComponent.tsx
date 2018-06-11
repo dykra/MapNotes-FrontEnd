@@ -10,12 +10,14 @@ import NewComplexAttribute from './NewComplexAttribute';
 import { SimpleAttrType } from '../../types/creation/SimpleAttrType';
 import { BasicAttrType } from '../../types/BasicAttrType';
 import { OPERATORS, TYPES } from '../../constants/index';
+import { Col, FormControl } from 'react-bootstrap';
 
 interface CreateAttributeState {
     showAddNewComplexAttr: boolean;
     complexAttributes: ComplexAttrType[];
     simpleAttributes: SimpleAttrType[];
     simpleAttrAvailableNames: string[];
+    mapName: string;
 }
 
 export default class CreateAttributeComponent extends React.Component<any, CreateAttributeState> {
@@ -50,6 +52,7 @@ export default class CreateAttributeComponent extends React.Component<any, Creat
             simpleAttributes: this.getSimpleAttr([]),
             showAddNewComplexAttr: false,
             simpleAttrAvailableNames: [],
+            mapName: ''
         };
         this.handleClickAddNewComplexAttr = this.handleClickAddNewComplexAttr.bind(this);
         this.handleCloseAddNewAttrBox = this.handleCloseAddNewAttrBox.bind(this);
@@ -195,7 +198,7 @@ export default class CreateAttributeComponent extends React.Component<any, Creat
     }
 
     handleClickSaveAttributes() {
-        this.props.handleSave(this.prepareBasicAttr(), this.state.complexAttributes);
+        this.props.handleSave(this.prepareBasicAttr(), this.state.complexAttributes, this.state.mapName);
     }
 
     handleCloseAddNewAttrBox() {
@@ -312,6 +315,21 @@ export default class CreateAttributeComponent extends React.Component<any, Creat
 
                     <div className={'complexAttributes'}>
                         <ModalBody>
+                            <div className={'MapName'}>
+
+                                <Col sm={4}>
+                                    <p className="font-weight-bold">Map name</p>
+
+                                </Col>
+                                <Col sm={8}>
+                                    <FormControl
+                                        onChange={(event) => this.handleChange(event)}
+                                        placeholder={'Enter map name'}
+                                        value={this.state.mapName}
+                                    />
+                                </Col>
+
+                            </div>
                             <div className={'attrTable'}>
                                 <h4 className={'attrTitle'}>Basic Attributes</h4>
                                 {this.renderSimpleAttrTable()}
@@ -339,5 +357,9 @@ export default class CreateAttributeComponent extends React.Component<any, Creat
                 </Modal.Dialog>
             </div>
         );
+    }
+
+    handleChange( event: any) {
+        this.setState({mapName: event.target.value});
     }
 }

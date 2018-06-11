@@ -47,22 +47,23 @@ export class CreationMenu extends React.Component <any, {}> {
         return complexAttrMap;
     }
 
-    handleSaveAttr(basicAttributes: Array<BasicAttrType>, complexAttributes: Array<ComplexAttrType>) {
+    handleSaveAttr(basicAttributes: Array<BasicAttrType>, complexAttributes: Array<ComplexAttrType>, mapName: string) {
         const pin: PinData[] = [];
-
         const map: MapData = {
             data: {
                 attributes: basicAttributes,
                 complexAttributes: this.prepareComplexAttr(complexAttributes)
             },
             id: 0,
-            pins: pin
+            pins: pin,
+            mapName: mapName,
         };
         console.log(map);
         putMap(map, this.myCallback);
     }
 
     public myCallback(map: MapData): void {
+        console.log('map', map);
         const path = '/map/' + map.id;
         this.props.history.push(path);
     }
