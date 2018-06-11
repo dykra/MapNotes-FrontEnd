@@ -1,10 +1,7 @@
 import * as Button from 'react-bootstrap/lib/Button';
 import * as React from 'react';
-import * as FormControl from 'react-bootstrap/lib/FormControl';
-import * as ControlLabel from 'react-bootstrap/lib/ControlLabel';
-import { FormGroup } from 'react-bootstrap';
-import * as Col from 'react-bootstrap/lib/Col';
 import { PinData } from '../../../types/api/PinData';
+import Input from 'reactstrap/lib/Input';
 
 export interface TransportComponentProps {
     visiblePins: PinData[];
@@ -102,37 +99,30 @@ export class TransportComponent extends React.Component<TransportComponentProps,
     render() {
         return (
             <div className={'TransportBar'}>
-                <FormGroup controlId="destinations">
-                    <Col componentClass={ControlLabel} sm={8}>Select Destiantion</Col>
-                    <Col sm={8}>
-                        <FormControl
-                            placeholder={'Start destination index'}
-                            onChange={this.changeStartPoint}
-                        />
-                        <FormControl
-                            placeholder={'End destination index'}
-                            onChange={this.changeEndPoint}
-                        />
-                    </Col>
+                Select Destiantion
+                <Input
+                    placeholder="Start destination index"
+                    onChange={this.changeStartPoint}
+                />
+                <Input
+                    placeholder="End destination index"
+                    onChange={this.changeEndPoint}
+                />
+                <div className="Buttons">
+                    <Button
+                        className="btn"
+                        onClick={this.searchForTransport}
+                    >
+                        SEARCH
+                    </Button>
 
                     <Button
-                        className={'SearchTransportButton'}
-                        bsSize="small"
-                        active={true}
-                        onClick={this.searchForTransport}
-                    >SEARCH
-                    </Button>
-                    <Button
-                        className={'RemoveTransport'}
-                        bsSize="small"
-                        active={true}
+                        className="btn"
                         onClick={this.removeTransport}
-                    >REMOVE PATH
+                    >
+                        REMOVE PATH
                     </Button>
-                </FormGroup>
-                <label>
-                    Car distance: {this.state.currentDistance} km
-                </label>
+                </div>
             </div>
         );
     }

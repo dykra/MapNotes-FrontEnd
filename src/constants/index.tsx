@@ -4,5 +4,6 @@ export const GOOGLE_MAP_URL = `https://maps.googleapis.com/maps/api/js?key=${GOO
 export const API_BASE_URL = process.env.REACT_APP_API_URL;
 export const BASE_ICON_URL = 'https://maps.google.com/mapfiles/ms/icons/';
 export const MAP_ID_STORAGE = 'mapID';
-export const TYPES = [ 'm^2', 'pln', 'yes/no', 'text', 'number', 'other' ];
+export const TYPES = [ 'm^2', 'pln', 'yes/no', 'text', 'number' ];
 export const OPERATORS = ['+', '-', '*', '/'];
+export const COMPLEX_ATTRIBUTE_TYPE = 'computed';

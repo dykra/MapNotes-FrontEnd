@@ -112,7 +112,7 @@ export class AddNoteAttributeComponent extends React.Component<AddAttributeCompo
                     Cancel
                 </Button>
                 <Button className="btn btn-primary" onClick={this.handleSave}>
-                    Save
+                    Add
                 </Button>
             </div>
         );

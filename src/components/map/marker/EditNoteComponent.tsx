@@ -1,4 +1,5 @@
 import * as React from 'react';
+import math from 'mathjs';
 import { Button, Modal } from 'react-bootstrap';
 import { AddNoteAttributeComponent } from './AddNoteAttributeComponent';
 import Form from 'reactstrap/lib/Form';
@@ -7,6 +8,8 @@ import Col from 'reactstrap/lib/Col';
 import * as FormControl from 'react-bootstrap/lib/FormControl';
 import { MapSettings } from '../../../types/map/MapSettings';
 import { PinData } from '../../../types/api/PinData';
+import { FormulaLists } from '../../../types/creation/FormulaLists';
+import { COMPLEX_ATTRIBUTE_TYPE } from '../../../constants';
 
 export interface EditNoteComponentProps {
     pin: PinData;
@@ -35,18 +38,64 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
         };
         this.handleAddingNewAttribute = this.handleAddingNewAttribute.bind(this);
         this.handlePin = this.handlePin.bind(this);
+        this.handleSave = this.handleSave.bind(this);
+    }
+
+    findIndexForAttributeName(pin: PinData, attributeName: string) {
+        return pin.data.attributes.findIndex(value => value.name === attributeName);
     }
 
     handlePin() {
-        const pin = this.props.pin;
+        const pin = JSON.parse(JSON.stringify(this.props.pin));
         const defaultAttr = this.props.mapData.attributes;
         defaultAttr.forEach(attribute => {
-            const index = pin.data.attributes.findIndex(value => value.name === attribute.name);
+            const index = this.findIndexForAttributeName(pin, attribute.name);
             if (index === -1) {
                 pin.data.attributes.push({name: attribute.name, type: attribute.type, value: ''});
             }
         });
+
+        const complexAttr = this.props.mapData.complexAttributes;
+
+        complexAttr.forEach(complexAttribute => {
+            const index = this.findIndexForAttributeName(pin, complexAttribute.name);
+            if (index === -1) {
+                pin.data.attributes.push({name: complexAttribute.name, type: COMPLEX_ATTRIBUTE_TYPE, value: ''});
+            }
+        });
+
         return pin;
+    }
+
+    countComplexAttributeValue(complexAttributeValue: FormulaLists) {
+
+        const attributes = this.state.pin.data.attributes;
+        const values = complexAttributeValue.attrList.map(name => {
+            const index = attributes.findIndex(attr => attr.name === name);
+            return attributes[index].value;
+        });
+        const operations = complexAttributeValue.opList;
+
+        let result = values[0];
+
+        operations.forEach((operator, index) => {
+            result += ` ${operator} ${values[index + 1]}`;
+        });
+
+        return math.eval(result);
+    }
+
+    handleComplexAttributes() {
+        const pin = this.state.pin;
+
+        const complexAttr = this.props.mapData.complexAttributes;
+
+       complexAttr.forEach( complexAttribute => {
+            const index = this.findIndexForAttributeName(pin, complexAttribute.name);
+            pin.data.attributes[index].value = this.countComplexAttributeValue(complexAttribute);
+        });
+
+        this.setState({pin});
     }
 
     handleAddingNewAttribute(nameAttr: string, typeAttr: string, isDefault: boolean) {
@@ -69,7 +118,7 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
         });
     }
 
-    renderAddAtributeNote() {
+    renderAddAttributeNote() {
         if (this.state.isAddNewAttrClick) {
             return (
                 <AddNoteAttributeComponent
@@ -92,6 +141,10 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
         this.setState({pin});
     }
 
+    isBasicType(attributeType: any) {
+        return attributeType.type !== COMPLEX_ATTRIBUTE_TYPE;
+    }
+
     renderModalBody() {
         const attributes = this.state.pin.data.attributes;
         return(
@@ -100,7 +153,7 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
                     <FormGroup
                         controlId="NewNote"
                     >
-                        {attributes.map(attribute => (
+                        {attributes.filter(this.isBasicType).map(attribute => (
                             <div key={attribute.name}>
                                 <Col sm={4}>
                                     {attribute.name}
@@ -115,19 +168,18 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
                             </div>
                         ))}
                     </FormGroup>
-                </Form>
-                {this.renderAddAtributeNote()}
+                </Form><br/>
+                {this.renderAddAttributeNote()}
             </Modal.Body>
         );
     }
 
-    cancelNewInputs() {
+    deleteEmptyInputs() {
         const pin = this.state.pin;
-        for (let key in pin.data.attributes) {
-            if (pin.data.attributes[key].value === '') {
-                delete pin.data.attributes[key];
-            }
+        pin.data.attributes = pin.data.attributes.filter(attr => {
+                return((attr.value !== '' && this.isBasicType(attr.type)) || !this.isBasicType(attr.type));
         }
+             );
         this.setState({
             pin,
             isAddNewAttrClick: false
@@ -151,7 +203,8 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
                     <Button
                         className="btn btn-secondary"
                         onClick={() => {
-                            this.cancelNewInputs();
+
+                            this.deleteEmptyInputs();
                             this.props.close();
                         }}
                     >
@@ -159,12 +212,75 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
                     </Button>
                     <Button
                         className="btn btn-primary"
-                        onClick={() => this.props.savePin(this.state.pin)}
+                        onClick={this.handleSave}
                     >
                         Save
                     </Button>
                 </Modal.Footer>
             </div>
         );
+    }
+
+    isAttributeNumber(attribute: any) {
+        return((attribute.type === 'pln' || attribute.type === 'number'  || attribute.type === 'm^2')
+            && isNaN(Number(attribute.value)) );
+    }
+
+    handleSave() {
+
+        const pin = this.state.pin;
+        const emptyDefaultAttr: string[] = [];
+        const mismatchType: any[] = [];
+        const emptyAttrWarning: string[] = [];
+
+        const isBoolean = ((type: string) =>  {
+            return(type === 'yes' || type === 'no');
+        });
+        pin.data.attributes.forEach((attr) => {
+            if (attr.value === '' && this.isBasicType(attr) )  {
+                if (this.checkIfDefault(attr.name)) {
+                    emptyDefaultAttr.push(attr.name);
+                } else {
+                    emptyAttrWarning.push(attr.name);
+                }
+            } else if (this.isAttributeNumber(attr)) {
+                    mismatchType.push({name: attr.name, type: attr.type});
+
+            } else if (attr.type === 'yes/no' && !isBoolean(attr.value.toLowerCase())) {
+                mismatchType.push({name: attr.name, type: attr.type});
+            }
+
+        });
+        if (emptyDefaultAttr.length === 0 && mismatchType.length === 0) {
+            let warningStatement = '';
+            if (emptyAttrWarning.length !== 0) {
+                warningStatement = '\nAdditional attributes (' + emptyAttrWarning + ' )in the note are incomplete.' +
+                    ' Attributes will be deleted.';
+            }
+            if (warningStatement.length !== 0 ) {
+                this.deleteEmptyInputs();
+            }
+            this.handleComplexAttributes();
+            this.props.savePin(this.state.pin);
+
+        } else {
+            let errorStatement = '';
+            if (emptyDefaultAttr.length !== 0) {
+                errorStatement += 'Default attributes ( ' + emptyDefaultAttr + ' ) must be filled out. \n';
+            }
+            if (mismatchType.length !== 0) {
+                mismatchType.forEach(e => {
+                    errorStatement += 'The value of attribute ' + e.name + ' has incompatible type. ' +
+                        'Require - ' + e.type + '.\n';
+                });
+            }
+            alert(errorStatement);
+        }
+    }
+
+    checkIfDefault(name: string) {
+        const defaults = this.props.mapData.attributes.map(e => e.name);
+        const isDefault = defaults.filter(e => e === name );
+        return isDefault.length;
     }
 }

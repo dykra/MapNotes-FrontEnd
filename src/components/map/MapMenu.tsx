@@ -1,5 +1,6 @@
 import * as React from 'react';
 import '../../styles/App.css';
+import '../../styles/map/MapMenu.css';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/css/bootstrap-theme.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -92,7 +93,9 @@ export class MapMenu extends React.Component<RouteComponentProps<MapMenuProps>, 
         if (map && map.id) {
             map.data = mapSettings;
             putMap(map, newMap => {
-                this.setState({map: newMap});
+                this.setState({
+                    map: newMap
+                });
             });
 
         }
@@ -148,7 +151,7 @@ export class MapMenu extends React.Component<RouteComponentProps<MapMenuProps>, 
         if (this.state.map) {
             const visiblePins = this.state.filterPin || this.state.map.pins;
             return (
-                <div style={{height: '100%'}} >
+                <div className="menu" >
                     <LeftBarComponent
                         filter={this.filter}
                         removeFilter={this.removeFilter}
@@ -159,6 +162,7 @@ export class MapMenu extends React.Component<RouteComponentProps<MapMenuProps>, 
                         callbackOnRef={(ref: any) => (this.setState({ leftBar: ref}))}
                         leftBarComponentChild={this.state.leftBarComponentChild}
                         showInLeftBar={this.showInLeftBar}
+                        map={this.state.map}
                     />
                     <MapContainer
                         map={this.state.map}

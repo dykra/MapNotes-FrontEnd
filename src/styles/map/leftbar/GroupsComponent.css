@@ -1,0 +1,28 @@
+.GroupsContent {
+    display: flex;
+    flex-direction: column;
+}
+.ColorButtons{
+    padding: 5%;
+}
+.Hide {
+    display: flex;
+    flex-direction: column;
+}
+
+.btn-pink {
+    background-color: #dc27db;
+    margin: 1%;
+}
+.btn-yellow{
+    background-color: yellow;
+    margin: 1%;
+}
+.btn-green{
+    background-color: #1adc33;
+    margin: 1%;
+}
+.btn-blue{
+    background-color: #3433dc;
+    margin: 1%;
+}

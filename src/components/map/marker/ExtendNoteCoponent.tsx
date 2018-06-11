@@ -3,6 +3,7 @@ import { Button } from 'react-bootstrap';
 import { MapSettings } from '../../../types/map/MapSettings';
 import { PinData } from '../../../types/api/PinData';
 import { EditNoteComponent } from './EditNoteComponent';
+import * as Glyphicon from 'react-bootstrap/lib/Glyphicon';
 
 export interface ExtendNoteComponentProps {
     pin: PinData;
@@ -15,6 +16,7 @@ export interface ExtendNoteComponentProps {
 
 export interface ExtendNoteState {
     isEditMode: boolean;
+    pin: PinData;
 }
 
 export class ExtendNoteComponent extends React.Component<ExtendNoteComponentProps, ExtendNoteState> {
@@ -23,19 +25,20 @@ export class ExtendNoteComponent extends React.Component<ExtendNoteComponentProp
         super(props);
         this.state = {
             isEditMode: false,
+            pin: this.props.pin,
         };
         this.savePin = this.savePin.bind(this);
     }
 
     savePin(pin: PinData) {
         this.setState(
-            {isEditMode: false},
+            {isEditMode: false, pin},
             () => this.props.savePin(pin)
         );
     }
 
     renderPinAttributes() {
-        const attributes = this.props.pin.data.attributes;
+        const attributes = this.state.pin.data.attributes;
         return attributes.map(attribute => (
             <div key={attribute.name}>
                 <b>{attribute.name} </b> {attribute.value}
@@ -46,7 +49,7 @@ export class ExtendNoteComponent extends React.Component<ExtendNoteComponentProp
     renderEditNote() {
         return (
             <EditNoteComponent
-                pin={this.props.pin}
+                pin={this.state.pin}
                 mapData={this.props.mapData}
                 savePin={this.savePin}
                 updateMapSettings={this.props.updateMapSettings}
@@ -67,14 +70,13 @@ export class ExtendNoteComponent extends React.Component<ExtendNoteComponentProp
             <div>
                 <div>
                     <Button
-                        className="CloseLeftBarButton"
+                        className="CloseLeftBarButton btn btn-primary"
                         onClick={() => this.close()}
                     >
-                        Close
+                        <Glyphicon glyph="remove"/>
                     </Button>
                 </div>
                 <div>
-                    {this.renderPinAttributes()}
                     <Button
                         className="btn btn-primary"
                         onClick={() => this.setState({isEditMode: true})}
@@ -82,24 +84,16 @@ export class ExtendNoteComponent extends React.Component<ExtendNoteComponentProp
                         Edit
                     </Button>
                     <Button
-                        className="btn btn-primary Save"
-                        onClick={() => {
-                            this.props.savePin(this.props.pin);
-                            this.close();
-                        }}
-                    >
-                        Save
-                    </Button>
-                    <Button
                         className="btn btn-danger"
                         onClick={() => {
-                            this.props.deletePin(this.props.pin);
+                            this.props.deletePin(this.state.pin);
                             this.close();
                         }}
                     >
                         Delete
                     </Button>
                 </div>
+                {this.renderPinAttributes()}
             </div>
         );
     }
