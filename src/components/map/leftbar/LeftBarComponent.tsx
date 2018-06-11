@@ -9,6 +9,8 @@ import { Link } from 'react-router-dom';
 import * as Glyphicon from 'react-bootstrap/lib/Glyphicon';
 import '../../../styles/map/leftbar/LeftBarComponent.css';
 import { FilterListComponent } from './FilterListComponent';
+import { exportToCSV } from '../../../utils/csv/csvConverter';
+import { MapData } from '../../../types/api/MapData';
 
 export interface LeftBarComponentProps {
     filter: (filter: Filter) => void;
@@ -20,6 +22,7 @@ export interface LeftBarComponentProps {
     callbackOnRef: any;
     showInLeftBar: (component: any) => void;
     leftBarComponentChild?: any;
+    map: MapData;
 }
 
 export interface LeftBarState {
@@ -65,7 +68,11 @@ export class LeftBarComponent extends React.Component<LeftBarComponentProps, Lef
         if (this.props.leftBarComponentChild) {
             return (
                 <div className="OpenedLeftBar">
-                    {this.props.leftBarComponentChild}
+                    <div className="LeftBarContent" >
+                        <div className="LeftBarChild">
+                            {this.props.leftBarComponentChild}
+                        </div>
+                    </div>
                 </div>
             );
         }
@@ -91,6 +98,12 @@ export class LeftBarComponent extends React.Component<LeftBarComponentProps, Lef
                                     Home
                                 </Button>
                             </Link>
+                            <Button
+                             className="ExportButton"
+                             onClick={() => exportToCSV(this.props.map)}
+                            >
+                                Export to CSV
+                            </Button>
                             <Button
                                 className="CloseLeftBarButton btn btn-primary"
                                 onClick={this.hideLeftBar}
