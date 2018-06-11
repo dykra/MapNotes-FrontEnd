@@ -166,7 +166,10 @@ export class MapContainer extends React.Component<MapContainerProps, MapContaine
                     mapData={this.props.map.data}
                     index={-1}
                     key={-1}
-                    savePin={this.props.addPin}
+                    savePin={(sPin: PinData) => {
+                        this.props.addPin(sPin);
+                        this.setState({newPin: undefined});
+                    }}
                     deletePin={() => this.setState({newPin: undefined})}
                     updateMapSettings={(mapSetting) => this.props.updateMapSettings(mapSetting)}
                     showTransportComponent={this.showTransportComponent}

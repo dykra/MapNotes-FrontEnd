@@ -23,7 +23,7 @@ export class FilterListComponent extends React.Component<FilterListComponentProp
     }
 
     handleClick(id: any) {
-        if (!this.state.buttonClicked) {
+        if (!this.state.buttonClicked || this.state.pinIdPrinted !== id) {
             this.setState({pinIdPrinted: id, buttonClicked: true});
         } else {
             this.setState({buttonClicked: false});
@@ -49,7 +49,7 @@ export class FilterListComponent extends React.Component<FilterListComponentProp
                     <ListGroup key={id}>
                         <ListGroupItem>
                         <Button onClick={() => this.handleClick(id)}>
-                            Pin {i}
+                            Pin {id}
                         </Button>
                         {this.renderNote(pin)}
                         </ListGroupItem>
