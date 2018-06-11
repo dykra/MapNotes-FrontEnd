@@ -68,7 +68,11 @@ export class LeftBarComponent extends React.Component<LeftBarComponentProps, Lef
         if (this.props.leftBarComponentChild) {
             return (
                 <div className="OpenedLeftBar">
-                    {this.props.leftBarComponentChild}
+                    <div className="LeftBarContent" >
+                        <div className="LeftBarChild">
+                            {this.props.leftBarComponentChild}
+                        </div>
+                    </div>
                 </div>
             );
         }
