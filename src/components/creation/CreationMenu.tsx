@@ -52,11 +52,11 @@ export class CreationMenu extends React.Component <any, {}> {
         const map: MapData = {
             data: {
                 attributes: basicAttributes,
-                complexAttributes: this.prepareComplexAttr(complexAttributes)
+                complexAttributes: this.prepareComplexAttr(complexAttributes),
+                mapName: mapName,
             },
             id: 0,
             pins: pin,
-            mapName: mapName,
         };
         putMap(map, this.myCallback);
     }
