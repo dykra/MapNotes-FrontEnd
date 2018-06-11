@@ -123,7 +123,11 @@ export class TransportComponent extends React.Component<TransportComponentProps,
                         REMOVE PATH
                     </Button>
                 </div>
+                <label>
+                    Car distance: {this.state.currentDistance} km
+                </label>
             </div>
+
         );
     }
 }
