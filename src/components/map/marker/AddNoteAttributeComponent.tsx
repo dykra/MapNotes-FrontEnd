@@ -2,10 +2,12 @@ import * as React from 'react';
 import { Button, Checkbox } from 'react-bootstrap';
 import { FormGroup, FormControl, Form, Col, ControlLabel } from 'react-bootstrap/lib';
 import { TYPES } from '../../../constants';
+import { PinData } from '../../../types/api/PinData';
 
 export interface AddAttributeComponentProps {
     cancel: () => void;
     save: (name: string, type: string, isDefault: boolean ) => void;
+    pin: PinData;
 }
 
 export interface AddAttributeComponentState {
@@ -41,11 +43,23 @@ export class AddNoteAttributeComponent extends React.Component<AddAttributeCompo
     }
 
     handleSave() {
-        if (this.getValidationStateName() === 'success' && this.getValidationStateType() === 'success') {
+        if (!this.checkIfNameValid()) {
+            alert('Attribute with name ' + this.state.name + ' already exists. ');
+        } else if (this.getValidationStateName() === 'success' && this.getValidationStateType() === 'success') {
             this.props.save(this.state.name, this.state.selectedType, this.state.isDefault);
         } else {
             alert('Fill out all mandatory fields');
         }
+    }
+    checkIfNameValid() {
+        const attributes = this.props.pin.data.attributes;
+        let isValid = true;
+        attributes.forEach( e => {
+            if (e.name === this.state.name) {
+                isValid = false;
+            }
+        });
+        return isValid;
     }
 
     handleNameEnter(event: any) {
