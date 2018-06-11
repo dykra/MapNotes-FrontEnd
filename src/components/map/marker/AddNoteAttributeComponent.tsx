@@ -43,7 +43,7 @@ export class AddNoteAttributeComponent extends React.Component<AddAttributeCompo
     }
 
     handleSave() {
-        if (!this.checkIfNameValid()) {
+        if (!this.isNameUsed ()) {
             alert('Attribute with name ' + this.state.name + ' already exists. ');
         } else if (this.getValidationStateName() === 'success' && this.getValidationStateType() === 'success') {
             this.props.save(this.state.name, this.state.selectedType, this.state.isDefault);
@@ -51,7 +51,7 @@ export class AddNoteAttributeComponent extends React.Component<AddAttributeCompo
             alert('Fill out all mandatory fields');
         }
     }
-    checkIfNameValid() {
+    isNameUsed () {
         const attributes = this.props.pin.data.attributes;
         let isValid = true;
         attributes.forEach( e => {
