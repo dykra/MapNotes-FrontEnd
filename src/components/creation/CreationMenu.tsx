@@ -58,12 +58,10 @@ export class CreationMenu extends React.Component <any, {}> {
             pins: pin,
             mapName: mapName,
         };
-        console.log(map);
         putMap(map, this.myCallback);
     }
 
     public myCallback(map: MapData): void {
-        console.log('map', map);
         const path = '/map/' + map.id;
         this.props.history.push(path);
     }
