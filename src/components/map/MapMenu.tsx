@@ -62,8 +62,10 @@ export class MapMenu extends React.Component<RouteComponentProps<MapMenuProps>, 
 
     showInLeftBar(leftBarComponentChild: any) {
         this.setState({
+            leftBarComponentChild: undefined
+        }, () => this.setState({
             leftBarComponentChild
-        });
+        }));
     }
 
     filter(filter: Filter) {

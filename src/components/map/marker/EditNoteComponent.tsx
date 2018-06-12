@@ -122,6 +122,7 @@ export class EditNoteComponent extends React.Component<EditNoteComponentProps, E
         if (this.state.isAddNewAttrClick) {
             return (
                 <AddNoteAttributeComponent
+                    pin={this.props.pin}
                     cancel={() => this.setState({isAddNewAttrClick: false})}
                     save={this.handleAddingNewAttribute}
                 />

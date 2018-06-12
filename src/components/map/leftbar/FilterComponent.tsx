@@ -78,26 +78,24 @@ export default class FilterComponent extends React.Component<FilterComponentProp
                 <div>
                     <h4>Examples:</h4>
                     <ul>
-                        <li>
-                            {'a & b | b & c'}
+                        <li>Logical conditions
+                            <p>{'( | priority is higher than & )'}:</p>
+                            <p>{'a & b | b & c'}</p>
                         </li>
-                        <li>
-                            attributeName:value
+                        <li><p>Specific attribute and his value:</p>
+                            <p>attributeName:value</p>
                         </li>
-                        <li>
-                            canBeRawString
+                        <li>Specific fragment of
+                            <p>attributeName or its value:</p>
+                            <p>canBeRawString</p>
                         </li>
-                        <li>
-                            forExactValueUsePoint.
+                        <li><p>Specific exactly attributeName or value:</p>
+                            <p>forExactValueUsePoint.</p>
+                            <p>pointsCanBeInAttribute.:andInValue.</p>
                         </li>
-                        <li>
-                            pointsCanBeInAttribute.:value
-                        </li>
-                        <li>
-                            numberAttribute:!=2
-                        </li>
-                        <li>
-                            numberAttribute:&lt;3
+                        <li><p>Comparison for numberAttribute value:</p>
+                            <p>numberAttribute:!=2</p>
+                            <p>numberAttribute:&lt;3</p>
                         </li>
                     </ul>
                 </div>
