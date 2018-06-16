@@ -1,70 +1,66 @@
-import * as React from 'react';
-import { Button, FormGroup, FormControl, ControlLabel } from 'react-bootstrap';
+import React from 'react';
 import '../../styles/login/Login.css';
-import { ChooseRouterPathComponent } from '../ChooseRouterPathComponent';
-import Register from './Register';
+// import { gql, graphql } from 'react-apollo';
+import { Button, FormGroup, FormControl, ControlLabel } from 'react-bootstrap';
 
-interface LoginState {
+interface RegisterState {
     email: string;
+    name: string;
     password: string;
-    logged: boolean;
-    signUp: boolean;
 
 }
-export default class Login extends React.Component<any, LoginState> {
+
+interface RegisterProps {
+    cancel: () => void;
+
+}
+export default class Register extends React.Component<RegisterProps, RegisterState> {
     constructor(props: any) {
         super(props);
         this.state = {
             email: '',
+            name: '',
             password: '',
-            logged: false,
-            signUp: false,
         };
         this.handleChange = this.handleChange.bind(this);
         this.validateForm = this.validateForm.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.handleLogin = this.handleLogin.bind(this);
-        this.handleSignUp = this.handleSignUp.bind(this);
     }
 
     validateForm() {
         return this.state.email.length > 0 && this.state.password.length > 0;
     }
 
-    handleChange( event: any) {
+    handleChange(event: any) {
         this.setState({
             [event.target.id]: event.target.value
         });
     }
 
-    handleSubmit(event: any ) {
+    handleSubmit(event: any) {
         console.log('submit');
         event.preventDefault();
     }
 
     render() {
-
-        if (this.state.logged) {
-            return (
-                <ChooseRouterPathComponent/>
-            );
-        } else if (this.state.signUp) {
-            return(
-                <Register
-                    cancel={() => this.handleSignUp(false)}
-                />
-            );
-
-        } else {
             return (
                 <div>
-                    <form className={'loginForm'} onSubmit={this.handleSubmit}>
+                    <form className={'RegisterForm'} onSubmit={this.handleSubmit}>
                         <FormGroup controlId="email" bsSize="large">
                             <ControlLabel>Email</ControlLabel>
                             <FormControl
                                 autoFocus={true}
                                 type="email"
                                 value={this.state.email}
+                                onChange={this.handleChange}
+                            />
+                        </FormGroup>
+                        <FormGroup controlId="name" bsSize="large">
+                            <ControlLabel>Name</ControlLabel>
+                            <FormControl
+                                autoFocus={true}
+                                type="name"
+                                value={this.state.name}
                                 onChange={this.handleChange}
                             />
                         </FormGroup>
@@ -77,35 +73,26 @@ export default class Login extends React.Component<any, LoginState> {
                             />
                         </FormGroup>
                         <Button
-                            className={'buttonLogin'}
+                            block={true}
+                            bsSize="large"
+                            type="submit"
+                            onClick={this.props.cancel}
+                        >
+                            Cancel
+                        </Button>
+                        <Button
                             block={true}
                             bsSize="large"
                             disabled={!this.validateForm()}
                             type="submit"
-                            onClick={this.handleLogin}
+                            onClick={this.props.cancel}
                         >
-                            Login
-                        </Button>
-                        <Button
-                            className={'buttonRegister'}
-                            block={true}
-                            bsSize="large"
-                            type="submit"
-                            onClick={() => this.handleSignUp(true)}
-                        >
-                            SignUp
+                            Save
                         </Button>
                     </form>
                 </div>
             );
-        }
+
     }
 
-    handleLogin() {
-        this.setState({logged: true});
-    }
-
-    handleSignUp(signUp: boolean) {
-        this.setState({signUp});
-    }
 }
