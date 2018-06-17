@@ -38,7 +38,6 @@ export default class Register extends React.Component<RegisterProps, RegisterSta
     }
 
     handleSubmit(event: any) {
-        console.log('submit');
         event.preventDefault();
     }
 

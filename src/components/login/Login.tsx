@@ -27,7 +27,7 @@ export default class Login extends React.Component<any, LoginState> {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleLogin = this.handleLogin.bind(this);
         this.handleSignUp = this.handleSignUp.bind(this);
-        this.callbackFromUserExistance = this.callbackFromUserExistance.bind(this);
+        this.callbackFromUserExistence = this.callbackFromUserExistence.bind(this);
     }
 
     validateForm() {
@@ -111,11 +111,11 @@ export default class Login extends React.Component<any, LoginState> {
             },
             id: 0,
         };
-        checkUserExist(user, this.callbackFromUserExistance);
+        checkUserExist(user, this.callbackFromUserExistence);
      }
     }
 
-    public callbackFromUserExistance(user: UserData): any {
+    public callbackFromUserExistence(user: UserData): any {
         if (isBoolean(user)) {
             this.setState( {logged: user} );
         }
