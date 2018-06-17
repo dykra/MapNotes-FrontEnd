@@ -2,7 +2,11 @@ import React from 'react';
 import '../../styles/login/Login.css';
 // import { gql, graphql } from 'react-apollo';
 import { Button, FormGroup, FormControl, ControlLabel } from 'react-bootstrap';
+import { putUserIfNotInDatabase } from '../../api/UserApi';
+import { UserData } from '../../types/api/UserData';
+import { isBoolean } from 'util';
 
+const WRONG_CREDENTIALS_ALERT = 'Wrong logging credentials';
 interface RegisterState {
     email: string;
     name: string;
@@ -25,6 +29,7 @@ export default class Register extends React.Component<RegisterProps, RegisterSta
         this.handleChange = this.handleChange.bind(this);
         this.validateForm = this.validateForm.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleSignUp = this.handleSignUp.bind(this);
     }
 
     validateForm() {
@@ -41,6 +46,26 @@ export default class Register extends React.Component<RegisterProps, RegisterSta
         event.preventDefault();
     }
 
+    handleSignUp() {
+        const user: UserData = {
+            data: {
+                email: this.state.email,
+                password: this.state.password,
+            },
+            id: 0,
+        };
+        putUserIfNotInDatabase(user, this.callbackFromUserExistence);
+    }
+
+    public callbackFromUserExistence(wasUserAdded: UserData): any {
+        if (isBoolean(wasUserAdded)) {
+            if (wasUserAdded) {
+                this.props.cancel();
+            } else {
+                window.alert(WRONG_CREDENTIALS_ALERT);
+            }
+        }
+    }
     render() {
             return (
                 <div>
@@ -84,7 +109,7 @@ export default class Register extends React.Component<RegisterProps, RegisterSta
                             bsSize="large"
                             disabled={!this.validateForm()}
                             type="submit"
-                            onClick={this.props.cancel}
+                            onClick={this.handleSignUp}
                         >
                             Save
                         </Button>
