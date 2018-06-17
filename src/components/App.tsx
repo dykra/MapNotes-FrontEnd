@@ -8,7 +8,7 @@ import { MapMenu } from './map/MapMenu';
 import { HomeMenu } from './home/HomeMenu';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 // import { ChooseRouterPathComponent } from './ChooseRouterPathComponent';
-import Login from './Login/Login';
+import Login from './login/Login';
 export class App extends React.Component<{}, {}> {
 
     render() {

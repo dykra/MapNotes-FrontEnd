@@ -46,9 +46,19 @@ export function deleteUserById(id: number, cb: () => void, er?: (error: any) => 
         });
 }
 
-export function putUser(user: UserData, cb: (user: UserData) => void, er?: (error: any) => void) {
-    console.log(user);
+export function putUser(user: UserData, er?: (error: any) => void) {
     axios.put(USER_URL, user)
+        .catch(function (error: any) {
+            if (er) {
+                er(error);
+            } else {
+                console.log(error);
+            }
+        });
+}
+
+export function checkUserExist(user: UserData, cb: (user: UserData) => void, er?: (error: any) => void) {
+    axios.put(USER_URL + '/exists', user)
         .then(function (response: any) {
             cb(response.data);
         })

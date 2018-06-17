@@ -58,6 +58,7 @@ export class CreationMenu extends React.Component <any, {}> {
             id: 0,
             pins: pin,
         };
+
         putMap(map, this.myCallback);
     }
 

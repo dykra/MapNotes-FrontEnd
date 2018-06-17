@@ -3,13 +3,15 @@ import { Button, FormGroup, FormControl, ControlLabel } from 'react-bootstrap';
 import '../../styles/login/Login.css';
 import { ChooseRouterPathComponent } from '../ChooseRouterPathComponent';
 import Register from './Register';
+import { UserData } from '../../types/api/UserData';
+import { checkUserExist } from '../../api/UserApi';
+import { isBoolean } from 'util';
 
 interface LoginState {
     email: string;
     password: string;
     logged: boolean;
     signUp: boolean;
-
 }
 export default class Login extends React.Component<any, LoginState> {
     constructor(props: any) {
@@ -25,6 +27,7 @@ export default class Login extends React.Component<any, LoginState> {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleLogin = this.handleLogin.bind(this);
         this.handleSignUp = this.handleSignUp.bind(this);
+        this.callbackFromUserExistance = this.callbackFromUserExistance.bind(this);
     }
 
     validateForm() {
@@ -38,12 +41,10 @@ export default class Login extends React.Component<any, LoginState> {
     }
 
     handleSubmit(event: any ) {
-        console.log('submit');
         event.preventDefault();
     }
 
     render() {
-
         if (this.state.logged) {
             return (
                 <ChooseRouterPathComponent/>
@@ -102,7 +103,22 @@ export default class Login extends React.Component<any, LoginState> {
     }
 
     handleLogin() {
-        this.setState({logged: true});
+     if (this.validateForm()) { // not sure is it necessary
+        const user: UserData = {
+            data: {
+                email: this.state.email,
+                password: this.state.password,
+            },
+            id: 0,
+        };
+        checkUserExist(user, this.callbackFromUserExistance);
+     }
+    }
+
+    public callbackFromUserExistance(user: UserData): any {
+        if (isBoolean(user)) {
+            this.setState( {logged: user} );
+        }
     }
 
     handleSignUp(signUp: boolean) {
