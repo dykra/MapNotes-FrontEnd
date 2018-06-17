@@ -7,6 +7,8 @@ import { UserData } from '../../types/api/UserData';
 import { checkUserExist } from '../../api/UserApi';
 import { isBoolean } from 'util';
 
+const WRONG_CREDENTIALS_ALERT = 'Wrong logging credentials';
+
 interface LoginState {
     email: string;
     password: string;
@@ -119,7 +121,7 @@ export default class Login extends React.Component<any, LoginState> {
         if (isBoolean(user)) {
             this.setState( {logged: user} );
             if (! user) {
-                window.alert('Wrong logging credentials');
+                window.alert(WRONG_CREDENTIALS_ALERT);
             }
         }
     }
