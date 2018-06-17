@@ -105,7 +105,6 @@ export default class Login extends React.Component<any, LoginState> {
     }
 
     handleLogin() {
-     if (this.validateForm()) { // not sure is it necessary
         const user: UserData = {
             data: {
                 email: this.state.email,
@@ -114,7 +113,6 @@ export default class Login extends React.Component<any, LoginState> {
             id: 0,
         };
         checkUserExist(user, this.callbackFromUserExistence);
-     }
     }
 
     public callbackFromUserExistence(user: UserData): any {
