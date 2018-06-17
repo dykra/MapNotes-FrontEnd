@@ -118,6 +118,9 @@ export default class Login extends React.Component<any, LoginState> {
     public callbackFromUserExistence(user: UserData): any {
         if (isBoolean(user)) {
             this.setState( {logged: user} );
+            if (! user) {
+                window.alert('Wrong logging credentials');
+            }
         }
     }
 
