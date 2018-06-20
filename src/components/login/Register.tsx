@@ -1,12 +1,10 @@
 import React from 'react';
 import '../../styles/login/Login.css';
-// import { gql, graphql } from 'react-apollo';
 import { Button, FormGroup, FormControl, ControlLabel } from 'react-bootstrap';
-import { putUserIfNotInDatabase } from '../../api/UserApi';
+import { putUser } from '../../api/UserApi';
 import { UserData } from '../../types/api/UserData';
-import { isBoolean } from 'util';
+import { getAllUsers } from '../../api/UserApi';
 
-const WRONG_CREDENTIALS_ALERT = 'Wrong logging credentials';
 interface RegisterState {
     email: string;
     repPassword: string;
@@ -56,8 +54,6 @@ export default class Register extends React.Component<RegisterProps, RegisterSta
         const bcrypt = require('bcryptjs');
         const salt = bcrypt.genSaltSync(10);
         const storedPassword = bcrypt.hashSync(this.state.password, salt);
-        console.log('password', storedPassword);
-        console.log(bcrypt.compareSync(this.state.password, storedPassword));
         const user: UserData = {
             data: {
                 email: this.state.email,
@@ -65,19 +61,23 @@ export default class Register extends React.Component<RegisterProps, RegisterSta
             },
             id: 0,
         };
-        putUserIfNotInDatabase(user, this.callbackFromUserExistence);
+        console.log(user);
+        putUser(user, (error) => {console.log(error); });
+        this.props.cancel();
     }
 
-    public callbackFromUserExistence(wasUserAdded: UserData): any {
-        console.log('added', wasUserAdded);
-        if (isBoolean(wasUserAdded)) {
-            if (wasUserAdded) {
-
-                this.props.cancel();
-            } else {
-                window.alert(WRONG_CREDENTIALS_ALERT);
-            }
+    public callbackFromUserExistence(wasUserAdded: UserData[]): any {
+        let emails;
+            wasUserAdded.map(value => {
+            if ( value.data.email === this.state.email) {
+                emails = value.data.email;
+            }});
+        if (emails) {
+            window.alert('Email exists. Try to log in.');
+        } else {
+            this.handleSignUp();
         }
+
     }
     render() {
             return (
@@ -123,7 +123,7 @@ export default class Register extends React.Component<RegisterProps, RegisterSta
                             type="submit"
                             className="btn btn-primary"
                             disabled={!this.validateForm()}
-                            onClick={this.handleSignUp}
+                            onClick={() => getAllUsers(this.callbackFromUserExistence)}
                         >
                             Save
                         </Button>
