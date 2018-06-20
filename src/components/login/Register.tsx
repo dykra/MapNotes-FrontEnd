@@ -9,7 +9,7 @@ import { isBoolean } from 'util';
 const WRONG_CREDENTIALS_ALERT = 'Wrong logging credentials';
 interface RegisterState {
     email: string;
-    name: string;
+    repPassword: string;
     password: string;
 
 }
@@ -23,17 +23,23 @@ export default class Register extends React.Component<RegisterProps, RegisterSta
         super(props);
         this.state = {
             email: '',
-            name: '',
+            repPassword: '',
             password: '',
         };
         this.handleChange = this.handleChange.bind(this);
         this.validateForm = this.validateForm.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleSignUp = this.handleSignUp.bind(this);
+        this.callbackFromUserExistence = this.callbackFromUserExistence.bind(this);
     }
 
     validateForm() {
-        return this.state.email.length > 0 && this.state.password.length > 0;
+        const re = /\S+@\S+\.\S+/;
+        return this.state.email.length > 0
+            && this.state.password.length > 0
+            && this.state.password === this.state.repPassword
+            && re.test(this.state.email);
+
     }
 
     handleChange(event: any) {
@@ -58,6 +64,7 @@ export default class Register extends React.Component<RegisterProps, RegisterSta
     }
 
     public callbackFromUserExistence(wasUserAdded: UserData): any {
+        console.log('added', wasUserAdded);
         if (isBoolean(wasUserAdded)) {
             if (wasUserAdded) {
                 this.props.cancel();
@@ -69,33 +76,51 @@ export default class Register extends React.Component<RegisterProps, RegisterSta
     render() {
             return (
                 <div>
-                    <form className={'RegisterForm'} onSubmit={this.handleSubmit}>
+                    <form role="form" data-toggle="validator" className={'was-validated'} onSubmit={this.handleSubmit}>
                         <FormGroup controlId="email" bsSize="large">
                             <ControlLabel>Email</ControlLabel>
                             <FormControl
+                                required={true}
                                 autoFocus={true}
                                 type="email"
                                 value={this.state.email}
                                 onChange={this.handleChange}
                             />
-                        </FormGroup>
-                        <FormGroup controlId="name" bsSize="large">
-                            <ControlLabel>Name</ControlLabel>
-                            <FormControl
-                                autoFocus={true}
-                                type="name"
-                                value={this.state.name}
-                                onChange={this.handleChange}
-                            />
+                            <div className="invalid-feedback">Invalid email</div>
                         </FormGroup>
                         <FormGroup controlId="password" bsSize="large">
                             <ControlLabel>Password</ControlLabel>
                             <FormControl
+                                required={true}
+                                minLength={8}
                                 value={this.state.password}
                                 onChange={this.handleChange}
                                 type="password"
                             />
+                            <div className="invalid-feedback">8 characters minimum</div>
                         </FormGroup>
+                        <FormGroup controlId="repPassword" bsSize="large">
+                            <ControlLabel>Repeat password</ControlLabel>
+                            <FormControl
+                                required={true}
+                                type="password"
+                                pattern={this.state.password}
+                                value={this.state.repPassword}
+                                onChange={this.handleChange}
+
+                            />
+                            <div className="invalid-feedback">Password and Repeat password are different</div>
+                        </FormGroup>
+                        <Button
+                            block={true}
+                            bsSize="large"
+                            type="submit"
+                            className="btn btn-primary"
+                            disabled={!this.validateForm()}
+                            onClick={this.handleSignUp}
+                        >
+                            Save
+                        </Button>
                         <Button
                             block={true}
                             bsSize="large"
@@ -104,15 +129,7 @@ export default class Register extends React.Component<RegisterProps, RegisterSta
                         >
                             Cancel
                         </Button>
-                        <Button
-                            block={true}
-                            bsSize="large"
-                            disabled={!this.validateForm()}
-                            type="submit"
-                            onClick={this.handleSignUp}
-                        >
-                            Save
-                        </Button>
+
                     </form>
                 </div>
             );
