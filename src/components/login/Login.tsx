@@ -4,8 +4,7 @@ import '../../styles/login/Login.css';
 import { ChooseRouterPathComponent } from '../ChooseRouterPathComponent';
 import Register from './Register';
 import { UserData } from '../../types/api/UserData';
-import { checkUserExist } from '../../api/UserApi';
-import { isBoolean } from 'util';
+import { getAllUsers } from '../../api/UserApi';
 
 const WRONG_CREDENTIALS_ALERT = 'Wrong logging credentials';
 
@@ -105,23 +104,23 @@ export default class Login extends React.Component<any, LoginState> {
     }
 
     handleLogin() {
-        const user: UserData = {
-            data: {
-                email: this.state.email,
-                password: this.state.password,
-            },
-            id: 0,
-        };
-        checkUserExist(user, this.callbackFromUserExistence);
+        getAllUsers(this.callbackFromUserExistence);
     }
 
-    public callbackFromUserExistence(user: UserData): any {
-        if (isBoolean(user)) {
-            this.setState( {logged: user} );
-            if (! user) {
-                window.alert(WRONG_CREDENTIALS_ALERT);
+    public callbackFromUserExistence(user: UserData[]): any {
+
+        let logged = false;
+        const bcrypt = require('bcryptjs');
+        user.forEach((value) => {
+            if (value.data.email === this.state.email && bcrypt.compareSync(this.state.password, value.data.password)) {
+                logged = true;
+                return;
             }
+        });
+        if (!logged) {
+            window.alert(WRONG_CREDENTIALS_ALERT);
         }
+        this.setState({logged});
     }
 
     handleSignUp(signUp: boolean) {

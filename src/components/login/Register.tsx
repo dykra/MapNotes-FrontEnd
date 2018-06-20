@@ -34,7 +34,7 @@ export default class Register extends React.Component<RegisterProps, RegisterSta
     }
 
     validateForm() {
-        const re = /\S+@\S+\.\S+/;
+        const re = /\S+@\S+/;
         return this.state.email.length > 0
             && this.state.password.length > 0
             && this.state.password === this.state.repPassword
@@ -53,10 +53,15 @@ export default class Register extends React.Component<RegisterProps, RegisterSta
     }
 
     handleSignUp() {
+        const bcrypt = require('bcryptjs');
+        const salt = bcrypt.genSaltSync(10);
+        const storedPassword = bcrypt.hashSync(this.state.password, salt);
+        console.log('password', storedPassword);
+        console.log(bcrypt.compareSync(this.state.password, storedPassword));
         const user: UserData = {
             data: {
                 email: this.state.email,
-                password: this.state.password,
+                password: storedPassword,
             },
             id: 0,
         };
@@ -67,6 +72,7 @@ export default class Register extends React.Component<RegisterProps, RegisterSta
         console.log('added', wasUserAdded);
         if (isBoolean(wasUserAdded)) {
             if (wasUserAdded) {
+
                 this.props.cancel();
             } else {
                 window.alert(WRONG_CREDENTIALS_ALERT);
