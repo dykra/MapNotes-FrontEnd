@@ -124,6 +124,6 @@ export default class Login extends React.Component<any, LoginState> {
     }
 
     handleSignUp(signUp: boolean) {
-        this.setState({signUp});
+        this.setState({signUp, email: '', password: ''});
     }
 }

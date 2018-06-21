@@ -61,7 +61,6 @@ export default class Register extends React.Component<RegisterProps, RegisterSta
             },
             id: 0,
         };
-        console.log(user);
         putUser(user, (error) => {console.log(error); });
         this.props.cancel();
     }
