@@ -9,7 +9,6 @@ interface RegisterState {
     email: string;
     repPassword: string;
     password: string;
-
 }
 
 interface RegisterProps {
