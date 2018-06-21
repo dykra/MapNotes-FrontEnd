@@ -7,8 +7,8 @@ import { CreationMenu } from './creation/CreationMenu';
 import { MapMenu } from './map/MapMenu';
 import { HomeMenu } from './home/HomeMenu';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
-import { ChooseRouterPathComponent } from './ChooseRouterPathComponent';
-
+// import { ChooseRouterPathComponent } from './ChooseRouterPathComponent';
+import Login from './login/Login';
 export class App extends React.Component<{}, {}> {
 
     render() {
@@ -18,7 +18,7 @@ export class App extends React.Component<{}, {}> {
                     <Route path="/map/:id" component={MapMenu}/>
                     <Route path="/create" component={CreationMenu}/>
                     <Route path="/home" component={HomeMenu}/>
-                    <Route exact={true} path="/" component={ChooseRouterPathComponent}/>
+                    <Route exact={true} path="/" component={Login}/>
                 </div>
             </Router>
         );
