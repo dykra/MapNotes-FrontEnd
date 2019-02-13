@@ -10,9 +10,6 @@
   - [Review](#review)
   - [Deploy](#deploy)
   
-## Demo
-
-Current version of project can be tested [here](https://map-note-frontend.herokuapp.com/)
 
 ## Backend
 
